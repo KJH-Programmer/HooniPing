@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0bed2bbc-4bce-4e16-bd9f-44647a16f73d" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/SpringBootDeveloperApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/SpringBootDeveloperApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/TestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/GptController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/GptController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,16 +149,5 @@
       <updated>1728863959332</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/AwsLambdaService.java</url>
-          <line>24</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
