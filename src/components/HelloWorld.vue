@@ -34,7 +34,6 @@
         <hr>
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <!-- 두 번째 블록의 description2를 placeholder로 설정 -->
           <textarea id="preview" v-model="preview" :placeholder="description2"></textarea>
         </div>
         <button @click="save">저장</button>
