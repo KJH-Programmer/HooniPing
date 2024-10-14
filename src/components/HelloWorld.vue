@@ -2,7 +2,6 @@
   <div class="container">
     <div class="form-wrapper">
 
-      
       <div class="form">
         <hr>
         <div class="input-field">
@@ -15,7 +14,6 @@
         </div>
         <button @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
-
       
       <div class="form">
         <hr>
@@ -28,7 +26,6 @@
           <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요"></textarea>
         </div>
       </div>
-
       
       <div class="form">
         <hr>
