@@ -2,6 +2,7 @@
   <div class="container">
     <div class="form-wrapper">
 
+
       <div class="form">
         <hr>
         <div class="input-field">
@@ -15,6 +16,7 @@
         <button @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
       
+
       <div class="form">
         <hr>
         <div class="input-field">
@@ -27,6 +29,7 @@
         </div>
       </div>
       
+
       <div class="form">
         <hr>
         <div class="input-field">
@@ -39,6 +42,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
