@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="0bed2bbc-4bce-4e16-bd9f-44647a16f73d" name="변경" comment="" />
+=======
+    <list default="true" id="0bed2bbc-4bce-4e16-bd9f-44647a16f73d" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/GptController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/GptController.java" afterDir="false" />
+    </list>
+>>>>>>> ed67ada (연결 전)
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,12 +70,12 @@
     &quot;assignee&quot;: &quot;wowns4690&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;git@github.com:KJH-Programmer/HooniPing.git&quot;,
-    &quot;accountId&quot;: &quot;02ce7f0f-eadf-4ae3-8268-9b436e6b9f9b&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:KJH-Programmer/HooniPing.git",
+    "accountId": "99b6fab7-b17a-4bb0-a213-357c4da726c2"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -85,9 +94,13 @@
     "Gradle.backend [bootRun].executor": "Debug",
     "Gradle.backend.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "hanjaejun",
+    "git-widget-placeholder": "eojin",
     "kotlin-language-version-configured": "true",
+<<<<<<< HEAD
     "last_opened_file_path": "/Users/hanjaejun/ai-academy/HooniPing",
+=======
+    "last_opened_file_path": "//wsl.localhost/Ubuntu/home/eojin/FinalProject/HooniPing",
+>>>>>>> ed67ada (연결 전)
     "project.structure.last.edited": "전역 라이브러리",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2",
