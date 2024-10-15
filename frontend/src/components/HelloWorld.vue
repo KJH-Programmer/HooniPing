@@ -13,7 +13,7 @@
           <label for="description">설명</label>
           <textarea id="description" v-model="description" placeholder="설명을 입력하세요"></textarea>
         </div>
-        <button @click="generateRecommendation">추천 내용 생성하기</button>
+        <button @click="generateAnswer">추천 내용 생성하기</button>
       </div>
 
 
@@ -44,6 +44,12 @@
 
 
 <script>
+//ai api 호출
+import {
+  GenerateAnswer
+} from '@/api/GptService';
+
+
 export default {
   name: 'HelloWorld',
   data() {
@@ -61,6 +67,10 @@ export default {
     },
     save() {
       console.log('저장:', this.preview);
+    },
+    async generateAnswer() {
+      const response = await GenerateAnswer(this.description);
+      this.description2 = response.data;
     }
   }
 };
