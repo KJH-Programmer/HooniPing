@@ -1,5 +1,14 @@
 <template>
     <div class="relative h-screen bg-gray-100">
+        
+      <!-- 로고를 페이지 왼쪽 상단에 고정 -->
+      <router-link to="/">
+        <img
+          :src="require('@/assets/HooniPing.jpg')"
+          alt="Logo"
+          class="absolute top-0 left-0 w-16 cursor-pointer z-50"
+        />
+      </router-link>
       <!-- 중앙에 로그인 박스 -->
       <div class="flex items-center justify-center h-full">
         <div class="bg-white p-8 rounded-md shadow-md w-full max-w-sm">
@@ -20,7 +29,7 @@
   
       <!-- 회원가입 버튼을 페이지 하단에 고정 -->
       <button 
-        class="absolute bottom-5 bg-whigt-500 text-black py-2 px-4 rounded-md"
+        class="absolute bottom-5 bg-white-500 text-black py-2 px-4 rounded-md"
         
         @click="goToSignup">
         회원가입

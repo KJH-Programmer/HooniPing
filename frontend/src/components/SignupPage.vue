@@ -81,7 +81,7 @@
   <style scoped>
   .signup-container {
     max-width: 400px;
-    margin: 0 auto;
+    margin: 50px auto;;
     padding: 1rem;
     background-color: #f9f9f9;
     border-radius: 8px;
