@@ -20,8 +20,8 @@
   
       <!-- 회원가입 버튼을 페이지 하단에 고정 -->
       <button 
-        class="absolute bottom-5 bg-gray-500 text-black py-2 px-4 rounded-md"
-        style="left: 15px;"
+        class="absolute bottom-5 bg-whigt-500 text-black py-2 px-4 rounded-md"
+        
         @click="goToSignup">
         회원가입
       </button>
