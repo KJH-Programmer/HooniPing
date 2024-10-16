@@ -1,8 +1,13 @@
 package wwee.jihun.Repository;
 
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import wwee.jihun.Entity.UserEntity;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    // ID와 Password로 사용자 조회
+import java.util.Optional;
+
+
+public interface UserRepository extends JpaRepository<UserEntity, String> {
+    //동일한 id를 사용하는 유저가 있는지 확인
+    Optional<UserEntity> findByUserId(String userId);
 }
