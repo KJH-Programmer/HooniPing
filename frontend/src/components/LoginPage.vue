@@ -53,13 +53,14 @@
           // 백엔드 로그인 API로 요청 보내기
           const response = await axios.post('http://localhost:8080/api/login', {
             user_id: this.user_id,   // 백엔드로 전송되는 데이터에서 user_id로 변경
-            password: this.password
+            password: this.password  //'http://localhost:8080/api/login' 에 백앤드 api 입력
           });
   
-          // 성공적으로 로그인한 경우 처리 (토큰 저장 또는 리디렉션)
+          // 성공적으로 로그인한 경우 처리 (토큰 저장 및 사용자 아이디 저장)
           console.log('로그인 성공:', response.data);
           // 예: localStorage에 토큰 저장
           localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user_id', response.data.user_id);
   
           // 로그인 성공 후 홈 페이지로 이동
           this.$router.push('/');
