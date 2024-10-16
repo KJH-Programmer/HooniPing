@@ -9,12 +9,27 @@
   
         <div class="mb-4">
           <label class="block mb-1" for="password">비밀번호</label>
-          <input v-model="formData.password" type="password" id="password" class="border rounded w-full px-2 py-1" required />
+          <input 
+            v-model="formData.password" 
+            @input="validatePasswordLength"
+            type="password" 
+            id="password" 
+            class="border rounded w-full px-2 py-1" 
+            :placeholder="'비밀번호는 6자 이상, 14자 미만으로 입력하세요.'"
+            required 
+          />
+          <span v-if="errors.password" class="text-red-500">{{  errors.password }}</span>
         </div>
   
         <div class="mb-4">
           <label class="block mb-1" for="confirmPassword">비밀번호 재확인</label>
-          <input v-model="formData.confirmPassword" type="password" id="confirmPassword" class="border rounded w-full px-2 py-1" required />
+          <input 
+            v-model="formData.confirmPassword" 
+            type="password" 
+            id="confirmPassword" 
+            class="border rounded w-full px-2 py-1" 
+            required 
+          />
         </div>
   
         <div class="mb-4">
@@ -44,13 +59,34 @@
           confirmPassword: '',
           name: '',
           email: ''
+        },
+        errors: {
+          password: ''
         }
       };
     },
     methods: {
+      // 비밀번호 자릿수 검증 (6자 이상, 14자 미만)
+      validatePasswordLength() {
+        const password = this.formData.password;
+        const passwordLength = password.length;
+
+        if (password === '') {
+          this.errors.password = ''; //비밀번혹 ㅏ공백일 때 오류 메세지 없음
+        } else if (passwordLength < 6 || passwordLength >= 14) {
+          this.errors.password = '비밀번호는 6자리 이상, 14자리 미만이어야합니다.';
+        } else {
+          this.errors.password = ''; //조건에 맞으면 에러 메세지 삭제
+        }
+      },
       async handleSubmit() {
         if (this.formData.password !== this.formData.confirmPassword) {
           alert('비밀번호가 일치하지 않습니다.');
+          return;
+        }
+
+        if (this.errors.password) {
+          alert('입력된 비밀번호에 오류가 있습니다.');
           return;
         }
         
