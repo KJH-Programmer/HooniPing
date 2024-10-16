@@ -16,13 +16,25 @@ public class DatabaseService {
         this.userRepository = userRepository;
     }
 
-    public String getUserName(String user_Id, String user_Password){
-        Optional<UserEntity> userEntity = userRepository.findByUserIdAndUserPassword(user_Id, user_Password);
-        return userEntity.map(UserEntity::getUserName).orElse("존재하지 않는 회원입니다.");
-    }
-
     //모든 유저 조회
     public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    //유저 회원가입
+    public String CreateUser(UserEntity userEntity){
+        try{
+            userRepository.save(userEntity);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
+    //이미 사용중인 id 인지 검증
+    public String getUserName(String user_Id){
+        Optional<UserEntity> userEntity = userRepository.findByUserId(user_Id);
+        return userEntity.map(UserEntity::getUserName).orElse("Available");
     }
 }

@@ -17,14 +17,17 @@ public class UserController {
     public UserController(UserAuthService userAuthService){
         this.userAuthService = userAuthService;
     }
-    //front에서 받은 id password 가지고 유저 이름 출력
-    @PostMapping
-    public String getUserName(@RequestBody UserEntity userEntity){
-        return userAuthService.GetUserName(userEntity);
-    }
+
+
     //모든 user 조회
     @GetMapping
     public List<UserEntity> getAllUsers(){
         return userAuthService.getAllUsers();
+    }
+
+    //회원가입
+    @PostMapping("/create")
+    public String CreateUser(@RequestBody UserEntity userEntity){
+        return userAuthService.CreateUser(userEntity);
     }
 }
