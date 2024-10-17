@@ -1,6 +1,5 @@
 package wwee.jihun.Service;
 
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.Repository.UserRepository;
@@ -37,4 +36,10 @@ public class DatabaseService {
         Optional<UserEntity> userEntity = userRepository.findByUserId(user_Id);
         return userEntity.map(UserEntity::getUserName).orElse("Available");
     }
+
+    //유저 로그인을 위한 유저 정보
+    public Optional<UserEntity> Login(String userId, String userPassword){
+        return userRepository.findByUserIdAndUserPassword(userId, userPassword);
+    }
+
 }
