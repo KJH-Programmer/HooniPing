@@ -44,28 +44,56 @@
 
 
 <script>
+import axios from 'axios';
+import {
+  GenerateAnswer
+} from '@/api/GptService';
+
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      brand: '',
-      description: '',
-      brand2: '',
-      description2: '',
+      brand: '',  // brand
+      description: '',  // product
+      brand2: '', // keyword1
+      description2: '', // ad_text
       preview: ''
     };
   },
   methods: {
-    generateRecommendation() {
-      console.log('추천 내용 생성:', this.brand, this.description);
+    async getCampaign() {
+      try {
+        // 백엔드 캠페인 API로 요청 보내기
+        const response = await axios.post('http://localhost:8080/api/campaign', {
+          brand: this.brand,
+          product: this.description,
+          keyword1: this.brand2,
+          ad_text: this.description2
+        });
+        console.log('추천 내용 생성:', this.brand, this.description);
+      } catch (error) {
+        console.error('추천 내용 생성 중 오류 발생:', error);
+      }
     },
     save() {
-      console.log('저장:', this.preview);
+      try {
+        console.log('저장:', this.preview);
+      } catch (error) {
+        console.error('저장 중 오류 발생:', error);
+      }
+    },
+    async generateAnswer() {
+      const response = await GenerateAnswer(this.description);
+      this.description2 = response.data;
     },
     resizeTextarea(event) {
-      const textarea = event.target;
-      textarea.style.height = 'auto'; // 초기화
-      textarea.style.height = textarea.scrollHeight + 'px'; // 내용에 맞게 높이 조정
+      try {
+        const textarea = event.target;
+        textarea.style.height = 'auto'; // 초기화
+        textarea.style.height = textarea.scrollHeight + 'px'; // 내용에 맞게 높이 조정
+      } catch (error) {
+        console.error('Textarea 리사이즈 중 오류 발생:', error);
+      }
     }
   }
 };
