@@ -12,22 +12,22 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld,  // 기본 경로는 HelloWorld
+      component: HelloWorld, 
     },
     {
       path: '/login',
       name: 'LoginPage',
-      component: LoginPage,   // /login 경로는 LoginPage
+      component: LoginPage,  
     },
     {
       path: '/main',
       name: 'MainPage',
-      component: MainPage,    // /main 경로는 MainPage
+      component: MainPage,    
     },
     {
       path: '/signup',
       name: 'SignupPage',
-      component: SignupPage,  // /signup 경로는 SignupPage
+      component: SignupPage,  
     },
   ],
 });

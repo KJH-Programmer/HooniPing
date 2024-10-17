@@ -64,8 +64,8 @@ export default {
     },
     resizeTextarea(event) {
       const textarea = event.target;
-      textarea.style.height = 'auto'; // 초기화
-      textarea.style.height = textarea.scrollHeight + 'px'; // 내용에 맞게 높이 조정
+      textarea.style.height = 'auto'; 
+      textarea.style.height = textarea.scrollHeight + 'px'; 
     }
   }
 };
@@ -124,8 +124,8 @@ hr {
 }
 
 textarea {
-  height: auto; /* 기본 높이 설정 */
-  overflow: hidden; /* 스크롤 막기 */
+  height: auto; 
+  overflow: hidden; 
   resize: none; 
 }
 
