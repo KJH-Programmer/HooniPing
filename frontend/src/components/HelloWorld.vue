@@ -65,12 +65,19 @@ export default {
   methods: {
     async getCampaign() {
       try {
+        // 로컬 스토리지에서 토큰 가져오기
+        const token = localStorage.getItem('token');
+
         // 백엔드 캠페인 API로 요청 보내기
         const response = await axios.post('http://localhost:8080/api/campaign', {
           brand: this.brand,
           product: this.description,
           keyword1: this.brand2,
           ad_text: this.description2
+        }, {
+          headers: {
+            Authorization: 'Bearer ${token}'  // 토큰을 헤더에 추가
+          }
         });
         console.log('추천 내용 생성:', this.brand, this.description);
       } catch (error) {
