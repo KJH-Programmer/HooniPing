@@ -45,10 +45,14 @@
 
 <script>
 import axios from 'axios';
+
 import {
   GenerateAnswer
 } from '@/api/GptService';
 
+import {
+  GetCampaign
+} from '@/api/CampaignService';
 
 
 export default {
