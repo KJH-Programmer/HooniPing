@@ -54,4 +54,9 @@ public class DatabaseService {
     public Optional<CampaignEntity> findCampaignByUserIdAndCampaignId(String userId) {
         return campaignRepository.findByUserId(userId);
     }
+    //유저 로그인을 위한 유저 정보
+    public Optional<UserEntity> Login(String userId, String userPassword){
+        return userRepository.findByUserIdAndUserPassword(userId, userPassword);
+    }
+
 }

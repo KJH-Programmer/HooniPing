@@ -11,7 +11,7 @@
         </div>
         <div class="input-field">
           <label for="description">설명</label>
-          <textarea id="description" v-model="description" placeholder="설명을 입력하세요" @input="resizeTextarea($event)"></textarea>
+          <textarea id="description" v-model="description" placeholder="설명을 입력하세요"></textarea>
         </div>
         <button @click="generateAnswer">추천 내용 생성하기</button>
       </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="input-field">
           <label for="description2">내용</label>
-          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요" @input="resizeTextarea($event)"></textarea>
+          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요"></textarea>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <hr>
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea id="preview" v-model="preview" :placeholder="description2" @input="resizeTextarea($event)"></textarea>
+          <textarea id="preview" v-model="preview" :placeholder="description2"></textarea>
         </div>
         <button @click="save">저장</button>
       </div>
@@ -44,58 +44,33 @@
 
 
 <script>
-import axios from 'axios';
+//ai api 호출
 import {
   GenerateAnswer
 } from '@/api/GptService';
-
 
 
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      brand: '',  // brand
-      description: '',  // product
-      brand2: '', // keyword1
-      description2: '', // ad_text
+      brand: '',
+      description: '',
+      brand2: '',
+      description2: '',
       preview: ''
     };
   },
   methods: {
-    async getCampaign() {
-      try {
-        // 백엔드 캠페인 API로 요청 보내기
-        const response = await axios.post('http://localhost:8080/api/campaign', {
-          brand: this.brand,
-          product: this.description,
-          keyword1: this.brand2,
-          ad_text: this.description2
-        });
-        console.log('추천 내용 생성:', this.brand, this.description);
-      } catch (error) {
-        console.error('추천 내용 생성 중 오류 발생:', error);
-      }
+    generateRecommendation() {
+      console.log('추천 내용 생성:', this.brand, this.description);
     },
     save() {
-      try {
-        console.log('저장:', this.preview);
-      } catch (error) {
-        console.error('저장 중 오류 발생:', error);
-      }
+      console.log('저장:', this.preview);
     },
     async generateAnswer() {
       const response = await GenerateAnswer(this.description);
       this.description2 = response.data;
-    },
-    resizeTextarea(event) {
-      try {
-        const textarea = event.target;
-        textarea.style.height = 'auto'; // 초기화
-        textarea.style.height = textarea.scrollHeight + 'px'; // 내용에 맞게 높이 조정
-      } catch (error) {
-        console.error('Textarea 리사이즈 중 오류 발생:', error);
-      }
     }
   }
 };
@@ -106,7 +81,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
+  height: 40vh; 
 }
 
 .form-wrapper {
@@ -135,6 +110,10 @@ input, textarea {
   font-size: inherit;
 }
 
+textarea {
+  height: 100px; 
+}
+
 button {
   width: 100%; 
   padding: 10px;
@@ -148,16 +127,4 @@ button {
 button:hover {
   background-color: #36996e;
 }
-
-hr {
-  display: none; 
-}
-
-textarea {
-  height: auto; /* 기본 높이 설정 */
-  overflow: hidden; /* 스크롤 막기 */
-  resize: none; 
-}
-
-
 </style>
