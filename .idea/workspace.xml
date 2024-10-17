@@ -4,20 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-<<<<<<< HEAD
-    <list default="true" id="0bed2bbc-4bce-4e16-bd9f-44647a16f73d" name="변경" comment="" />
-=======
     <list default="true" id="0bed2bbc-4bce-4e16-bd9f-44647a16f73d" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/JwtAuthFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/SecurityContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/TokenProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/GptController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/GptController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/DatabaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/UserAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/UserAuthService.java" afterDir="false" />
     </list>
->>>>>>> ed67ada (연결 전)
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/backend">
@@ -52,6 +60,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -70,12 +79,15 @@
     &quot;assignee&quot;: &quot;wowns4690&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:KJH-Programmer/HooniPing.git",
-    "accountId": "99b6fab7-b17a-4bb0-a213-357c4da726c2"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:KJH-Programmer/HooniPing.git&quot;,
+    &quot;accountId&quot;: &quot;02ce7f0f-eadf-4ae3-8268-9b436e6b9f9b&quot;
   }
-}]]></component>
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -92,24 +104,25 @@
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Gradle.backend [:wwee.jihun.Main.main()].executor": "Run",
     "Gradle.backend [bootRun].executor": "Debug",
+    "Gradle.backend 빌드.executor": "Run",
     "Gradle.backend.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "eojin",
+    "git-widget-placeholder": "hanjaejun에 #12개",
     "kotlin-language-version-configured": "true",
-<<<<<<< HEAD
-    "last_opened_file_path": "/Users/hanjaejun/ai-academy/HooniPing",
-=======
-    "last_opened_file_path": "//wsl.localhost/Ubuntu/home/eojin/FinalProject/HooniPing",
->>>>>>> ed67ada (연결 전)
-    "project.structure.last.edited": "전역 라이브러리",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "last_opened_file_path": "/Users/hanjaejun/ai-academy/HooniPing/backend/src/main",
+    "project.structure.last.edited": "모듈",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.50344825",
+    "settings.editor.selected.configurable": "advanced.settings"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend/src/main" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend/src/main/java/resources" />
     </key>
   </component>
   <component name="RunManager">
@@ -134,19 +147,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <RunAsTest>false</RunAsTest>
       <method v="2" />
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="HooniPing" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="HooniPing" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
