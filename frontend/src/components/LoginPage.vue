@@ -71,7 +71,7 @@
         }
       },
       goToSignup() {
-        this.$router.push('/signup');  // 회원가입 페이지로 이동 (회원가입 라우트 설정 필요)
+        this.$router.push('/signup');  // 회원가입 페이지로 이동
       }
     }
   };

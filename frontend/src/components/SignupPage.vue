@@ -4,7 +4,20 @@
       <form @submit.prevent="handleSubmit">
         <div class="mb-4">
           <label class="block mb-1 " for="user_id">아이디</label>
-          <input v-model="formData.user_id" type="text" id="user_id" class="border rounded w-full px-2 py-1" required />
+
+          <input 
+            v-model="formData.user_id" 
+            type="text" 
+            id="user_id" 
+            class="border rounded w-full px-2 py-1" 
+            required 
+          />
+          <button
+            type="button"
+            class="bg-gray-500 text-black px-2 py-1 mt-2 rounded border-1 border-black"
+            @click="checkUserId">
+            아이디 중복 확인
+          </button>
         </div>
   
         <div class="mb-4">
@@ -61,11 +74,39 @@
           email: ''
         },
         errors: {
+          user_id:'',
           password: ''
-        }
+        },
+        successMessage: '' // 성공 메세지
       };
     },
     methods: {
+      //아이디 중복 체크 버튼 클릭시 서버에 요청
+      async checkUserId() {
+        if (this.formData.user_id === '') {
+          this.errors.user_id = '아이디를 입력해 주세요.';
+          return;
+        }
+
+        try {
+          const response = await axios.post('백엔드_api_주소/check-user-id', {
+            user_id: this.formData.user_id
+          });
+
+          // 아이디가 중복이면 exists= true , 중복이아니면 false exists 부분은 백엔드에서 설정한 응답 변수로 변경
+          if (response.data.exists) {
+            this.errors.user_id = '이미 존재하는 아이디입니다.';
+            this.successMessage = ''; // 성공 메세지 초기화
+          } else {
+            this.errors.user_id = ''; // 중복되지 않으면 오류 메세지 제거
+            this.successMessage = '사용 가능한 아이디입니다.';
+          }
+        } catch (error) {
+          console.error('아이디 중복 체크 오류:', error);
+          this.errors.user_id = '아이디를 확인하는 중 오류가 발생했습니다.';
+        }
+      },
+
       // 비밀번호 자릿수 검증 (6자 이상, 14자 미만)
       validatePasswordLength() {
         const password = this.formData.password;
@@ -106,7 +147,7 @@
             alert('회원가입에 실패했습니다.');
           }
         } catch (error) {
-          console.error('Error during signup:', error);
+          console.error('회원가입 오류:', error);
           alert('서버 오류가 발생했습니다.');
         }
       }
