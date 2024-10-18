@@ -62,7 +62,7 @@ export default {
     async submitLogin() {
       try {
         // 서버로 로그인 요청을 보냄
-        const response = await axios.post('http://localhost:8080/api/login', {
+        const response = await axios.post('http://localhost:8080/api/user/login', {
           user_id: this.user_id, // 입력된 아이디 전송
           password: this.password // 입력된 비밀번호 전송
         });
