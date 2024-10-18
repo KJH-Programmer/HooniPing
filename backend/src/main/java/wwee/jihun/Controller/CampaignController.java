@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/campaign")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class CampaignController {
     private final CampaignService campaignService;
 
@@ -32,7 +32,7 @@ public class CampaignController {
     }
 
     //campaignId의 내용 조회
-    @PostMapping("/content/{campaignId}")
+    @PostMapping("/content")
     public List<CampaignEntity> CampaignContent(@RequestBody CampaignEntity campaignEntity){
         String userId = campaignEntity.getUserId();
         Long campaignId = campaignEntity.getCampaignId();
