@@ -13,7 +13,7 @@
           <label for="description">설명</label>
           <textarea id="description" v-model="description" placeholder="설명을 입력하세요" @input="resizeTextarea($event)"></textarea>
         </div>
-        <button @click="generateAnswer">추천 내용 생성하기</button>
+        <button @click="GetCampaign">추천 내용 생성하기</button>
       </div>
 
 
@@ -44,8 +44,6 @@
 
 
 <script>
-import axios from 'axios';
-
 import {
   GenerateAnswer
 } from '@/api/GptService';
@@ -63,31 +61,75 @@ export default {
       description: '',  // product
       brand2: '', // keyword1
       description2: '', // ad_text
-      preview: ''
+      preview: '',
+      userId: 'hooniping',
+      campaignId: 1,
     };
   },
   methods: {
-    async getCampaign() {
+
+    // 캠페인 내용 가져오기
+    async GetCampaign() {
       try {
         // 로컬 스토리지에서 토큰 가져오기
-        const token = localStorage.getItem('token');
+        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJob29uaXBpbmciLCJ1c2VyTmFtZSI6Ikhvb25pcGluZyIsImlhdCI6MTcyOTIzNTQ4OCwiZXhwIjoxNzI5MjM3Mjg4fQ.mNA6d-jrubMFkTCbNemfqIiU-abr9NXU7wDZaxgKDXM";
 
-        // 백엔드 캠페인 API로 요청 보내기
-        const response = await axios.post('http://localhost:8080/api/campaign', {
-          brand: this.brand,
-          product: this.description,
-          keyword1: this.brand2,
-          ad_text: this.description2
-        }, {
-          headers: {
-            Authorization: 'Bearer ${token}'  // 토큰을 헤더에 추가
-          }
-        });
-        console.log('추천 내용 생성:', this.brand, this.description);
+        // GetCampaign 함수 호출
+        const campaign = await GetCampaign(token, this.userId, this.campaignId);
+
+        this.brand = campaign[0].brand;
+
+        console.log('캠페인 내용 가져오기 성공:', campaign);
       } catch (error) {
-        console.error('추천 내용 생성 중 오류 발생:', error);
+        console.error('캠페인 내용 가져오기 중 오류:', error);
       }
     },
+
+    // // 캠페인 생성
+    // async createCampaign() {
+    //   try {
+    //     // 로컬 스토리지에서 토큰 가져오기
+    //     const token = localStorage.getItem('token');
+        
+    //     // 캠페인 생성 데이터
+    //     const campaignData = {
+    //       brand: this.brand,
+    //       product: this.description,
+    //       keyword1: this.brand2,
+    //       ad_text: this.description2,
+    //     };
+
+    //     // 캠페인 생성 함수 호출
+    //     const response = await CreateCampaign(token, campaignData);
+
+    //     console.log('추천 내용 생성:', this.brand, this.description);
+    //   } catch (error) {
+    //     console.error('추천 내용 생성 중 오류 발생:', error);
+    //   }
+    // },
+
+    // // 캠페인 수정
+    // async updateCampaign(campaignId) {
+    //   try {
+    //     const token = localStorage.getItem('token');
+
+    //     // 수정할 데이터
+    //     const updatedData = {
+    //       brand: this.brand,
+    //       product: this.description,
+    //       keyword1: this.brand2,
+    //       ad_text: this.description2,
+    //     };
+
+    //     // 캠페인 수정 함수 호출
+    //     const response = await UpdateCampaign(token, campaignId, updatedData);
+
+    //     console.log('캠페인 수정 성공:', response);
+    //   } catch (error) {
+    //     console.error('캠페인 수정 중 오류:', error);
+    //   }
+    // },
+
     save() {
       try {
         console.log('저장:', this.preview);
@@ -95,10 +137,12 @@ export default {
         console.error('저장 중 오류 발생:', error);
       }
     },
+
     async generateAnswer() {
       const response = await GenerateAnswer(this.description);
       this.description2 = response.data;
     },
+
     resizeTextarea(event) {
       try {
         const textarea = event.target;
@@ -107,7 +151,10 @@ export default {
       } catch (error) {
         console.error('Textarea 리사이즈 중 오류 발생:', error);
       }
-    }
+    },
+  },
+  mounted(){
+    this.GetCampaign();
   }
 };
 </script>
