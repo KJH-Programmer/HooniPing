@@ -1,72 +1,111 @@
 <template>
-    <div class="relative w-full min-h-screen bg-[#f0f3fb] pt-[60px] lg:px-[122px] md:px-[60px] pb-[120px] xs:px-5">
-      <!-- 로그인 여부에 따른 상단 UI 변경-->
-      <div class="absolute top-5 right-5 flex space-x-4">
-        <template v-if="!isLoggedIn">
-          <!-- 로그인 및 회원가입 버튼 -->
-          <button 
-            class="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
-            @click="goToLogin">
-            로그인
-          </button>
-          <button 
-            class="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
-            @click="goToSignup">
-            회원가입
-          </button>
-        </template>
-        <template v-else>
-          <!-- 사용자 아이디와 로그아웃 버튼 -->
-           <span class="text-gray-700 font-bold">환영합니다, {{  user_id }}님!</span>
-           <button
-            class="bg-red-500 text-white px-4 py-2 rounded-md font-bold"
-            @click="logout">
-            로그아웃
-           </button>    
-        </template>
-      </div>
+  <div class="container">
+    <!-- 로그인 여부에 따른 상단 UI -->
+    <div class="header">
+      <template v-if="!isLoggedIn">
+        <button class="button" @click="goToLogin">로그인</button>
+        <button class="button" @click="goToSignup">회원가입</button>
+      </template>
+      <template v-else>
+        <span class="welcome-message">환영합니다, {{ user_id }}님!</span>
+        <button class="logout-button" @click="logout">로그아웃</button>
+      </template>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        user_id: '',// 사용자 아이디 저장
-        isLoggedIn: false //로그인 여부
-        
-      };
-    },
-    mounted() {
-      //로그인 여부 확인 (localStorage에 토큰 또는 사용자 정보가 있는지 확인)
-      const token = localStorage.getItem('token');
-      const storedUserid = localStorage.getItem('user_id');
+  </div>
+</template>
 
-      if (token && storedUserid) {
-        this.isLoggedIn = true;
-        this.user_id = storedUserid; // 저장된 사용자 아이디 불러오기
-      }
-    },
-    methods: {
-      goToLogin() {
-        this.$router.push('/login');  // 로그인 페이지로 이동
-      },
-      goToSignup() {
-        this.$router.push('/signup'); // 회원가입 페이지로 이동
-      },
-      logout() {
-        // 로그아웃 처리 : localStorage 에서 토큰과 사용자 이름 삭제
-        localStorage.removeItem('token');
-        localStorage.removeItem('user_id');
-        this.isLoggedIn = false; //로그인 상태 false 로 설정
-        this.user_id = '';
-        this.$router.push('/'); //로그아웃 후 메인 페이지로 이동
-      }
+<script>
+export default {
+  data() {
+    return {
+      user_id: '', // 사용자 아이디 저장
+      isLoggedIn: false, // 로그인 여부
+    };
+  },
+  mounted() {
+    const token = localStorage.getItem('token') || '';
+    const storedUserid = localStorage.getItem('user_id') || '';
+
+    if (token && storedUserid) {
+      this.isLoggedIn = true;
+      this.user_id = storedUserid;
     }
-  };
-  </script>
-  
-  <style scoped>
-  /* 필요시 추가 스타일 */
-  </style>
-  
+  },
+  methods: {
+    goToLogin() {
+      this.$router.push('/login');
+    },
+    goToSignup() {
+      this.$router.push('/signup');
+    },
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
+      this.isLoggedIn = false;
+      this.user_id = '';
+      this.$router.push('/');
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* 전체 화면 컨테이너 */
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f3fb;
+  padding-top: 60px;
+  padding-bottom: 120px;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+/* 상단 헤더 */
+.header {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* 버튼 스타일 */
+.button {
+  background-color: #42b983;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #36996e;
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #cc0000;
+}
+
+/* 환영 메시지 스타일 */
+.welcome-message {
+  color: #333;
+  font-weight: bold;
+}
+</style>
