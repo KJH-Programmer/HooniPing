@@ -59,17 +59,6 @@
           />
         </div>
 
-        <div class="input-field">
-          <label for="email">이메일</label> <!-- 이메일 입력 레이블 -->
-          <input
-            v-model="formData.email"
-            type="email"
-            id="email"
-            placeholder="이메일 입력"
-            required
-          />
-        </div>
-
         <button type="submit">회원가입</button> <!-- 회원가입 버튼 -->
       </form>
 
@@ -84,7 +73,7 @@ export default {
   data() {
     return {
       formData: {
-        user_id: '',
+        userId: '',
         password: '',
         confirmPassword: '',
         name: '',
@@ -145,14 +134,13 @@ export default {
       }
 
       const payload = {
-        user_id: this.formData.user_id,
-        password: this.formData.password,
-        name: this.formData.name,
-        email: this.formData.email
+        userId: this.formData.user_id,
+        userPassword: this.formData.password,
+        userName: this.formData.name
       };
 
       try {
-        const response = await axios.post('백엔드_API_주소', payload);
+        const response = await axios.post('http://localhost:8080/api/user/create', payload);
 
         if (response.status === 200) {
           alert('회원가입이 완료되었습니다.');

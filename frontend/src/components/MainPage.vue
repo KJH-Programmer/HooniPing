@@ -40,7 +40,7 @@
     mounted() {
       //로그인 여부 확인 (localStorage에 토큰 또는 사용자 정보가 있는지 확인)
       const token = localStorage.getItem('token');
-      const storedUserid = localStorage.getItem('user_id');
+      const storedUserid = localStorage.getItem('userId');
 
       if (token && storedUserid) {
         this.isLoggedIn = true;
@@ -57,10 +57,10 @@
       logout() {
         // 로그아웃 처리 : localStorage 에서 토큰과 사용자 이름 삭제
         localStorage.removeItem('token');
-        localStorage.removeItem('user_id');
+        localStorage.removeItem('userId');
         this.isLoggedIn = false; //로그인 상태 false 로 설정
         this.user_id = '';
-        this.$router.push('/'); //로그아웃 후 메인 페이지로 이동
+        this.$router.push('/login'); //로그아웃 후 메인 페이지로 이동
       }
     }
   };
