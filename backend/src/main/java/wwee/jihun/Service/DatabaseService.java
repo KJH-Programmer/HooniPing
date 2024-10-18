@@ -18,6 +18,8 @@ public class DatabaseService {
         this.userRepository = userRepository;
         this.campaignRepository = campaignRepository;
     }
+
+    //=====================================사용자======================================
     //모든 유저 조회
     public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
@@ -40,6 +42,12 @@ public class DatabaseService {
         return userEntity.map(UserEntity::getUserName).orElse("Available");
     }
 
+    //유저 로그인을 위한 유저 정보
+    public Optional<UserEntity> Login(String userId, String userPassword){
+        return userRepository.findByUserIdAndUserPassword(userId, userPassword);
+    }
+
+    //==================================캠페인=======================================
     //전체 캠페인 조회
     public List<CampaignEntity> getAllCampaigns(){
         return campaignRepository.findAll();
@@ -50,13 +58,9 @@ public class DatabaseService {
         return campaignRepository.findAllByUserId(userId);
     }
 
-    //캠페인 id 확인
-    public Optional<CampaignEntity> findCampaignByUserIdAndCampaignId(String userId) {
-        return campaignRepository.findByUserId(userId);
-    }
-    //유저 로그인을 위한 유저 정보
-    public Optional<UserEntity> Login(String userId, String userPassword){
-        return userRepository.findByUserIdAndUserPassword(userId, userPassword);
+    //userId의 campaignId 캠페인의 내용 조회
+    public List<CampaignEntity> getCampaignContentByUserIdAndCampaignId(String userId, Long campaignId) {
+        return campaignRepository.findAllByUserIdAndCampaignId(userId, campaignId);
     }
 
 }

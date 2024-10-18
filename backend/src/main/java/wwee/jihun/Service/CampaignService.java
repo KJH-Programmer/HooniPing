@@ -2,9 +2,7 @@ package wwee.jihun.Service;
 
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.CampaignEntity;
-import wwee.jihun.Repository.CampaignRepository;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +22,17 @@ public class CampaignService {
         return databaseService.getUserAllCampaigns(userId);
     }
 
-    //userId의 product 가져오기
-    public String getCampaignContent(String userId) {
-        Optional<CampaignEntity> campaignEntity = databaseService.findCampaignByUserIdAndCampaignId(userId);
+    //campaignId의 product 가져오기
+    public List<CampaignEntity> getCampaignContent(String userId, Long campaignId) {
+        return databaseService.getCampaignContentByUserIdAndCampaignId(userId, campaignId);
 
-        if(campaignEntity.isEmpty()){
-            return "Campaign Not Found";
-        } else {
-            String product = campaignEntity.map(CampaignEntity::getProduct).orElse("");
-
-            return "Product: "+ product + ", Keywords: ";
-        }
+//        if(campaignEntity.isEmpty()){
+//            return "Campaign Not Found";
+//        } else {
+////            String product = campaignEntity.map(CampaignEntity::getProduct).orElse("");
+////            String product = campaignContent.get(CampaignEntity::getProduct).orElse("");
+////            return "Product: "+ product;
+//            return campaignEntity;
+//        }
     }
 }

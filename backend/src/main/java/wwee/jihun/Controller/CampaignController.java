@@ -31,10 +31,13 @@ public class CampaignController {
         return campaignService.getUserAllCampaigns(campaignEntity.getUserId());
     }
 
-    //특정 캠페인 정보 조회
-    @PostMapping("/content")
-    public String CampaignContent(@RequestBody UserEntity userEntity){
-        return campaignService.getCampaignContent(userEntity.getUserId());
+    //campaignId의 내용 조회
+    @PostMapping("/content/{campaignId}")
+    public List<CampaignEntity> CampaignContent(@RequestBody CampaignEntity campaignEntity){
+        String userId = campaignEntity.getUserId();
+        Long campaignId = campaignEntity.getCampaignId();
+
+        return campaignService.getCampaignContent(userId, campaignId);
     }
 
 }
