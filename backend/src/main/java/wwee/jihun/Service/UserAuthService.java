@@ -40,7 +40,7 @@ public class UserAuthService {
         String tokenId = userEntity.map(UserEntity::getUserId).orElse(null);
         String tokenName = userEntity.map(UserEntity::getUserName).orElse(null);
         if(tokenId == null || tokenName == null){
-            return "Not User";
+            return ("Not User");
         }else{
             return tokenProvider.CreateAccessToken(tokenId,tokenName);
         }

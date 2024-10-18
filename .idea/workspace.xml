@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0bed2bbc-4bce-4e16-bd9f-44647a16f73d" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/CustomUserDetailsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/JwtAuthFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/SecurityContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/TokenProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/DatabaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/TokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/JwtToken/TokenProvider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/UserAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/wwee/jihun/Service/UserAuthService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +99,7 @@
     "Gradle.backend 빌드.executor": "Run",
     "Gradle.backend.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "hanjaejun에 #12개",
+    "git-widget-placeholder": "hanjaejun",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/hanjaejun/ai-academy/HooniPing/backend/src/main",
     "project.structure.last.edited": "모듈",
@@ -159,5 +151,16 @@
       <updated>1728863959332</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

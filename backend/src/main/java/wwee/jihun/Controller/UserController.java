@@ -37,7 +37,9 @@ public class UserController {
     //로그인
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserEntity userEntity) {
+        //토큰을 발급받아서 token에 저장
         String token = userAuthService.Login(userEntity.getUserId(), userEntity.getUserPassword());
+        //login api 요청에 대한 token 반환
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 }
