@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class UserAuthService {
-    private final DatabaseService databaseService;
+    private final wwee.jihun.Service.DatabaseService databaseService;
     private final TokenProvider tokenProvider;
 
 
@@ -27,6 +27,7 @@ public class UserAuthService {
     //회원가입
     public String CreateUser(UserEntity userEntity) {
         String userVerification = databaseService.getUserName(userEntity.getUserId());
+        //System.out.println(userVerification);
         if(userVerification.equals("Available")){
             return databaseService.CreateUser(userEntity);
         }else {
@@ -45,5 +46,4 @@ public class UserAuthService {
             return tokenProvider.CreateAccessToken(tokenId,tokenName);
         }
     }
-
 }
