@@ -7,4 +7,3 @@ export const GenerateAnswer = async (question) => {
         question: question
     });
 };
-
