@@ -30,8 +30,7 @@ public class SecurityContext {
     }
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/user/login",
-            "/api/user/create"
+            "/api/**"
     };
 
     @Bean
