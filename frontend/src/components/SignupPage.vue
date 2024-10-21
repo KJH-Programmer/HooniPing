@@ -119,7 +119,7 @@ export default {
         const response = await axios.post('http://localhost:8080/api/user/create', payload);
 
         if (status === 200) {
-          this.handleResponse(data);
+          this.handleResponse(response);
         } else {
           this.showError('general', '회원가입에 실패했습니다. 다시 시도해주세요.');
         }

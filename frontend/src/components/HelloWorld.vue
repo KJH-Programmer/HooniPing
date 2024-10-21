@@ -62,7 +62,7 @@ export default {
       brand2: '', // keyword1
       description2: '', // ad_text
       preview: '',
-      userId: 'hooniping',
+      userId: '',
       campaignId: 1,
     };
   },
@@ -72,11 +72,12 @@ export default {
     async getCampaign() {
       try {
         // 로컬 스토리지에서 토큰 가져오기
-        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJob29uaXBpbmciLCJ1c2VyTmFtZSI6Ikhvb25pcGluZyIsImlhdCI6MTcyOTQ3NTEwOCwiZXhwIjoxNzI5NDc2OTA4fQ.GEkOL2asdM8iYpptoxMlLBH4lXNig_SOOv0bPNih4Bw";
+        const token = localStorage.getItem('token')
+        const userId = localStorage.getItem('userId')
         // const token = localStorage.getItem('token');
 
         // GetCampaign 함수 호출
-        const campaign = await GetCampaign(token, this.userId, this.campaignId);
+        const campaign = await GetCampaign(token, userId, this.campaignId);
 
         this.brand = campaign[0].brand;
         this.description = campaign[0].keyword3;
