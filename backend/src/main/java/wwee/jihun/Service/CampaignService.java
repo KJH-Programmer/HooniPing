@@ -22,7 +22,7 @@ public class CampaignService {
         return databaseService.getUserAllCampaigns(userId);
     }
 
-    //campaignId의 product 가져오기
+    //campaignId의 캠페인 내용 가져오기
     public List<CampaignEntity> getCampaignContent(String userId, Long campaignId) {
         return databaseService.getCampaignContentByUserIdAndCampaignId(userId, campaignId);
 

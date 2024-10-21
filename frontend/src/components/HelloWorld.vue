@@ -13,7 +13,7 @@
           <label for="description">설명</label>
           <textarea id="description" v-model="description" placeholder="설명을 입력하세요" @input="resizeTextarea($event)"></textarea>
         </div>
-        <button @click="GetCampaign">추천 내용 생성하기</button>
+        <button @click="getCampaign">추천 내용 생성하기</button>
       </div>
 
 
@@ -69,16 +69,21 @@ export default {
   methods: {
 
     // 캠페인 내용 가져오기
-    async GetCampaign() {
+    async getCampaign() {
       try {
         // 로컬 스토리지에서 토큰 가져오기
-        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJob29uaXBpbmciLCJ1c2VyTmFtZSI6Ikhvb25pcGluZyIsImlhdCI6MTcyOTIzNTQ4OCwiZXhwIjoxNzI5MjM3Mjg4fQ.mNA6d-jrubMFkTCbNemfqIiU-abr9NXU7wDZaxgKDXM";
+        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJob29uaXBpbmciLCJ1c2VyTmFtZSI6Ikhvb25pcGluZyIsImlhdCI6MTcyOTQ3NTEwOCwiZXhwIjoxNzI5NDc2OTA4fQ.GEkOL2asdM8iYpptoxMlLBH4lXNig_SOOv0bPNih4Bw";
+        // const token = localStorage.getItem('token');
 
         // GetCampaign 함수 호출
         const campaign = await GetCampaign(token, this.userId, this.campaignId);
 
         this.brand = campaign[0].brand;
+        this.description = campaign[0].keyword3;
+        this.brand2 = campaign[0].keyword1;
+        this.description2 = campaign[0].keyword2;
 
+        
         console.log('캠페인 내용 가져오기 성공:', campaign);
       } catch (error) {
         console.error('캠페인 내용 가져오기 중 오류:', error);
@@ -154,7 +159,7 @@ export default {
     },
   },
   mounted(){
-    this.GetCampaign();
+    this.getCampaign();
   }
 };
 </script>

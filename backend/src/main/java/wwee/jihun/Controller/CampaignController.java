@@ -19,6 +19,9 @@ public class CampaignController {
         this.campaignService = campaignService;
     }
 
+    // ***************<로그인 된 사용자(userId)의 캠페인 관리>****************
+
+    //==================전체 캠페인 관리 페이지======================
     //모든 캠페인 조회
     @GetMapping
     public List<CampaignEntity> getAllCampaigns() {
@@ -31,6 +34,7 @@ public class CampaignController {
         return campaignService.getUserAllCampaigns(campaignEntity.getUserId());
     }
 
+    //=================특정 캠페인(campaignId) 관리 페이지====================
     //campaignId의 내용 조회
     @PostMapping("/content")
     public List<CampaignEntity> CampaignContent(@RequestBody CampaignEntity campaignEntity){
@@ -39,5 +43,7 @@ public class CampaignController {
 
         return campaignService.getCampaignContent(userId, campaignId);
     }
+
+    //campaginId의 내용 업데이트
 
 }

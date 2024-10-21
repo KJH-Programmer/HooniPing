@@ -6,13 +6,17 @@ const API_URL = 'http://localhost:8080/api/campaign';
 // 캠페인 내용 가져오기
 export const GetCampaign = async (token, userId, campaignId) => {
     try {
-      const response = await axios.post(`${API_URL}/content`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(`${API_URL}/content`,
+        {
+          userId: userId,
+          campaignId: campaignId
         },
-        userId: userId,
-        campaignId: campaignId
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
       console.log("response:", response);
       return response.data;
     } catch (error) {
