@@ -63,17 +63,6 @@
           />
         </div>
 
-        <div class="input-field">
-          <label for="email">이메일</label> <!-- 이메일 입력 레이블 -->
-          <input
-            v-model="formData.email"
-            type="email"
-            id="email"
-            placeholder="이메일 입력"
-            required
-          />
-        </div>
-
         <button type="submit">회원가입</button> <!-- 회원가입 버튼 -->
       </form>
 
@@ -87,9 +76,18 @@ import axios from 'axios'; // Axios 라이브러리 임포트
 export default {
   data() {
     return {
-      formData: this.getInitialFormData(),
-      errors: { general: '', password: '' },
-      successMessage: ''
+      formData: {
+        userId: '',
+        password: '',
+        confirmPassword: '',
+        name: '',
+        email: ''
+      },
+      errors: {
+        user_id: '',
+        password: ''
+      },
+      successMessage: '' // 성공 메세지
     };
   },
   methods: {
@@ -111,8 +109,14 @@ export default {
         return;
       }
 
+      const payload = {
+        userId: this.formData.user_id,
+        userPassword: this.formData.password,
+        userName: this.formData.name
+      };
+
       try {
-        const { data, status } = await axios.post('http://localhost:8080/api/user/create', this.formData);
+        const response = await axios.post('http://localhost:8080/api/user/create', payload);
 
         if (status === 200) {
           this.handleResponse(data);

@@ -24,13 +24,15 @@ public class TokenProvider {
     }
 
     private String createToken(String userId, String userName) {
+        //토큰에 사용할 claims 작성
+        //Claims : Jwt에서 페이로드라고 불리는 부분에 저장되는 정보.
         Claims claims = Jwts.claims();
         claims.put("userId", userId);
         claims.put("userName", userName);
         ZonedDateTime now = ZonedDateTime.now();
-        long tokenValidTime = 60 * 30L;
+        long tokenValidTime = 60 * 30L; // 60초 * 30번 토큰 유효기간 30분
         ZonedDateTime tokenValidity = now.plusSeconds(tokenValidTime);
-
+        //토큰을 생성후 토큰 반환
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(Date.from(now.toInstant()))
@@ -40,10 +42,12 @@ public class TokenProvider {
     }
     
     public String getUserId(String token){
+        //CustomUserDetalilsService의 유저 확인에 사용할 userId를 받아옴
         return parseClaims(token).get("userId", String.class);
     }
 
     public boolean validateToken(String token) {
+        //유효한 토큰인지 검증
         Logger log = (Logger) LoggerFactory.getLogger(TokenProvider.class);
         try {
             Jwts.parserBuilder().setSigningKey(SecretKey).build().parseClaimsJws(token);
@@ -61,6 +65,9 @@ public class TokenProvider {
     }
 
     public Claims parseClaims(String accessToken) {
+        //토큰에서 Claims(사용자 정보)를 파싱하는 메서드
+        //만약 토큰이 만료되었으면 catch문이 작동. ExpiredJwtException 예외가 발생하고, 그 예외에서 Claims를 추출하여 반환.
+        //토큰이 유효한다면 getbody를 통해 Claims를 반환
         try {
             return Jwts.parserBuilder().setSigningKey(SecretKey).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
