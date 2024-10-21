@@ -1,6 +1,5 @@
 package wwee.jihun.Controller;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,7 @@ public class UserController {
     //로그인
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserEntity userEntity) {
-        //토큰을 발급받아서 token에 저장
+        //토큰을 발급받아서 token 저장
         String token = userAuthService.Login(userEntity.getUserId(), userEntity.getUserPassword());
         //login api 요청에 대한 token 반환
         return ResponseEntity.status(HttpStatus.OK).body(token);

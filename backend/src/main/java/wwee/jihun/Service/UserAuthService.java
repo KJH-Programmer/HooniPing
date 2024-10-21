@@ -3,7 +3,6 @@ package wwee.jihun.Service;
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.JwtToken.TokenProvider;
-import wwee.jihun.Repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
