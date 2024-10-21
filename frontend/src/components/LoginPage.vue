@@ -4,10 +4,10 @@
 
       <!-- 로고를 클릭하면 홈(/)으로 이동 -->
       <router-link to="/">
-        <img 
-          :src="require('@/assets/HooniPing.jpg')" 
-          alt="Logo" 
-          class="logo"
+        <img
+            :src="require('@/assets/HooniPing.jpg')"
+            alt="Logo"
+            class="logo"
         />
       </router-link>
 
@@ -18,21 +18,21 @@
         <form @submit.prevent="submitLogin"> <!-- submit 시 페이지 리로드 방지 및 로그인 함수 호출 -->
           <div class="input-field">
             <label for="user_id">아이디</label> <!-- 아이디 입력 레이블 -->
-            <input 
-              v-model="user_id" 
-              type="text" 
-              id="user_id" 
-              placeholder="아이디 입력"
+            <input
+                v-model="user_id"
+                type="text"
+                id="user_id"
+                placeholder="아이디 입력"
             />
           </div>
 
           <div class="input-field">
             <label for="password">비밀번호</label> <!-- 비밀번호 입력 레이블 -->
-            <input 
-              v-model="password" 
-              type="password" 
-              id="password" 
-              placeholder="비밀번호 입력"
+            <input
+                v-model="password"
+                type="password"
+                id="password"
+                placeholder="비밀번호 입력"
             />
           </div>
 
@@ -62,15 +62,16 @@ export default {
     async submitLogin() {
       try {
         // 서버로 로그인 요청을 보냄
-        const response = await axios.post('http://localhost:8080/api/login', {
-          user_id: this.user_id, // 입력된 아이디 전송
-          password: this.password // 입력된 비밀번호 전송
+        const response = await axios.post('http://localhost:8080/api/user/login', {
+          userId: this.user_id, // 입력된 아이디 전송
+          userPassword: this.password // 입력된 비밀번호 전송
         });
 
         // 로그인 성공 시, 서버 응답에서 받은 토큰과 사용자 아이디를 localStorage에 저장
-        localStorage.setItem('token', response.data.token); // 토큰 저장
-        localStorage.setItem('user_id', response.data.user_id); // 사용자 아이디 저장
-
+        localStorage.setItem('token', response.data); // 토큰 저장
+        localStorage.setItem('userId', this.user_id); // 사용자 아이디 저장
+        console.log(localStorage.getItem('token'));
+        console.log(response);
         // 로그인 성공 후 홈(/)으로 이동
         this.$router.push('/');
       } catch (error) {

@@ -3,7 +3,6 @@ package wwee.jihun.Service;
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.JwtToken.TokenProvider;
-import wwee.jihun.Repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +39,7 @@ public class UserAuthService {
         String tokenId = userEntity.map(UserEntity::getUserId).orElse(null);
         String tokenName = userEntity.map(UserEntity::getUserName).orElse(null);
         if(tokenId == null || tokenName == null){
-            return "Not User";
+            return ("Not User");
         }else{
             return tokenProvider.CreateAccessToken(tokenId,tokenName);
         }
