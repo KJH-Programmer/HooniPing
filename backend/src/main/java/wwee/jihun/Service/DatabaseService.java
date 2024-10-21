@@ -62,5 +62,8 @@ public class DatabaseService {
     public List<CampaignEntity> getCampaignContentByUserIdAndCampaignId(String userId, Long campaignId) {
         return campaignRepository.findAllByUserIdAndCampaignId(userId, campaignId);
     }
-
+    //userId 와 product 를 이용해 campaign 검색기능
+    public List<CampaignEntity> getCampaignSearch(String userId, String product) {
+        return campaignRepository.findAllByUserIdAndProduct(userId, product);
+    }
 }

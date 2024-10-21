@@ -25,15 +25,6 @@ public class CampaignService {
     //campaignId의 캠페인 내용 가져오기
     public List<CampaignEntity> getCampaignContent(String userId, Long campaignId) {
         return databaseService.getCampaignContentByUserIdAndCampaignId(userId, campaignId);
-
-//        if(campaignEntity.isEmpty()){
-//            return "Campaign Not Found";
-//        } else {
-////            String product = campaignEntity.map(CampaignEntity::getProduct).orElse("");
-////            String product = campaignContent.get(CampaignEntity::getProduct).orElse("");
-////            return "Product: "+ product;
-//            return campaignEntity;
-//        }
     }
     //userId 와 product 를 이용해 campaign 검색기능
     public List<CampaignEntity> getCampaignSearch(String userId, String product) {
