@@ -17,7 +17,7 @@ public class AwsLambdaService {
 
     public AwsLambdaService(){
         this.lambdaClient = LambdaClient.builder()
-                .credentialsProvider(ProfileCredentialsProvider.create("cloude2")).build();
+                .credentialsProvider(ProfileCredentialsProvider.create("claude2")).build();
         this.objectMapper = new ObjectMapper();
     }
 
