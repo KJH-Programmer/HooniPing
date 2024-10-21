@@ -70,3 +70,11 @@ resources
 node_modules/
 .idea/
 
+caches/
+deamon/
+gradle/
+jdks/
+native
+wrapper
+/daemon/
+/backend/daemon/
