@@ -73,7 +73,7 @@ export default {
         console.log(localStorage.getItem('token'));
         console.log(response);
         // 로그인 성공 후 홈(/)으로 이동
-        this.$router.push('/');
+        this.$router.push('/main');
       } catch (error) {
         // 로그인 실패 시 에러 로그를 출력하고 알림 표시
         console.error('로그인 실패:', error);

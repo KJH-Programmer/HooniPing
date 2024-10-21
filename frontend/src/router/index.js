@@ -10,12 +10,12 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/campaign',
       name: 'HelloWorld',
       component: HelloWorld,  // 기본 경로는 HelloWorld
     },
     {
-      path: '/login',
+      path: '/',
       name: 'LoginPage',
       component: LoginPage,   // /login 경로는 LoginPage
     },
