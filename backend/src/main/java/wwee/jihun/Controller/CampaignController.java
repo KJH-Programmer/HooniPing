@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/campaign")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:8081"})
 public class CampaignController {
     private final CampaignService campaignService;
 
@@ -19,6 +19,9 @@ public class CampaignController {
         this.campaignService = campaignService;
     }
 
+    // ***************<로그인 된 사용자(userId)의 캠페인 관리>****************
+
+    //==================전체 캠페인 관리 페이지======================
     //모든 캠페인 조회
     @GetMapping
     public List<CampaignEntity> getAllCampaigns() {
@@ -31,6 +34,7 @@ public class CampaignController {
         return campaignService.getUserAllCampaigns(campaignEntity.getUserId());
     }
 
+    //=================특정 캠페인(campaignId) 관리 페이지====================
     //campaignId의 내용 조회
     @PostMapping("/content")
     public List<CampaignEntity> CampaignContent(@RequestBody CampaignEntity campaignEntity){
@@ -40,4 +44,12 @@ public class CampaignController {
         return campaignService.getCampaignContent(userId, campaignId);
     }
 
+    //userId 와 product 를 이용해 campaign 검색기능
+    @PostMapping ("/search")
+    public List<CampaignEntity> CampaignSearch(@RequestBody CampaignEntity campaignEntity) {
+        String userId = campaignEntity.getUserId();
+        String product = campaignEntity.getProduct();
+
+        return campaignService.getCampaignSearch(userId, product);
+    }
 }
