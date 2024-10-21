@@ -52,6 +52,17 @@
           />
         </div>
 
+        <div class="input-field">
+          <label for="email">이메일</label>
+          <input
+            v-model="formData.email"
+            type="email"
+            id="email"
+            placeholder="이메일 입력"
+            required
+          />
+        </div>
+
         <button type="submit">회원가입</button>
       </form>
     </div>
@@ -59,7 +70,7 @@
 </template>
 
 <script>
-import { registerUser } from '@/api/UserService.js'; // 회원가입 API 호출
+import { registerUser } from '@/api/UserService.js';
 
 export default {
   data() {
@@ -69,7 +80,7 @@ export default {
         password: '',
         confirmPassword: '',
         name: '',
-        email: ''
+        email: '' 
       },
       errors: {
         userId: '',
@@ -105,7 +116,8 @@ export default {
       const payload = {
         userId: this.formData.userId,
         userPassword: this.formData.password,
-        userName: this.formData.name
+        userName: this.formData.name,
+        email: this.formData.email 
       };
 
       try {
@@ -131,8 +143,6 @@ export default {
   }
 };
 </script>
-
-
 
 <style scoped>
 .container {
@@ -184,19 +194,6 @@ button {
 
 button:hover {
   background-color: #36996e;
-}
-
-.check-button {
-  margin-top: 5px;
-  background-color: #42b983;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.check-button:hover {
-  background-color: #ccc;
 }
 
 .error-message {
