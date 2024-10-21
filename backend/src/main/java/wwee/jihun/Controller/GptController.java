@@ -14,6 +14,7 @@ public class GptController {
     @PostMapping
     public String GenerateAnswer(@RequestBody String Question){
         try {
+
             String response = awsLambdaService.RequestLambdaFunction(Question);
             return jsonDecoderService.DecodeAndFormat(response);
         } catch (Exception e) {
