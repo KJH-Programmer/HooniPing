@@ -116,7 +116,7 @@ export default {
       };
 
       try {
-        const response = await axios.post('http://localhost:8080/api/user/create', payload);
+        const data = await axios.post('http://localhost:8080/api/user/create', payload);
 
         if (status === 200) {
           this.handleResponse(data);
