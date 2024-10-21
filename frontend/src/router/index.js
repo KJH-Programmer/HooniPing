@@ -5,30 +5,40 @@ import LoginPage from '@/components/LoginPage.vue';
 import MainPage from '@/components/MainPage.vue';
 import SignupPage from '@/components/SignupPage.vue';
 
+
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
+  mode: 'history',  // URL 깔끔하게 유지
   routes: [
     {
       path: '/campaign',
       name: 'HelloWorld',
-      component: HelloWorld,  // 기본 경로는 HelloWorld
+      component: HelloWorld,
+      meta: { requiresAuth: true },  // 로그인 필요
+    },
+    {
+      path: '/login',
+      name: 'LoginPage',
+      component: LoginPage,
     },
     {
       path: '/',
-      name: 'LoginPage',
-      component: LoginPage,   // /login 경로는 LoginPage
-    },
-    {
-      path: '/main',
       name: 'MainPage',
-      component: MainPage,    // /main 경로는 MainPage
+      component: MainPage,
     },
     {
       path: '/signup',
       name: 'SignupPage',
-      component: SignupPage,  // /signup 경로는 SignupPage
+      component: SignupPage,
     },
   ],
 });
 
+// **라우터 가드 사용**
+import { 
+  authGuard 
+} from '@/api/authGuardService';  // 라우터 가드 임포트
+router.beforeEach(authGuard);  // authGuard 함수 호출
+
+export default router;
