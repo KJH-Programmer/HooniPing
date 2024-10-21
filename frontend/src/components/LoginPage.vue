@@ -17,11 +17,11 @@
         <!-- 로그인 폼 -->
         <form @submit.prevent="submitLogin"> <!-- submit 시 페이지 리로드 방지 및 로그인 함수 호출 -->
           <div class="input-field">
-            <label for="user_id">아이디</label> <!-- 아이디 입력 레이블 -->
+            <label for="userId">아이디</label> <!-- 아이디 입력 레이블 -->
             <input
-                v-model="user_id"
+                v-model="userId"
                 type="text"
-                id="user_id"
+                id="userId"
                 placeholder="아이디 입력"
             />
           </div>
@@ -48,12 +48,12 @@
 </template>
 
 <script>
-import axios from 'axios'; // Axios 라이브러리 임포트
+import { Login } from '@/api/loginService'; // 로그인 서비스 임포트
 
 export default {
   data() {
     return {
-      user_id: '', // 사용자가 입력한 아이디를 저장하는 변수
+      userId: '', // 사용자가 입력한 아이디를 저장하는 변수
       password: '' // 사용자가 입력한 비밀번호를 저장하는 변수
     };
   },
@@ -61,19 +61,17 @@ export default {
     // 로그인 처리 함수
     async submitLogin() {
       try {
-        // 서버로 로그인 요청을 보냄
-        const response = await axios.post('http://localhost:8080/api/user/login', {
-          userId: this.user_id, // 입력된 아이디 전송
-          userPassword: this.password // 입력된 비밀번호 전송
-        });
+        // loginService를 사용해 로그인 요청 수행
+        const response = await Login(this.userId, this.password);
 
         // 로그인 성공 시, 서버 응답에서 받은 토큰과 사용자 아이디를 localStorage에 저장
         localStorage.setItem('token', response.data); // 토큰 저장
-        localStorage.setItem('userId', this.user_id); // 사용자 아이디 저장
+        localStorage.setItem('userId', this.userId); // 사용자 아이디 저장
         console.log(localStorage.getItem('token'));
         console.log(response);
-        // 로그인 성공 후 홈(/)으로 이동
-        this.$router.push('/main');
+
+        // 로그인 성공 후 메인 페이지로 이동
+        this.$router.push('/');
       } catch (error) {
         // 로그인 실패 시 에러 로그를 출력하고 알림 표시
         console.error('로그인 실패:', error);
@@ -87,6 +85,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 /* 컨테이너: 화면의 중앙에 정렬 */
