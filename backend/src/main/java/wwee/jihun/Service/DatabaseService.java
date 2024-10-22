@@ -66,8 +66,4 @@ public class DatabaseService {
     public List<CampaignEntity> getCampaignSearch(String userId, String product) {
         return campaignRepository.findAllByUserIdAndProduct(userId, product);
     }
-    // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능
-    public void deleteByUserIdAndCampaignId(String userId, Long campaignId) {
-        campaignRepository.deleteByUserIdAndCampaignId(userId, campaignId);
-    }
 }

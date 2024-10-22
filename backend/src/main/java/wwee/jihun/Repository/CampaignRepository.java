@@ -1,6 +1,7 @@
 package wwee.jihun.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import wwee.jihun.Entity.CampaignEntity;
 
 import java.util.List;
@@ -18,6 +19,4 @@ public interface CampaignRepository extends JpaRepository<CampaignEntity, String
 
     // userID 와 Product 를 이용해 캠페인 검색 기능
     List<CampaignEntity> findAllByUserIdAndProduct(String userId, String product);
-    // // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능
-    void deleteByUserIdAndCampaignId(String userId, Long campaignId);
 }
