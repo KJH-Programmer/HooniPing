@@ -30,6 +30,7 @@ public class SecurityContext {
     }
 
     private static final String[] AUTH_WHITELIST = {
+            "/api/**",
             "/api/user/login",
             "/api/user/create"
     };
@@ -63,9 +64,6 @@ public class SecurityContext {
                         //@PreAuthrization을 사용할 것이기 때문에 모든 경로에 대한 인증처리는 Pass
                         .anyRequest().authenticated()
         );
-
         return http.build();
     }
-
-
 }
