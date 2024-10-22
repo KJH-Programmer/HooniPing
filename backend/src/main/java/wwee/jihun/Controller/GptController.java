@@ -2,7 +2,7 @@ package wwee.jihun.Controller;
 
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import wwee.jihun.Entity.GptEntity;
+import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.AwsLambdaService;
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
@@ -38,10 +38,16 @@ public class GptController {
         }
     }
 
-    @PostMapping("/chat")
-    public Mono<String[]> Chat(@RequestBody GptEntity gptEntity) {
-        String prompt = gptEntity.getPrompt();
+    @PostMapping("/keyword")
+    public Mono<String[]> Chat(@RequestBody CampaignEntity campaignEntity) {
+        String prompt = campaignEntity.getPrompt_for_ad_text();
         Mono<String> response = gptService.getChatResponse(prompt);
+        return jsonDecoderService.DecodeAndFormatGpt(response);
+    }
+
+    @PostMapping("/adtext")
+    public Mono<String[]> AdText(@RequestBody CampaignEntity campaignEntity) {
+        Mono<String> response = gptService.getAdText(campaignEntity);
         return jsonDecoderService.DecodeAndFormatGpt(response);
     }
 
