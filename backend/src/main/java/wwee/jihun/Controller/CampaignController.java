@@ -1,6 +1,7 @@
 package wwee.jihun.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Entity.UserEntity;
@@ -51,5 +52,15 @@ public class CampaignController {
         String product = campaignEntity.getProduct();
 
         return campaignService.getCampaignSearch(userId, product);
+    }
+    // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteCampaign(@RequestBody CampaignEntity campaignEntity) {
+        String userId = campaignEntity.getUserId();
+        Long campaignId = campaignEntity.getCampaignId();
+        // 서비스에서 캠페인 삭제 실행
+        campaignService.deleteCampaign(userId, campaignId);
+        // 삭제 성공 시 204 No Content 반환
+        return ResponseEntity.noContent().build();
     }
 }
