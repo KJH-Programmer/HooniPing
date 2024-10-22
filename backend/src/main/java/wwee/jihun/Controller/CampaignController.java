@@ -61,4 +61,14 @@ public class CampaignController {
 
         return campaignService.getCampaignSearch(userId, product);
     }
+    // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteCampaign(@RequestBody CampaignEntity campaignEntity) {
+        String userId = campaignEntity.getUserId();
+        Long campaignId = campaignEntity.getCampaignId();
+        // 서비스에서 캠페인 삭제 실행
+        campaignService.deleteCampaign(userId, campaignId);
+        // 삭제 성공 시 204 No Content 반환
+        return ResponseEntity.noContent().build();
+    }
 }

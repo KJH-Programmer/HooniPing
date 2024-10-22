@@ -50,4 +50,9 @@ public class CampaignService {
     public List<CampaignEntity> getCampaignSearch(String userId, String product) {
         return databaseService.getCampaignSearch(userId, product);
     }
+
+    // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능 추가
+    public void deleteCampaign(String userId, Long campaignId) {
+        databaseService.deleteByUserIdAndCampaignId(userId, campaignId);
+    }
 }
