@@ -69,4 +69,14 @@ resources
 /.idea/
 node_modules/
 .idea/
+.vscode/
+.gradle/
 
+caches/
+deamon/
+gradle/
+jdks/
+native
+wrapper
+/daemon/
+/backend/daemon/

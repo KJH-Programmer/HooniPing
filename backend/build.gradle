@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.springframework.boot:spring-boot-devtools'
     // 스프링 데이터 JPA
@@ -35,6 +36,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2' // JJWT의 Jackson 사용
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
 }
 
 test {

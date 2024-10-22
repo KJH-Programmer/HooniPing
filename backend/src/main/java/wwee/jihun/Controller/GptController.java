@@ -1,7 +1,10 @@
 package wwee.jihun.Controller;
 
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+import wwee.jihun.Entity.GptEntity;
 import wwee.jihun.Service.AwsLambdaService;
+import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
 
 // 스프링의 REST 컨트롤러, HTTP 요청을 처리하는 역할
@@ -15,6 +18,10 @@ public class GptController {
     AwsLambdaService awsLambdaService = new AwsLambdaService();
     // JsonDecoderService 클래스를 new 키워드를 통해 jsonDecoderService 객체를 만듬
     JsonDecoderService jsonDecoderService = new JsonDecoderService();
+    private final GptService gptService;
+    public GptController(GptService gptService) {
+        this.gptService = gptService;
+    }
 
     // HTTP POST 요청 처리
     @PostMapping
@@ -30,4 +37,12 @@ public class GptController {
             throw new RuntimeException(e);
         }
     }
+
+    @PostMapping("/chat")
+    public Mono<String[]> Chat(@RequestBody GptEntity gptEntity) {
+        String prompt = gptEntity.getPrompt();
+        Mono<String> response = gptService.getChatResponse(prompt);
+        return jsonDecoderService.DecodeAndFormatGpt(response);
+    }
+
 }
