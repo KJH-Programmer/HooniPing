@@ -42,5 +42,6 @@ bin/
 .DS_Store
 .idea
 resources
+application.properties
 
 /.idea/
