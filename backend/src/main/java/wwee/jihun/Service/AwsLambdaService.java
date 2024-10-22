@@ -1,3 +1,4 @@
+
 package wwee.jihun.Service;
 
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class AwsLambdaService {
 
     public AwsLambdaService(){
         this.lambdaClient = LambdaClient.builder()
-                .credentialsProvider(ProfileCredentialsProvider.create("claude2")).build();
+                .credentialsProvider(ProfileCredentialsProvider.create("cloude2")).build();
         this.objectMapper = new ObjectMapper();
     }
 

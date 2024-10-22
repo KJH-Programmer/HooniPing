@@ -72,3 +72,11 @@ node_modules/
 .vscode/
 .gradle/
 
+caches/
+deamon/
+gradle/
+jdks/
+native
+wrapper
+/daemon/
+/backend/daemon/

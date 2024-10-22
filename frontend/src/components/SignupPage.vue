@@ -1,48 +1,38 @@
+
 <template>
   <div class="container">
     <div class="form-wrapper">
-
-      <h2 class="form-title">회원가입</h2> <!-- 회원가입 제목 -->
+      <h2 class="form-title">회원가입</h2>
 
       <span v-if="errors.general" class="error-message">{{ errors.general }}</span>
 
-      <form @submit.prevent="handleSubmit"> <!-- 폼 제출 시 리로드 방지 -->
+      <form @submit.prevent="handleSubmit">
         <div class="input-field">
-          <label for="user_id">아이디</label> <!-- 아이디 입력 레이블 -->
+          <label for="userId">아이디</label>
           <input
-            v-model="formData.user_id"
+            v-model="formData.userId"
             type="text"
-            id="user_id"
+            id="userId"
             placeholder="아이디 입력"
             required
           />
-          <!-- 
-          <button
-            type="button"
-            class="check-button"
-            @click="checkUserId">
-            아이디 중복 확인
-          </button>
-          <span v-if="errors.user_id" class="text-red-500">{{ errors.user_id }}</span>
-          <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span> 
-          -->
         </div>
 
         <div class="input-field">
-          <label for="password">비밀번호</label> <!-- 비밀번호 입력 레이블 -->
+          <label for="password">비밀번호</label>
           <input
             v-model="formData.password"
             @input="validatePasswordLength"
             type="password"
             id="password"
             placeholder="비밀번호는 6자 이상, 14자 미만으로 입력하세요."
-            required
+            required minlength="6" maxlength="14"
           />
           <span v-if="errors.password" class="text-red-500">{{ errors.password }}</span>
         </div>
 
         <div class="input-field">
-          <label for="confirmPassword">비밀번호 재확인</label> <!-- 비밀번호 재확인 레이블 -->
+          <label for="confirmPassword">비밀번호 재확인</label>
           <input
             v-model="formData.confirmPassword"
             type="password"
@@ -53,7 +43,7 @@
         </div>
 
         <div class="input-field">
-          <label for="name">이름</label> <!-- 이름 입력 레이블 -->
+          <label for="name">이름</label>
           <input
             v-model="formData.name"
             type="text"
@@ -63,15 +53,14 @@
           />
         </div>
 
-        <button type="submit">회원가입</button> <!-- 회원가입 버튼 -->
+        <button type="submit">회원가입</button>
       </form>
-
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'; // Axios 라이브러리 임포트
+import { registerUser } from '@/api/UserService.js'; // 회원가입 API 호출
 
 export default {
   data() {
@@ -84,20 +73,25 @@ export default {
         email: ''
       },
       errors: {
-        user_id: '',
-        password: ''
+        userId: '',
+        password: '',
+        general: ''
       },
-      successMessage: '' // 성공 메세지
+      successMessage: ''
     };
   },
   methods: {
     getInitialFormData() {
-      return { user_id: '', password: '', confirmPassword: '', name: '', email: '' };
+      return { userId: '', password: '', confirmPassword: '', name: '', email: '' };
     },
     validatePasswordLength() {
       const length = this.formData.password.length;
-      this.errors.password = length < 6 || length >= 14 ? 
-        '비밀번호는 6자리 이상, 14자리 미만이어야 합니다.' : '';
+      this.errors.password = length < 6 || length >= 14
+        ? '비밀번호는 6자리 이상, 14자리 미만이어야 합니다.'
+        : '';
+    },
+    showError(field, message) {
+      this.errors[field] = message;
     },
     async handleSubmit() {
       if (this.formData.password !== this.formData.confirmPassword) {
@@ -110,21 +104,15 @@ export default {
       }
 
       const payload = {
-        userId: this.formData.user_id,
+        userId: this.formData.userId,
         userPassword: this.formData.password,
         userName: this.formData.name
       };
 
       try {
-        const data = await axios.post('http://localhost:8080/api/user/create', payload);
-
-        if (status === 200) {
-          this.handleResponse(response);
-        } else {
-          this.showError('general', '회원가입에 실패했습니다. 다시 시도해주세요.');
-        }
+        const response = await registerUser(payload);
+        this.handleResponse(response);
       } catch (error) {
-        console.error('회원가입 오류:', error);
         this.showError('general', '서버 오류가 발생했습니다. 나중에 다시 시도해주세요.');
       }
     },
@@ -138,39 +126,14 @@ export default {
         this.showError('general', '이미 사용 중인 아이디입니다');
       }
     },
-    showError(field, message) {
-      this.errors[field] = message;
-    },
     resetForm() {
       this.formData = this.getInitialFormData();
-    },
-    // 주석 처리된 아이디 중복 확인 로직
-    // async checkUserId() { 
-    //   if (this.formData.user_id === '') {
-    //     this.errors.user_id = '아이디를 입력해 주세요.';
-    //     return;
-    //   }
-
-    //   try {
-    //     const response = await axios.post('백엔드_api_주소/check-user-id', {
-    //       user_id: this.formData.user_id
-    //     });
-
-    //     if (response.data.exists) {
-    //       this.errors.user_id = '이미 존재하는 아이디입니다.';
-    //       this.successMessage = ''; // 성공 메세지 초기화
-    //     } else {
-    //       this.errors.user_id = ''; // 오류 메세지 제거
-    //       this.successMessage = '사용 가능한 아이디입니다.';
-    //     }
-    //   } catch (error) {
-    //     console.error('아이디 중복 체크 오류:', error);
-    //     this.errors.user_id = '아이디를 확인하는 중 오류가 발생했습니다.';
-    //   }
-    // }
+    }
   }
 };
 </script>
+
+
 
 <style scoped>
 .container {
