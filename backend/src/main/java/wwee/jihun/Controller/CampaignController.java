@@ -44,6 +44,12 @@ public class CampaignController {
         return campaignService.getCampaignContent(userId, campaignId);
     }
 
-    //campaginId의 내용 업데이트
+    //userId 와 product 를 이용해 campaign 검색기능
+    @PostMapping ("/search")
+    public List<CampaignEntity> CampaignSearch(@RequestBody CampaignEntity campaignEntity) {
+        String userId = campaignEntity.getUserId();
+        String product = campaignEntity.getProduct();
 
+        return campaignService.getCampaignSearch(userId, product);
+    }
 }

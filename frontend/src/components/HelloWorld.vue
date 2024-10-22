@@ -11,21 +11,21 @@
         </div>
         <div class="input-field">
           <label for="description">설명</label>
-          <textarea id="description" v-model="description" placeholder="설명을 입력하세요" @input="resizeTextarea($event)"></textarea>
+          <textarea id="description" v-model="description" placeholder="설명을 입력하세요"></textarea>
         </div>
-        <button @click="getCampaign">추천 내용 생성하기</button>
+        <button @click="generateAnswer">추천 내용 생성하기</button>
       </div>
 
 
       <div class="form">
         <hr>
         <div class="input-field">
-          <label for="brand2">제목</label>
+          <label for="brand2">제목1</label>
           <input type="text" id="brand2" v-model="brand2" placeholder="제목 입력">
         </div>
         <div class="input-field">
           <label for="description2">내용</label>
-          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요" @input="resizeTextarea($event)"></textarea>
+          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요"></textarea>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <hr>
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea id="preview" v-model="preview" :placeholder="description2" @input="resizeTextarea($event)"></textarea>
+          <textarea id="preview" v-model="preview" :placeholder="description2"></textarea>
         </div>
         <button @click="save">저장</button>
       </div>
@@ -44,123 +44,35 @@
 
 
 <script>
+//ai api 호출
 import {
   GenerateAnswer
 } from '@/api/GptService';
 
-import {
-  GetCampaign
-} from '@/api/CampaignService';
 
 
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      brand: '',  // brand
-      description: '',  // product
-      brand2: '', // keyword1
-      description2: '', // ad_text
-      preview: '',
-      userId: '',
-      campaignId: 1,
+      brand: '',
+      description: '',
+      brand2: '',
+      description2: '',
+      preview: ''
     };
   },
   methods: {
-
-    // 캠페인 내용 가져오기
-    async getCampaign() {
-      try {
-        // 로컬 스토리지에서 토큰 가져오기
-        const token = localStorage.getItem('token')
-        const userId = localStorage.getItem('userId')
-        // const token = localStorage.getItem('token');
-
-        // GetCampaign 함수 호출
-        const campaign = await GetCampaign(token, userId, this.campaignId);
-
-        this.brand = campaign[0].brand;
-        this.description = campaign[0].keyword3;
-        this.brand2 = campaign[0].keyword1;
-        this.description2 = campaign[0].keyword2;
-
-        
-        console.log('캠페인 내용 가져오기 성공:', campaign);
-      } catch (error) {
-        console.error('캠페인 내용 가져오기 중 오류:', error);
-      }
+    generateRecommendation() {
+      console.log('추천 내용 생성:', this.brand, this.description);
     },
-
-    // // 캠페인 생성
-    // async createCampaign() {
-    //   try {
-    //     // 로컬 스토리지에서 토큰 가져오기
-    //     const token = localStorage.getItem('token');
-        
-    //     // 캠페인 생성 데이터
-    //     const campaignData = {
-    //       brand: this.brand,
-    //       product: this.description,
-    //       keyword1: this.brand2,
-    //       ad_text: this.description2,
-    //     };
-
-    //     // 캠페인 생성 함수 호출
-    //     const response = await CreateCampaign(token, campaignData);
-
-    //     console.log('추천 내용 생성:', this.brand, this.description);
-    //   } catch (error) {
-    //     console.error('추천 내용 생성 중 오류 발생:', error);
-    //   }
-    // },
-
-    // // 캠페인 수정
-    // async updateCampaign(campaignId) {
-    //   try {
-    //     const token = localStorage.getItem('token');
-
-    //     // 수정할 데이터
-    //     const updatedData = {
-    //       brand: this.brand,
-    //       product: this.description,
-    //       keyword1: this.brand2,
-    //       ad_text: this.description2,
-    //     };
-
-    //     // 캠페인 수정 함수 호출
-    //     const response = await UpdateCampaign(token, campaignId, updatedData);
-
-    //     console.log('캠페인 수정 성공:', response);
-    //   } catch (error) {
-    //     console.error('캠페인 수정 중 오류:', error);
-    //   }
-    // },
-
     save() {
-      try {
-        console.log('저장:', this.preview);
-      } catch (error) {
-        console.error('저장 중 오류 발생:', error);
-      }
+      console.log('저장:', this.preview);
     },
-
     async generateAnswer() {
       const response = await GenerateAnswer(this.description);
       this.description2 = response.data;
-    },
-
-    resizeTextarea(event) {
-      try {
-        const textarea = event.target;
-        textarea.style.height = 'auto'; // 초기화
-        textarea.style.height = textarea.scrollHeight + 'px'; // 내용에 맞게 높이 조정
-      } catch (error) {
-        console.error('Textarea 리사이즈 중 오류 발생:', error);
-      }
-    },
-  },
-  mounted(){
-    this.getCampaign();
+    }
   }
 };
 </script>
@@ -170,7 +82,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
+  height: 40vh; 
 }
 
 .form-wrapper {
@@ -199,6 +111,10 @@ input, textarea {
   font-size: inherit;
 }
 
+textarea {
+  height: 100px; 
+}
+
 button {
   width: 100%; 
   padding: 10px;
@@ -212,16 +128,4 @@ button {
 button:hover {
   background-color: #36996e;
 }
-
-hr {
-  display: none; 
-}
-
-textarea {
-  height: auto; /* 기본 높이 설정 */
-  overflow: hidden; /* 스크롤 막기 */
-  resize: none; 
-}
-
-
 </style>

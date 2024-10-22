@@ -23,6 +23,4 @@ public class UserEntity {
 
     @Column(name = "password")
     private String userPassword;
-
-
 }

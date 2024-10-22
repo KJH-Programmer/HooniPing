@@ -1,12 +1,13 @@
-const { defineConfig } = require('@vue/cli-service')
-
+const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
-    port: 8081,  // 사용하고 싶은 포트를 지정하세요
+    port: 8081, // 원하는 포트로 변경
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080', // Spring Boot 백엔드 주소
+        changeOrigin: true,
+      },
+    },
   },
-  configureWebpack: {
-    devtool: 'source-map'
-  }
-})
-
+});
