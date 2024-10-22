@@ -64,6 +64,7 @@ public class DatabaseService {
         return campaignRepository.findAllByUserIdAndCampaignId(userId, campaignId);
     }
 
+
     //userId의 최대 campaignId 찾기
     public Long getMaxCampaignIdForUser(String userId) {
         Long maxCampaignId = campaignRepository.findMaxCampaignIdByUserId(userId);
@@ -71,4 +72,9 @@ public class DatabaseService {
     }
 
 
+
+    //userId 와 product 를 이용해 campaign 검색기능
+    public List<CampaignEntity> getCampaignSearch(String userId, String product) {
+        return campaignRepository.findAllByUserIdAndProduct(userId, product);
+    }
 }

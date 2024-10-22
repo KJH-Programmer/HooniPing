@@ -46,4 +46,8 @@ public class CampaignService {
         return campaignRepository.save(originalCampaign);
     }
 
+    //userId 와 product 를 이용해 campaign 검색기능
+    public List<CampaignEntity> getCampaignSearch(String userId, String product) {
+        return databaseService.getCampaignSearch(userId, product);
+    }
 }
