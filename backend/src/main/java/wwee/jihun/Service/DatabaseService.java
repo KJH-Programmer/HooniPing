@@ -1,6 +1,7 @@
 package wwee.jihun.Service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.Repository.CampaignRepository;
@@ -62,5 +63,12 @@ public class DatabaseService {
     public List<CampaignEntity> getCampaignContentByUserIdAndCampaignId(String userId, Long campaignId) {
         return campaignRepository.findAllByUserIdAndCampaignId(userId, campaignId);
     }
+
+    //userId의 최대 campaignId 찾기
+    public Long getMaxCampaignIdForUser(String userId) {
+        Long maxCampaignId = campaignRepository.findMaxCampaignIdByUserId(userId);
+        return (maxCampaignId == null ? 0 : maxCampaignId);
+    }
+
 
 }

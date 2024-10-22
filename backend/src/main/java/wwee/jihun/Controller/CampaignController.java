@@ -1,6 +1,7 @@
 package wwee.jihun.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Entity.UserEntity;
@@ -44,6 +45,12 @@ public class CampaignController {
         return campaignService.getCampaignContent(userId, campaignId);
     }
 
-    //campaginId의 내용 업데이트
+    //새로운 campaignId의 내용(사용자 입력, 생성된 콘텐츠) 저장
+    @PostMapping("/content/save")
+    public ResponseEntity<CampaignEntity> saveCampaign(@RequestBody CampaignEntity campaignEntity){
+        String userId = campaignEntity.getUserId();
+        CampaignEntity savedCampaign = campaignService.saveNewCampaign(userId, campaignEntity);
+        return ResponseEntity.ok(savedCampaign);
+    }
 
 }

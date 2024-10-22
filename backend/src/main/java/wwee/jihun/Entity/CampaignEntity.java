@@ -1,13 +1,13 @@
 package wwee.jihun.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.annotation.processing.Generated;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,9 +15,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_campaign")
 public class CampaignEntity {
 
+    @Setter
     @Id
-    @Column(name = "campaign_id")
+    @Column(name = "campaign_id", updatable = true)
     private Long campaignId;
+
 
     @Column(name = "user_id")
     private String userId;
@@ -51,4 +53,5 @@ public class CampaignEntity {
 
     @Column(name = "ad_image")
     private String ad_image;
+
 }
