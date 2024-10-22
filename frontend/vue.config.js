@@ -1,7 +1,9 @@
+
 const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
+
     port: 8081, // 원하는 포트로 변경
     proxy: {
       '/api': {

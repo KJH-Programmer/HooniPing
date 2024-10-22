@@ -69,6 +69,8 @@ resources
 /.idea/
 node_modules/
 .idea/
+.vscode/
+.gradle/
 
 caches/
 deamon/
