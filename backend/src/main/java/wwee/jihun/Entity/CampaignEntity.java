@@ -27,6 +27,9 @@ public class CampaignEntity {
     @Column(name = "product")
     private String product;
 
+    @Column(name = "keywords")
+    private String keywords;
+
     @Column(name = "keyword1")
     private String keyword1;
 
@@ -35,18 +38,6 @@ public class CampaignEntity {
 
     @Column(name = "keyword3")
     private String keyword3;
-
-    @Column(name = "brand")
-    private String brand;
-
-    @Column(name = "tone")
-    private String tone;
-
-    @Column(name = "prompt_for_ad_text")
-    private String prompt_for_ad_text;
-
-    @Column(name = "prompt_for_ad_image")
-    private String prompt_for_ad_image;
 
     @Column(name = "ad_text")
     private String ad_text;
