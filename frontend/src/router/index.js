@@ -1,50 +1,35 @@
 import Vue from 'vue';
-import Router from 'vue-router';
-import CampaignPage from '@/components/CampaignPage.vue';
-import LoginPage from '@/components/LoginPage.vue';
-import MainPage from '@/components/MainPage.vue';
+import VueRouter from 'vue-router';
+import MainPage from '../components/MainPage.vue';   
+import LoginPage from '../components/LoginPage.vue';
 import SignupPage from '@/components/SignupPage.vue';
-import WebPage from '@/components/WebPage.vue';
 
+// VueRouter를 사용하도록 Vue에 등록
+Vue.use(VueRouter);
 
-Vue.use(Router);
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: MainPage,  // MainPage를 기본 경로로 사용
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginPage,
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: SignupPage,
+  }
+];
 
-const router = new Router({
-  mode: 'history',  // URL 깔끔하게 유지
-  routes: [
-    {
-      path: '/CampaignPage',
-      name: 'CampaignPage',
-      component: CampaignPage,
-      meta: { requiresAuth: true },  // 로그인 필요
-    },
-    {
-      path: '/login',
-      name: 'LoginPage',
-      component: LoginPage,
-    },
-    {
-      path: '/',
-      name: 'MainPage',
-      component: MainPage,
-    },
-    {
-      path: '/signup',
-      name: 'SignupPage',
-      component: SignupPage,
-    },
-    {
-      path: '/webpage',
-      name: 'Webpage',
-      component: WebPage,
-    },
-  ],
+const router = new VueRouter({
+  mode: 'history',  // history 모드를 사용하여 브라우저 히스토리를 관리
+  base: process.env.BASE_URL,
+  routes,
 });
 
-// **라우터 가드 사용**
-import { 
-  authGuard 
-} from '@/api/authGuardService';  // 라우터 가드 임포트
-router.beforeEach(authGuard);  // authGuard 함수 호출
-
 export default router;
+
