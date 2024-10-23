@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld.vue';
+import CampaignPage from '@/components/CampaignPage.vue';
 import LoginPage from '@/components/LoginPage.vue';
 import MainPage from '@/components/MainPage.vue';
 import SignupPage from '@/components/SignupPage.vue';
+import WebPage from '@/components/WebPage.vue';
 
 
 Vue.use(Router);
@@ -12,9 +13,9 @@ const router = new Router({
   mode: 'history',  // URL 깔끔하게 유지
   routes: [
     {
-      path: '/campaign',
-      name: 'HelloWorld',
-      component: HelloWorld,
+      path: '/CampaignPage',
+      name: 'CampaignPage',
+      component: CampaignPage,
       meta: { requiresAuth: true },  // 로그인 필요
     },
     {
@@ -31,6 +32,11 @@ const router = new Router({
       path: '/signup',
       name: 'SignupPage',
       component: SignupPage,
+    },
+    {
+      path: '/webpage',
+      name: 'Webpage',
+      component: WebPage,
     },
   ],
 });
