@@ -42,7 +42,8 @@ dependencies {
 
     implementation 'org.openkoreantext:open-korean-text:2.1.0'
 
-
+    // Jsoup 의존성
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
 }
 
 test {
