@@ -20,7 +20,7 @@ public class WebCrawlingController {
     public WebCrawlingController(WebCrawlingService webCrawlingService) {
         this.webCrawlingService = webCrawlingService;
     }
-    // userId 와 Product 조회 후 웹크롤링 기능
+    // userId 와 Product 조회 후 웹크롤링 기능 추가
     @GetMapping("/crawl")
     public String crawlByUserAndProduct(@RequestParam String userId, @RequestParam String product) {
         try {

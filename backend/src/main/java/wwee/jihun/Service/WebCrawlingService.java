@@ -19,7 +19,7 @@ public class WebCrawlingService {
     public WebCrawlingService(WebCrawlingRepository webCrawlingRepository) {
         this.webCrawlingRepository = webCrawlingRepository;
     }
-    // userId 와 Product 조회 후 웹크롤링 기능
+    // userId 와 Product 조회 후 웹크롤링 기능 추가
     public String crawlByUserAndProduct(String userId, String product) throws IOException{
         List<CampaignEntity> campaigns = webCrawlingRepository.findAllByUserIdAndProduct(userId, product);
         if (campaigns.isEmpty()) {
