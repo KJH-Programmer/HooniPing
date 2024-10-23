@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import wwee.jihun.Entity.GptEntity;
 
 @Service
 public class JsonDecoderService {
     private final ObjectMapper objectMapper;
-    private GptEntity gptEntity;
     public  JsonDecoderService(){
         this.objectMapper = new ObjectMapper();
     }

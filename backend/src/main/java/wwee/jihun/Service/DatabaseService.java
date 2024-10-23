@@ -1,5 +1,6 @@
 package wwee.jihun.Service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Entity.UserEntity;
@@ -78,6 +79,7 @@ public class DatabaseService {
     }
 
     // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능 추가
+    @Transactional
     public void deleteByUserIdAndCampaignId(String userId, Long campaignId) {
         campaignRepository.deleteByUserIdAndCampaignId(userId, campaignId);
     }
