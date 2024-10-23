@@ -44,12 +44,6 @@
 
 
 <script>
-//ai api 호출
-import {
-  GenerateAnswer
-} from '@/api/GptService';
-
-
 export default {
   name: 'HelloWorld',
   data() {

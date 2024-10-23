@@ -1,35 +1,38 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import MainPage from '../components/MainPage.vue';   
-import LoginPage from '../components/LoginPage.vue';
+import Router from 'vue-router';
+import CampaignPage from '@/components/CampaignPage.vue';
+import LoginPage from '@/components/LoginPage.vue';
+import MainPage from '@/components/MainPage.vue';
 import SignupPage from '@/components/SignupPage.vue';
+import WebPage from '@/components/WebPage.vue';  
+Vue.use(Router);
 
-// VueRouter를 사용하도록 Vue에 등록
-Vue.use(VueRouter);
-
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: MainPage,  // MainPage를 기본 경로로 사용
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: LoginPage,
-  },
-  {
-    path: '/signup',
-    name: 'Signup',
-    component: SignupPage,
-  }
-];
-
-const router = new VueRouter({
-  mode: 'history',  // history 모드를 사용하여 브라우저 히스토리를 관리
-  base: process.env.BASE_URL,
-  routes,
+export default new Router({
+  routes: [
+    { 
+      path: '/webpage',
+      name: 'WebPage',     
+      component: WebPage,    
+    },
+    { 
+      path: '/CampaignPage',
+      name: 'CampaignPage',
+      component: CampaignPage,  
+    },
+    {
+      path: '/',
+      name: 'LoginPage',
+      component: LoginPage,   
+    },
+    {
+      path: '/main',
+      name: 'MainPage',
+      component: MainPage,   
+    },
+    {
+      path: '/signup',
+      name: 'SignupPage',
+      component: SignupPage,  // /signup 경로는 SignupPage
+    },
+  ],
 });
-
-export default router;
-
