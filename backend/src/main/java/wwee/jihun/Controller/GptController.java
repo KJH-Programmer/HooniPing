@@ -6,6 +6,9 @@ import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.AwsLambdaService;
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
+import wwee.jihun.Service.KoreanTextService;
+
+import java.util.List;
 
 // 스프링의 REST 컨트롤러, HTTP 요청을 처리하는 역할
 @RestController
@@ -19,6 +22,7 @@ public class GptController {
     // JsonDecoderService 클래스를 new 키워드를 통해 jsonDecoderService 객체를 만듬
     JsonDecoderService jsonDecoderService = new JsonDecoderService();
     private final GptService gptService;
+    KoreanTextService koreanTextService = new KoreanTextService();
     public GptController(GptService gptService) {
         this.gptService = gptService;
     }
@@ -49,6 +53,11 @@ public class GptController {
     public Mono<String[]> AdText(@RequestBody CampaignEntity campaignEntity) {
         Mono<String> response = gptService.getAdText(campaignEntity);
         return jsonDecoderService.DecodeAndFormatGpt(response);
+    }
+
+    @PostMapping("/extract")
+    public List<String> extractKeyword(@RequestBody String sentence){
+        return koreanTextService.extractKeywords(sentence);
     }
 
 }
