@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wwee.jihun.Entity.CampaignEntity;
-import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.Service.CampaignService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/campaign")
@@ -31,14 +31,14 @@ public class CampaignController {
 
     //userId의 전체 캠페인 조회
     @PostMapping("/user-campaign")
-    public List<CampaignEntity> getUserAllCampaigns(@RequestBody CampaignEntity campaignEntity){
+    public List<CampaignEntity> getUserAllCampaigns(@RequestBody CampaignEntity campaignEntity) {
         return campaignService.getUserAllCampaigns(campaignEntity.getUserId());
     }
 
     //=================특정 캠페인(campaignId) 관리 페이지====================
     //campaignId의 내용 조회
     @PostMapping("/content")
-    public List<CampaignEntity> CampaignContent(@RequestBody CampaignEntity campaignEntity){
+    public Optional<CampaignEntity> CampaignContent(@RequestBody CampaignEntity campaignEntity) {
         String userId = campaignEntity.getUserId();
         Long campaignId = campaignEntity.getCampaignId();
 
@@ -47,10 +47,18 @@ public class CampaignController {
 
     //새로운 campaignId의 내용(사용자 입력, 생성된 콘텐츠) 저장
     @PostMapping("/content/save")
-    public ResponseEntity<CampaignEntity> saveCampaign(@RequestBody CampaignEntity campaignEntity){
+    public ResponseEntity<CampaignEntity> saveCampaign(@RequestBody CampaignEntity campaignEntity) {
         String userId = campaignEntity.getUserId();
         CampaignEntity savedCampaign = campaignService.saveNewCampaign(userId, campaignEntity);
         return ResponseEntity.ok(savedCampaign);
+    }
+
+    @PutMapping("/content/update")
+    public ResponseEntity<CampaignEntity> updateCampaign(@RequestBody CampaignEntity campaignEntity) {
+        String userId = campaignEntity.getUserId();
+        Long campaignId = campaignEntity.getCampaignId();
+        CampaignEntity updatedCampaign = campaignService.updateCampaign(userId, campaignId, campaignEntity);
+        return ResponseEntity.ok(updatedCampaign);
     }
 
     //userId 와 product 를 이용해 campaign 검색기능

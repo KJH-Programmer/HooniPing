@@ -11,7 +11,6 @@ import java.util.Optional;
 public class CampaignService {
     private final DatabaseService databaseService;
     private final CampaignRepository campaignRepository;
-
     public CampaignService(DatabaseService databaseService, CampaignRepository campaignRepository) {
         this.databaseService = databaseService;
         this.campaignRepository = campaignRepository;
@@ -28,7 +27,7 @@ public class CampaignService {
     }
 
     //campaignId의 캠페인 내용 가져오기
-    public List<CampaignEntity> getCampaignContent(String userId, Long campaignId) {
+    public Optional<CampaignEntity> getCampaignContent(String userId, Long campaignId) {
         return databaseService.getCampaignContentByUserIdAndCampaignId(userId, campaignId);
     }
 
@@ -40,10 +39,16 @@ public class CampaignService {
         return campaignRepository.save(newCampaign);
     }
 
-    public CampaignEntity updateCampaign(String userId, CampaignEntity originalCampaign) {
-        Long maxCampaignId = databaseService.getMaxCampaignIdForUser(userId);
-        originalCampaign.setCampaignId(maxCampaignId);
-        return campaignRepository.save(originalCampaign);
+    //userId, campaignId인 캠페인 내용 업데이트
+    public CampaignEntity updateCampaign(String userId, Long campaignId, CampaignEntity updatedCampaign) {
+        //userId, campaignId인 기존 엔티티 조회
+        CampaignEntity existingCampaign = databaseService.getCampaignContentByUserIdAndCampaignId(userId, campaignId)
+                .orElseThrow(() -> new RuntimeException("Campaign not found for userId: " + userId + " and campaignId: " + campaignId));
+        // 기존 엔티티 -> 업데이트 엔티티
+        CampaignMapper.INSTANCE.updateCampaign(updatedCampaign, existingCampaign);
+
+        // 변경된 엔티티를 저장하고 반환
+        return campaignRepository.save(existingCampaign);
     }
 
     //userId 와 product 를 이용해 campaign 검색기능

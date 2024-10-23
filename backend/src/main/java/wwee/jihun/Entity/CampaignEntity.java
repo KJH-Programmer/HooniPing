@@ -10,12 +10,12 @@ import lombok.Setter;
 import javax.annotation.processing.Generated;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tb_campaign")
 public class CampaignEntity {
 
-    @Setter
     @Id
     @Column(name = "campaign_id", updatable = true)
     private Long campaignId;
