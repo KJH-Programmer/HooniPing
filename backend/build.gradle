@@ -36,7 +36,12 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2' // JJWT의 Jackson 사용
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
     implementation 'org.openkoreantext:open-korean-text:2.1.0'
+
 
 }
 

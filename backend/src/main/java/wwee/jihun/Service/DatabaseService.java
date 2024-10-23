@@ -60,13 +60,24 @@ public class DatabaseService {
     }
 
     //userId의 campaignId 캠페인의 내용 조회
-    public List<CampaignEntity> getCampaignContentByUserIdAndCampaignId(String userId, Long campaignId) {
+    public Optional<CampaignEntity> getCampaignContentByUserIdAndCampaignId(String userId, Long campaignId) {
         return campaignRepository.findAllByUserIdAndCampaignId(userId, campaignId);
     }
+
+
+
+    //userId의 최대 campaignId 찾기
+    public Long getMaxCampaignIdForUser(String userId) {
+        Long maxCampaignId = campaignRepository.findMaxCampaignIdByUserId(userId);
+        return (maxCampaignId == null ? 0 : maxCampaignId);
+    }
+
+
     //userId 와 product 를 이용해 campaign 검색기능
     public List<CampaignEntity> getCampaignSearch(String userId, String product) {
         return campaignRepository.findAllByUserIdAndProduct(userId, product);
     }
+
     // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능 추가
     @Transactional
     public void deleteByUserIdAndCampaignId(String userId, Long campaignId) {
