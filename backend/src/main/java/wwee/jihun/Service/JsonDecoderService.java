@@ -21,7 +21,7 @@ public class JsonDecoderService {
     }
 
     public Mono<String[]> DecodeAndFormatGpt(Mono<String> responseMono) {
-        // Mono로부터 비동기 응답을 받아서 처리
+        // Mono 로부터 비동기 응답을 받아서 처리
         return responseMono.map(response -> {
             try {
                 // JSON 문자열에서 choices의 content 필드를 추출
