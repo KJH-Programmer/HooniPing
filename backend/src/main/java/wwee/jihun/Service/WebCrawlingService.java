@@ -1,35 +1,38 @@
 package wwee.jihun.Service;
 
 import java.io.IOException;
-import java.security.DrbgParameters;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
-import wwee.jihun.Entity.CampaignEntity;
-import wwee.jihun.Repository.WebCrawlingRepository;
 
 @Service
 public class WebCrawlingService {
-    private final WebCrawlingRepository webCrawlingRepository;
 
-    @Autowired
-    public WebCrawlingService(WebCrawlingRepository webCrawlingRepository) {
-        this.webCrawlingRepository = webCrawlingRepository;
-    }
-    // userId 와 Product 조회 후 웹크롤링 기능 추가
-    public String crawlByUserAndProduct(String userId, String product) throws IOException{
-        List<CampaignEntity> campaigns = webCrawlingRepository.findAllByUserIdAndProduct(userId, product);
-        if (campaigns.isEmpty()) {
-            throw new IllegalArgumentException("해당하는 캠페인을 찾을 수 없습니다.");
-        }
-        // product 로 크롤링 URL 생성
-        CampaignEntity campaign = campaigns.get(0);
-        String crawlingURL = "https://www.google.com/search?q=" + campaign.getProduct() + " 광고&tbm=nws";
+    // 고정된 URL로 웹 크롤링 기능 추가
+    public String crawlAndExtractContent() throws IOException {
+        // 고정된 URL
+        String crawlingURL = "https://www.shinailbo.co.kr/news/articleView.html?idxno=1943254";  // 원하는 URL로 수정
+
         // 크롤링 실행
         Document doc = Jsoup.connect(crawlingURL).get();
-        return doc.toString();
+        String htmlContent = doc.toString();  // 전체 HTML 가져오기
+
+        // HTML 태그 제거
+        String plainText = Jsoup.clean(htmlContent, Safelist.none());
+
+        // 정규식을 사용해 첫 번째 "기자"부터 마지막 "기자"까지의 내용 추출
+        Pattern pattern = Pattern.compile("(.*?기자)(.*기자)", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(plainText);
+
+        if (matcher.find()) {
+            // 첫 번째 "기자"부터 마지막 "기자"까지의 내용 추출
+            return matcher.group(0).trim();
+        } else {
+            return "기사를 찾을 수 없거나 형식이 맞지 않습니다.";
+        }
     }
 }
