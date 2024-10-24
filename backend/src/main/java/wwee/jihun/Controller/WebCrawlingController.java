@@ -11,7 +11,6 @@ import wwee.jihun.Service.WebCrawlingService;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:8081")
 public class WebCrawlingController {
-
     private final WebCrawlingService webCrawlingService;
 
     @Autowired
