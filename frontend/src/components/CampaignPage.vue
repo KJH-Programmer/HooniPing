@@ -11,7 +11,7 @@
         </div>
         <div class="input-field">
           <label for="description">설명</label>
-          <textarea id="description" v-model="description" placeholder="설명을 입력하세요"></textarea>
+          <textarea id="description" v-model="description" placeholder="설명을 입력하세요" @input="resizeTextarea($event)"></textarea>
         </div>
         <button @click="generateAnswer">추천 내용 생성하기</button>
       </div>
@@ -20,12 +20,12 @@
       <div class="form">
         <hr>
         <div class="input-field">
-          <label for="brand2">제목1</label>
+          <label for="brand2">제목</label>
           <input type="text" id="brand2" v-model="brand2" placeholder="제목 입력">
         </div>
         <div class="input-field">
           <label for="description2">내용</label>
-          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요"></textarea>
+          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요" @input="resizeTextarea($event)"></textarea>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <hr>
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea id="preview" v-model="preview" :placeholder="description2"></textarea>
+          <textarea id="preview" v-model="preview" :placeholder="description2" @input="resizeTextarea($event)"></textarea>
         </div>
         <button @click="save">저장</button>
       </div>
@@ -44,13 +44,6 @@
 
 
 <script>
-//ai api 호출
-import {
-  GenerateAnswer
-} from '@/api/GptService';
-
-
-
 export default {
   name: 'HelloWorld',
   data() {
@@ -69,9 +62,10 @@ export default {
     save() {
       console.log('저장:', this.preview);
     },
-    async generateAnswer() {
-      const response = await GenerateAnswer(this.description);
-      this.description2 = response.data;
+    resizeTextarea(event) {
+      const textarea = event.target;
+      textarea.style.height = 'auto'; 
+      textarea.style.height = textarea.scrollHeight + 'px'; 
     }
   }
 };
@@ -82,7 +76,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40vh; 
+  height: 100vh; 
 }
 
 .form-wrapper {
@@ -111,10 +105,6 @@ input, textarea {
   font-size: inherit;
 }
 
-textarea {
-  height: 100px; 
-}
-
 button {
   width: 100%; 
   padding: 10px;
@@ -128,4 +118,16 @@ button {
 button:hover {
   background-color: #36996e;
 }
+
+hr {
+  display: none; 
+}
+
+textarea {
+  height: auto; 
+  overflow: hidden; 
+  resize: none; 
+}
+
+
 </style>
