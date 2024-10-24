@@ -39,11 +39,13 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
     implementation 'org.openkoreantext:open-korean-text:2.1.0'
 
     // Jsoup 의존성
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
+
+    implementation 'org.json:json:20230227'
+
 }
 
 test {
