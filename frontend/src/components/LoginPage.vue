@@ -3,7 +3,7 @@
     <div class="form-wrapper"> <!-- 로고와 폼을 감싸는 래퍼 -->
 
       <!-- 로고를 클릭하면 홈(/)으로 이동 -->
-      <router-link to="/">
+      <router-link to="/main">
         <img
             :src="require('@/assets/HooniPing.jpg')"
             alt="Logo"
@@ -71,7 +71,7 @@ export default {
         console.log(response);
 
         // 로그인 성공 후 메인 페이지로 이동
-        this.$router.push('/');
+        this.$router.push('/main');
       } catch (error) {
         // 로그인 실패 시 에러 로그를 출력하고 알림 표시
         console.error('로그인 실패:', error);
