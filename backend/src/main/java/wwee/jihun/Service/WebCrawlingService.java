@@ -20,16 +20,15 @@ public class WebCrawlingService {
         this.webCrawlingRepository = webCrawlingRepository;
     }
     // userId 와 Product 조회 후 웹크롤링 기능 추가
-    public String crawlByUserAndProduct(String userId, String product) throws IOException{
-        List<CampaignEntity> campaigns = webCrawlingRepository.findAllByUserIdAndProduct(userId, product);
-        if (campaigns.isEmpty()) {
-            throw new IllegalArgumentException("해당하는 캠페인을 찾을 수 없습니다.");
-        }
-        // product 로 크롤링 URL 생성
-        CampaignEntity campaign = campaigns.get(0);
-        String crawlingURL = "https://www.google.com/search?q=" + campaign.getProduct() + " 광고&tbm=nws";
+    public String crawlByUserAndProduct(String url){
+
         // 크롤링 실행
-        Document doc = Jsoup.connect(crawlingURL).get();
-        return doc.toString();
+        try {
+            Document doc = Jsoup.connect(url).get();
+            return doc.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

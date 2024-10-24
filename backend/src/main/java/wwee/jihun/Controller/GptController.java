@@ -60,4 +60,9 @@ public class GptController {
         return koreanTextService.extractKeywords(sentence);
     }
 
+    @GetMapping
+    public String testapi(@RequestParam String product){
+        return gptService.getKeyword(product);
+    }
+
 }

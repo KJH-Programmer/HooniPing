@@ -1,20 +1,33 @@
 package wwee.jihun.Service;
 
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
+import wwee.jihun.JwtToken.TokenProvider;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GptService {
     private final WebClient webClient;
+    private final RagService ragService;
+    private final WebCrawlingService webCrawlingService;
+    private final KoreanTextService koreanTextService;
 
     @Value("${gpt.api.key}")
     private String apiKey;
 
-    public GptService(WebClient.Builder webClientBuilder) {
+    public GptService(WebClient.Builder webClientBuilder, RagService ragService, KoreanTextService koreanTextService, WebCrawlingService webCrawlingService) {
         this.webClient = webClientBuilder.baseUrl("https://api.openai.com/v1").build();
+        this.ragService = ragService;
+        this.koreanTextService = koreanTextService;
+        this.webCrawlingService = webCrawlingService;
     }
 
     public Mono<String> getChatResponse(String prompt) {
@@ -56,4 +69,27 @@ public class GptService {
                 .bodyToMono(String.class);
 
     }
+
+    public String getKeyword(String product){
+        //tavily로 product 연관된 웹사이트 url 가지고옴
+        List<String> urlList = ragService.callTavilyModel(product).block();
+
+        //tavily로 가져온 url 크롤링
+        List<String> crawling = new ArrayList<>();
+        for (int i = 0; i<urlList.size(); i++){
+            crawling.add(webCrawlingService.crawlByUserAndProduct(urlList.get(i)));
+        }
+
+        //크롤링 한 html에서 단어 추출
+        List<List<String>> tokenList = new ArrayList<>();
+        for(int i = 0; i<crawling.size(); i++){
+            tokenList.add(koreanTextService.extractKeywords(crawling.get(i)));
+        }
+
+
+
+        return " ";
+    }
 }
+
+
