@@ -37,12 +37,13 @@ public class TavilySearchService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("api_key", tavilyApiKey);
         requestBody.put("query", query);
-        requestBody.put("search_depth", "basic");
+//        requestBody.put("topic", "news");
+        requestBody.put("search_depth", "advanced");
         requestBody.put("include_answer", false);
         requestBody.put("include_images", false);
         requestBody.put("include_image_descriptions", false);
         requestBody.put("include_raw_content", false);
-        requestBody.put("max_results", 5);
+        requestBody.put("max_results", 10);
         requestBody.put("include_domains", new ArrayList<>());
         requestBody.put("exclude_domains", new ArrayList<>());
 
@@ -63,6 +64,7 @@ public class TavilySearchService {
 
             // API 응답에서 "results"의 "url" 추출
             return extractUrls(response.getBody());
+//            return (List<String>) response.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>(); // 빈 리스트 반환

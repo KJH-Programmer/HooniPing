@@ -17,7 +17,7 @@ public class TavilyController {
         this.tavilySearchService = tavilySearchService;
     }
 
-    // /api/tavily 엔드포인트에 GET 요청을 처리
+    // /api/tavily 엔드포인트에 POST 요청을 처리
     @PostMapping
     public List<String> searchProduct(@RequestBody String product) {
         return tavilySearchService.searchProduct(product); // 서비스 메서드 호출
