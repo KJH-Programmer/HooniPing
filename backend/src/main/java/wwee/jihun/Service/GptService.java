@@ -6,6 +6,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class GptService {
     private final WebClient webClient;
@@ -57,3 +60,5 @@ public class GptService {
 
     }
 }
+
+

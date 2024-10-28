@@ -6,7 +6,7 @@ import wwee.jihun.Entity.CampaignEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-10-24T09:37:04+0900",
+    date = "2024-10-25T09:27:09+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Ubuntu)"
 )
 @Component

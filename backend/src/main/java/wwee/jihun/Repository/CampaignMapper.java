@@ -1,4 +1,4 @@
-package wwee.jihun.Service;
+package wwee.jihun.Repository;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

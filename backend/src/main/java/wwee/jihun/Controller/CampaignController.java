@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import wwee.jihun.Entity.CampaignEntity;
+import wwee.jihun.Prompt.TonePrompt;
+import wwee.jihun.Repository.CampaignMapper;
 import wwee.jihun.Service.CampaignService;
 
 import java.util.List;
@@ -15,10 +17,12 @@ import java.util.Optional;
 @CrossOrigin(origins = {"http://localhost:8081"})
 public class CampaignController {
     private final CampaignService campaignService;
+    private final TonePrompt tonePrompt;
 
     @Autowired
-    public CampaignController(CampaignService campaignService) {
+    public CampaignController(CampaignService campaignService, TonePrompt tonePrompt) {
         this.campaignService = campaignService;
+        this.tonePrompt = tonePrompt;
     }
 
     // ***************<로그인 된 사용자(userId)의 캠페인 관리>****************
@@ -82,5 +86,10 @@ public class CampaignController {
 
         // 삭제 성공 시 204 No Content 반환
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/test")
+    public String test() {
+        return tonePrompt.getLuckviki();
     }
 }
