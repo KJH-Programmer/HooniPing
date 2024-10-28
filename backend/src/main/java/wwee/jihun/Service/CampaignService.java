@@ -2,6 +2,7 @@ package wwee.jihun.Service;
 
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.CampaignEntity;
+import wwee.jihun.Repository.CampaignMapper;
 import wwee.jihun.Repository.CampaignRepository;
 
 import java.util.List;
