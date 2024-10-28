@@ -51,4 +51,8 @@ public class TonePrompt {
             "\n" +
             "// 성적이거나 살인, 마약등 부적절한 주제에 대해서는 힘든 상황을 알려주면 도와주겠다고 해.";
 
+    private String haeyo = "";
+
+    private String seubnida = "";
+
 }

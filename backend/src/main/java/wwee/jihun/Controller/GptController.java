@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
+import wwee.jihun.Service.SwarmService;
 
 // 스프링의 REST 컨트롤러, HTTP 요청을 처리하는 역할
 @RestController
@@ -16,8 +17,10 @@ public class GptController {
     // JsonDecoderService 클래스를 new 키워드를 통해 jsonDecoderService 객체를 만듬
     JsonDecoderService jsonDecoderService = new JsonDecoderService();
     private final GptService gptService;
-    public GptController(GptService gptService) {
+    private final SwarmService swarmService;
+    public GptController(GptService gptService, SwarmService swarmService) {
         this.gptService = gptService;
+        this.swarmService = swarmService;
     }
 
     @PostMapping("/keyword")
@@ -28,9 +31,8 @@ public class GptController {
     }
 
     @PostMapping("/adtext")
-    public Mono<String[]> AdText(@RequestBody CampaignEntity campaignEntity) {
-        Mono<String> response = gptService.getAdText(campaignEntity);
-        return jsonDecoderService.DecodeAndFormatGpt(response);
+    public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity) {
+        return swarmService.generateCasualInstagramAd(campaignEntity);
     }
 
 }
