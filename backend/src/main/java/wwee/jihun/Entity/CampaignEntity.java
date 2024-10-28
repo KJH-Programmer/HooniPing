@@ -54,4 +54,7 @@ public class CampaignEntity {
     @Column(name = "ad_image")
     private String ad_image;
 
+    @Column(name = "ad_format")
+    private String ad_format;
+
 }
