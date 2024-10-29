@@ -24,9 +24,9 @@ public class GptService {
 
     public Mono<String> getChatResponse(String prompt) {
         Map<String, Object> requestBody = Map.of(
-                "model", "gpt-4",
+                "model", "gpt-4o-mini",
                 "messages", List.of(Map.of("role", "user", "content", prompt)),
-                "max_tokens", 150
+                "max_tokens", 3000
         );
 
         return webClient.post()
