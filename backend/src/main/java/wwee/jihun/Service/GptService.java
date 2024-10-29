@@ -25,12 +25,10 @@ public class GptService {
 
     public Mono<String> getChatResponse(String prompt, String systemMessage) {
         Map<String, Object> requestBody = Map.of(
-                "model", "gpt-4o",
-                "messages", List.of(
-                        Map.of("role", "system", "content", systemMessage),  // 시스템 메시지 추가
-                        Map.of("role", "user", "content", prompt)         // 사용자 메시지 추가
-                ),
-                "max_tokens", 300
+
+                "model", "gpt-4o-mini",
+                "messages", List.of(Map.of("role", "user", "content", prompt)),
+                "max_tokens", 3000
         );
 
         return webClient.post()
