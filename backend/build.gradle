@@ -22,8 +22,8 @@ dependencies {
     // 인메모리 데이터베이스
     runtimeOnly 'com.h2database:h2'
     // 롬복
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'software.amazon.awssdk:lambda:2.17.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
@@ -44,6 +44,8 @@ dependencies {
 
     // Jsoup 의존성
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
+
+    implementation 'org.json:json:20230227'
 }
 
 test {

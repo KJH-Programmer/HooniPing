@@ -23,12 +23,12 @@ public class GptController {
         this.swarmService = swarmService;
     }
 
-    @PostMapping("/keyword")
-    public Mono<String[]> Chat(@RequestBody CampaignEntity campaignEntity) {
-        String prompt = campaignEntity.getPrompt_for_ad_text();
-        Mono<String> response = gptService.getChatResponse(prompt);
-        return jsonDecoderService.DecodeAndFormatGpt(response);
-    }
+//    @PostMapping("/keyword")
+//    public Mono<String[]> Chat(@RequestBody CampaignEntity campaignEntity) {
+//        String prompt = campaignEntity.getPrompt_for_ad_text();
+//        Mono<String> response = gptService.getChatResponse(prompt, systemMessage);
+//        return jsonDecoderService.DecodeAndFormatGpt(response);
+//    }
 
     @PostMapping("/adtext")
     public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity) {
