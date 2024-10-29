@@ -23,6 +23,8 @@ public class AgentC {
         String toneExample = switch (campaignEntity.getTone()) {
             case "럭키비키체" -> tonePrompt.getLuckviki();
             case "해요체" -> tonePrompt.getHaeyo();
+            case "반말" -> tonePrompt.getBanmal();
+            case "신조어" -> tonePrompt.getNeologism();
             default -> tonePrompt.getSeubnida();
         };
 
