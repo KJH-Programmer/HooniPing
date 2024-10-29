@@ -27,7 +27,11 @@ public class GptService {
         Map<String, Object> requestBody = Map.of(
 
                 "model", "gpt-4o-mini",
-                "messages", List.of(Map.of("role", "user", "content", prompt)),
+//                "messages", List.of(Map.of("role", "user", "content", prompt)),
+                "messages", List.of(
+                        Map.of("role", "system", "content", systemMessage),
+                        Map.of("role", "user", "content", prompt)
+                ),
                 "max_tokens", 3000
         );
 
@@ -38,12 +42,7 @@ public class GptService {
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(Map.class)
-//                .bodyToMono(String.class) // 일단 String으로 받아서 로그로 확인
-//                .doOnNext(response -> System.out.println("GPT Response: " + response)) // 로그 출력
                 .map(response -> {
-                    // JSON 파싱을 위해 다시 Map 형식으로 변환 시도
-//                    ObjectMapper mapper = new ObjectMapper();
-//                    Map<String, Object> parsedResponse = mapper.readValue(response, new TypeReference<Map<String, Object>>() {});
                     // 응답에서 텍스트 추출
                     List<Map<String, Object>> choices = (List<Map<String, Object>>) response.get("choices");
                     Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
