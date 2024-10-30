@@ -20,7 +20,6 @@ public class CampaignEntity {
     @Column(name = "campaign_id", updatable = true)
     private Long campaignId;
 
-
     @Column(name = "user_id")
     private String userId;
 
@@ -58,3 +57,4 @@ public class CampaignEntity {
     private String ad_format;
 
 }
+
