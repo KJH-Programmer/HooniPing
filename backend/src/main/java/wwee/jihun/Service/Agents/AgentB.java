@@ -18,9 +18,13 @@ public class AgentB {
     }
     public Mono<String> generateInstagramAdFormat(CampaignEntity campaignEntity,String keywordsAndInfo) {
 
+        String adFormat = campaignEntity.getAd_format();
+        if (adFormat == null || adFormat.isBlank()) {
+            adFormat = "기본 광고 문구";
+        }
         String prompt = String.format(
-                keywordsAndInfo +"해당 광고 문구를 %s에 어울리는 형식으로 작성해줘",
-                campaignEntity.getAd_format()
+                keywordsAndInfo +"\n 해당 광고 문구를 %s에 어울리는 형식으로 작성해줘.",
+                adFormat
         );
 
         String systemMessage = systemPrompt.getAgentBSystemMessage();
