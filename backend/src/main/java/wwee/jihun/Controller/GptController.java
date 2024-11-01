@@ -7,6 +7,12 @@ import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.*;
 
 import java.io.IOException;
+import java.security.Key;
+
+import wwee.jihun.Service.GptService;
+import wwee.jihun.Service.JsonDecoderService;
+import wwee.jihun.Service.KeywordService;
+import wwee.jihun.Service.SwarmService;
 
 // 스프링의 REST 컨트롤러, HTTP 요청을 처리하는 역할
 @RestController
@@ -21,18 +27,13 @@ public class GptController {
     private final SwarmService swarmService;
     private final DalleService dalleService;
     private final S3Service s3Service;
-    public GptController(GptService gptService, SwarmService swarmService, DalleService dalleService, S3Service s3Service) {
+    private final KeywordService keywordService;
+    public GptController(GptService gptService, SwarmService swarmService, DalleService dalleService, S3Service s3Service, KeywordService keywordService) {
         this.gptService = gptService;
         this.swarmService = swarmService;
         this.dalleService = dalleService;
         this.s3Service = s3Service;
-    }
-
-    @PostMapping("/keyword")
-    public Mono<String[]> Chat(@RequestBody CampaignEntity campaignEntity) {
-        String prompt = campaignEntity.getPrompt_for_ad_text();
-        Mono<String> response = gptService.getChatResponse(prompt);
-        return jsonDecoderService.DecodeAndFormatGpt(response);
+        this.keywordService = keywordService;
     }
     //광고 문구 출력
     @PostMapping("/adtext")
@@ -60,5 +61,9 @@ public class GptController {
         return s3Service.getFileUrl(fileName);
     }
 
-}
+    @PostMapping("/keyword")
+    public Mono<String> Chat(@RequestBody CampaignEntity campaignEntity) {
+        return keywordService.suggestKeywords(campaignEntity);
+    }
 
+}

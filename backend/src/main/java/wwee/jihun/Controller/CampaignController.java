@@ -88,8 +88,4 @@ public class CampaignController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/test")
-    public String test() {
-        return tonePrompt.getLuckviki();
-    }
 }

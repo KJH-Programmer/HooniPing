@@ -12,25 +12,32 @@ public class SwarmService {
     private final AgentA agentA;
     private final AgentB agentB;
     private final AgentC agentC;
+    private final KeywordService keywordService;
 
-    public SwarmService(AgentA agentA, AgentB agentB, AgentC agentC) {
+    public SwarmService(AgentA agentA, AgentB agentB, AgentC agentC, KeywordService keywordService) {
         this.agentA = agentA;
         this.agentB = agentB;
         this.agentC = agentC;
+        this.keywordService = keywordService;
     }
 
     public Mono<String> generateCasualInstagramAd(CampaignEntity campaignEntity) {
-        // Step 1: agentA를 통해 키워드와 제품 정보 생성
-        return agentA.generateKeywordsAndProductInfo(campaignEntity)
-                .flatMap(keywordsAndInfo ->
-                        // Step 2: agentB를 통해 인스타그램 피드 광고 형식 생성
-                        agentB.generateInstagramAdFormat(campaignEntity,keywordsAndInfo).flatMap(adFormat ->
-                                // Step 3: agentC를 통해 반말 형식으로 변환
-                                agentC.convertToCasualTone(campaignEntity,adFormat).map(casualAd ->
-                                        "광고 문구:\n" + casualAd
-                                )
-                        )
-                );
+        return keywordService.suggestKeywords(campaignEntity)
+                .flatMap(keywords -> {
+                    campaignEntity.setKeywords(keywords);
+                    // Step 1: agentA를 통해 키워드와 제품 정보 생성
+                    return agentA.generateKeywordsAndProductInfo(campaignEntity, keywords)
+                            .flatMap(keywordsAndInfo ->
+                                    // Step 2: agentB를 통해 인스타그램 피드 광고 형식 생성
+                                    agentB.generateAdFormat(campaignEntity,keywordsAndInfo).flatMap(adFormat ->
+                                            // Step 3: agentC를 통해 반말 형식으로 변환
+                                            agentC.convertToCasualTone(campaignEntity,adFormat).map(casualAd ->
+                                                    "광고 문구:\n" + casualAd
+                                            )
+                                    )
+                            );
+                });
+
     }
 
 }

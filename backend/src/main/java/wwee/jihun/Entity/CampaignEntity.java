@@ -20,7 +20,6 @@ public class CampaignEntity {
     @Column(name = "campaign_id", updatable = true)
     private Long campaignId;
 
-
     @Column(name = "user_id")
     private String userId;
 
@@ -35,6 +34,9 @@ public class CampaignEntity {
 
     @Column(name = "keyword3")
     private String keyword3;
+
+    @Column(name = "keywords")
+    private String keywords;
 
     @Column(name = "brand")
     private String brand;
@@ -60,4 +62,11 @@ public class CampaignEntity {
     @Column(name = "image_url")
     private String image_url;
 
+    @Column(name = "brand_model")
+    private String brand_model;
+
+    @Column(name = "features")
+    private String features;
+
 }
+

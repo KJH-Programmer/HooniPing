@@ -1,5 +1,6 @@
 package wwee.jihun.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,15 @@ public class GptService {
         this.webClient = webClientBuilder.baseUrl("https://api.openai.com/v1").build();
     }
 
-    public Mono<String> getChatResponse(String prompt) {
+    public Mono<String> getChatResponse(String prompt, String systemMessage) {
         Map<String, Object> requestBody = Map.of(
+
                 "model", "gpt-4o-mini",
-                "messages", List.of(Map.of("role", "user", "content", prompt)),
+//                "messages", List.of(Map.of("role", "user", "content", prompt)),
+                "messages", List.of(
+                        Map.of("role", "system", "content", systemMessage),
+                        Map.of("role", "user", "content", prompt)
+                ),
                 "max_tokens", 3000
         );
 
@@ -44,5 +50,3 @@ public class GptService {
                 });
     }
 }
-
-
