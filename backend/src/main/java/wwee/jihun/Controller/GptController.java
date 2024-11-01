@@ -1,11 +1,12 @@
 package wwee.jihun.Controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
-import wwee.jihun.Service.GptService;
-import wwee.jihun.Service.JsonDecoderService;
-import wwee.jihun.Service.SwarmService;
+import wwee.jihun.Service.*;
+
+import java.io.IOException;
 
 // 스프링의 REST 컨트롤러, HTTP 요청을 처리하는 역할
 @RestController
@@ -18,9 +19,13 @@ public class GptController {
     JsonDecoderService jsonDecoderService = new JsonDecoderService();
     private final GptService gptService;
     private final SwarmService swarmService;
-    public GptController(GptService gptService, SwarmService swarmService) {
+    private final DalleService dalleService;
+    private final S3Service s3Service;
+    public GptController(GptService gptService, SwarmService swarmService, DalleService dalleService, S3Service s3Service) {
         this.gptService = gptService;
         this.swarmService = swarmService;
+        this.dalleService = dalleService;
+        this.s3Service = s3Service;
     }
 
     @PostMapping("/keyword")
@@ -29,10 +34,31 @@ public class GptController {
         Mono<String> response = gptService.getChatResponse(prompt);
         return jsonDecoderService.DecodeAndFormatGpt(response);
     }
-
+    //광고 문구 출력
     @PostMapping("/adtext")
     public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity) {
         return swarmService.generateCasualInstagramAd(campaignEntity);
     }
+    //image생성후 s3 bucket에 저장 하고 이미지 url을 반환
+    @PostMapping("/image")
+    public String Image(@RequestParam String prompt, String userId, String campaignId) {
+        String url = dalleService.generateImage(prompt).block();
+        try{
+            return s3Service.uploadFromUrl(url, userId+"-"+campaignId);
+        }  catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //image를 bucket에서 삭제하는 메소드
+    @PostMapping("/image-dlt")
+    public ResponseEntity<String> ImageDlt(@RequestParam String fileName){
+        return s3Service.deleteFile(fileName);
+    }
+    //image url을 가져오는 메소드
+    @PostMapping("/image-get")
+    public String ImageGet(@RequestParam String fileName){
+        return s3Service.getFileUrl(fileName);
+    }
 
 }
+
