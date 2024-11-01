@@ -3,6 +3,7 @@ package wwee.jihun.Service.Agents;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
+import wwee.jihun.Prompt.FormPrompt;
 import wwee.jihun.Prompt.SystemPrompt;
 import wwee.jihun.Prompt.TonePrompt;
 import wwee.jihun.Service.GptService;
@@ -11,6 +12,13 @@ import wwee.jihun.Service.GptService;
 public class AgentB {
     private final GptService gptService;
     private final SystemPrompt systemPrompt;
+    private final FormPrompt formPrompt;
+
+    public AgentB(GptService gptService, SystemPrompt systemPrompt, FormPrompt formPrompt) {
+        this.gptService = gptService;
+        this.systemPrompt = systemPrompt;
+        this.formPrompt = formPrompt;
+    }
 
     public Mono<String> generateAdFormat(CampaignEntity campaignEntity, String keywordsAndInfo) {
         // 광고 형식 확인 및 기본 값 설정

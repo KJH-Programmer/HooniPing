@@ -29,7 +29,7 @@ public class SwarmService {
                     return agentA.generateKeywordsAndProductInfo(campaignEntity, keywords)
                             .flatMap(keywordsAndInfo ->
                                     // Step 2: agentB를 통해 인스타그램 피드 광고 형식 생성
-                                    agentB.generateInstagramAdFormat(campaignEntity,keywordsAndInfo).flatMap(adFormat ->
+                                    agentB.generateAdFormat(campaignEntity,keywordsAndInfo).flatMap(adFormat ->
                                             // Step 3: agentC를 통해 반말 형식으로 변환
                                             agentC.convertToCasualTone(campaignEntity,adFormat).map(casualAd ->
                                                     "광고 문구:\n" + casualAd
