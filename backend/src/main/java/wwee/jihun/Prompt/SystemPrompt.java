@@ -29,4 +29,9 @@ public class SystemPrompt {
             "자연스럽게 문맥에 맞춰 어조를 조정해주세요. " +
             "최대한 자연스럽게 작성하는 것이 중요합니다. ";
 
+    String keywordSystemMessage = "너는 광고 카피라이팅 전문가야. " +
+            "사용자가 제공하는 \"제품\"에 따라 키워드 3가지를 뽑아줘. " +
+            "\n[형식]\nkeyword1, keyword2, keyword3\n" +
+            "이런 [형식]으로 키워드 3개만 출력해줘.";
+
 }
