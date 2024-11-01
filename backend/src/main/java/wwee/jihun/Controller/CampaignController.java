@@ -87,9 +87,5 @@ public class CampaignController {
         // 삭제 성공 시 204 No Content 반환
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/test")
-    public String test() {
-        return tonePrompt.getLuckviki();
-    }
+    
 }
