@@ -3,7 +3,7 @@
     <div class="form-wrapper">
       <div class="form section">
 
-        <!-- 브랜드명 입력 -->
+
         <div class="input-field">
           <label for="brand">브랜드명</label>
           <input 
@@ -14,7 +14,7 @@
           />
         </div>
 
-        <!-- 모델 이름 입력 -->
+
         <div class="input-field">
           <label for="model">모델 이름</label>
           <input 
@@ -25,7 +25,7 @@
           />
         </div>
 
-        <!-- 말투 선택 드롭다운 -->
+
         <div class="input-field">
           <label for="tone">말투</label>
           <select id="tone" v-model="tone" class="product-input">
@@ -38,13 +38,24 @@
           </select>
         </div>
 
-        <!-- 제품명 입력 -->
+
         <div class="input-field">
           <label for="product">제품명</label>
           <input 
             id="product" 
             v-model="productName" 
             placeholder="제품명을 입력하세요." 
+            class="product-input"
+          />
+        </div>
+
+
+        <div class="input-field">
+          <label for="productDescription">제품 설명</label>
+          <input 
+            id="productDescription" 
+            v-model="productDescription" 
+            placeholder="제품 설명을 입력하세요." 
             class="product-input"
           />
         </div>
@@ -93,15 +104,16 @@ export default {
   name: 'CampaignPage',
   data() {
     return {
-      brandName: '',     // 브랜드명 입력란 바인딩
-      modelName: '',     // 모델 이름 입력란 바인딩
-      productName: '',   // 제품명 입력란 바인딩
-      tone: '',          // 말투 선택 바인딩
+      brandName: '',    
+      modelName: '',    
+      productName: '',  
+      productDescription: '', 
+      tone: '',          
       description: '',
       description2: '',
       preview: '',
       keywords: ['무료 체험', '한정 판매', '특별 제공', '신규 가입', '쿠폰 혜택', '시즌 세일', '무료 배송', '파격 할인'],
-      selectedKeywords: [] // 여러 개 선택 가능하도록 배열로 변경
+      selectedKeywords: [] 
     };
   },
   methods: {
@@ -109,6 +121,7 @@ export default {
       console.log('추가된 브랜드명:', this.brandName);
       console.log('추가된 모델 이름:', this.modelName);
       console.log('추가된 제품명:', this.productName);
+      console.log('제품 설명:', this.productDescription);
       console.log('선택된 말투:', this.tone);
     },
     generateRecommendation() {
@@ -124,10 +137,10 @@ export default {
     },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
-        // 이미 선택된 키워드면 배열에서 제거
+        
         this.selectedKeywords = this.selectedKeywords.filter(item => item !== keyword);
       } else {
-        // 선택되지 않은 키워드면 배열에 추가
+        
         this.selectedKeywords.push(keyword);
       }
       console.log('선택된 키워드들:', this.selectedKeywords);
@@ -151,40 +164,42 @@ export default {
 }
 
 .section {
-  background-color: #f7f7f7; 
-  padding: 13px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+  background-color: #f7f7f7;
+  padding: 15px; 
+  border-radius: 8px; 
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form {
-  width: 50%; 
-  border-radius: 10px;
+  width: 48%; 
+  border-radius: 8px;
 }
 
 .input-field {
-  margin-bottom: 20px; 
+  margin-bottom: 15px; 
 }
 
 .input-field label {
   display: block;
-  margin-bottom: 8px; /* 레이블과 입력 칸 사이의 여백 */
+  margin-bottom: 6px; 
 }
 
 .keyword-section {
-  margin-top: 30px; /* 여백 추가 */
+  margin-top: 20px; 
 }
 
 .keyword-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px; 
   max-width: 600px;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .product-input {
-  width: 100%; 
-  padding: 10px;
+  width: 100%;
+  padding: 8px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -192,39 +207,39 @@ export default {
 }
 
 .product-button {
-  width: 100%; 
-  padding: 10px; 
+  width: 100%;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px; /* 간격을 미리보기와 저장 버튼 간격과 동일하게 설정 */
+  margin-top: 8px;
 }
 
 .button-container {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px; /* 버튼과 위 요소 사이 간격 */
+  margin-top: 8px;
 }
 
 .keyword-button {
-  padding: 5px 10px;
+  padding: 5px 8px; 
   background-color: transparent; 
   border: 1px solid #ccc;
   border-radius: 20px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px; 
   color: black; 
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: calc(25% - 10px); /* 한 줄에 4개 들어가도록 크기 조정 */
+  width: calc(25% - 8px); 
   box-sizing: border-box;
 }
 
 .keyword-button.selected {
-  background-color: #42b983; 
-  color: white; 
+  background-color: #42b983;
+  color: white;
 }
 
 .keyword-button:hover {
@@ -232,25 +247,25 @@ export default {
 }
 
 textarea {
-  width: 100%; 
-  padding: 15px;
+  width: 100%;
+  padding: 10px; 
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
   font-size: inherit;
-  height: 150px; 
-  overflow: hidden; 
-  resize: none; 
+  height: 130px; 
+  overflow: hidden;
+  resize: none;
 }
 
 .large-textarea {
-  height: 240px; 
+  height: 200px; 
 }
 
 button {
-  width: 100%; 
-  padding: 15px; 
+  width: 100%;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;
@@ -261,4 +276,6 @@ button {
 button:hover {
   background-color: #36996e;
 }
+
+
 </style>
