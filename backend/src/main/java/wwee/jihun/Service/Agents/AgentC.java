@@ -17,7 +17,7 @@ public class AgentC {
         this.tonePrompt = tonePrompt;
         this.systemPrompt = systemPrompt;
     }
-    public Mono<String> convertToCasualTone(CampaignEntity campaignEntity) {
+    public Mono<String> convertToCasualTone(CampaignEntity campaignEntity, String adFormat) {
         // Tone에 따른 프롬프트 예시 텍스트 선택
         String toneExample = switch (campaignEntity.getTone()) {
             case "럭키비키체" -> tonePrompt.getLuckviki();
@@ -29,8 +29,10 @@ public class AgentC {
 
         // 광고 문구의 형식 설정
         String prompt = String.format(
-                "해당 광고 문구의 어조를 %s 형식으로 작성해줘. " +
+                "[광고문구]\n%s\n" +
+                        "해당 광고 문구의 어조를 %s 형식으로 작성해줘. " +
                         "어조의 예시는 다음과 같아:\n%s",
+                adFormat,
                 campaignEntity.getTone(),
                 toneExample
         );
