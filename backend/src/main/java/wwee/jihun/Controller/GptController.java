@@ -1,8 +1,14 @@
 package wwee.jihun.Controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
+import wwee.jihun.Service.*;
+
+import java.io.IOException;
+import java.security.Key;
+
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
 import wwee.jihun.Service.KeywordService;
@@ -19,23 +25,40 @@ public class GptController {
     JsonDecoderService jsonDecoderService = new JsonDecoderService();
     private final GptService gptService;
     private final SwarmService swarmService;
+    private final DalleService dalleService;
+    private final S3Service s3Service;
     private final KeywordService keywordService;
-    public GptController(GptService gptService, SwarmService swarmService, KeywordService keywordService) {
+    public GptController(GptService gptService, SwarmService swarmService, DalleService dalleService, S3Service s3Service, KeywordService keywordService) {
         this.gptService = gptService;
         this.swarmService = swarmService;
+        this.dalleService = dalleService;
+        this.s3Service = s3Service;
         this.keywordService = keywordService;
     }
-
-//    @PostMapping("/keyword")
-//    public Mono<String[]> Chat(@RequestBody CampaignEntity campaignEntity) {
-//        String prompt = campaignEntity.getPrompt_for_ad_text();
-//        Mono<String> response = gptService.getChatResponse(prompt, systemMessage);
-//        return jsonDecoderService.DecodeAndFormatGpt(response);
-//    }
-
+    //광고 문구 출력
     @PostMapping("/adtext")
     public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity) {
         return swarmService.generateCasualInstagramAd(campaignEntity);
+    }
+    //image생성후 s3 bucket에 저장 하고 이미지 url을 반환
+    @PostMapping("/image")
+    public String Image(@RequestParam String prompt, String userId, String campaignId) {
+        String url = dalleService.generateImage(prompt).block();
+        try{
+            return s3Service.uploadFromUrl(url, userId+"-"+campaignId);
+        }  catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //image를 bucket에서 삭제하는 메소드
+    @PostMapping("/image-dlt")
+    public ResponseEntity<String> ImageDlt(@RequestParam String fileName){
+        return s3Service.deleteFile(fileName);
+    }
+    //image url을 가져오는 메소드
+    @PostMapping("/image-get")
+    public String ImageGet(@RequestParam String fileName){
+        return s3Service.getFileUrl(fileName);
     }
 
     @PostMapping("/keyword")

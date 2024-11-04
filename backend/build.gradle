@@ -41,9 +41,10 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     implementation 'org.openkoreantext:open-korean-text:2.1.0'
-
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.86.Final'
     // Jsoup 의존성
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     implementation 'org.json:json:20230227'
 }
