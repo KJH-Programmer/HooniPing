@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <router-view /> <!-- 라우터에 따른 페이지가 여기에 렌더링됩니다 -->
   <div class="app-container">
     <!-- 헤더: 로그인 상태일 때만 표시 -->
     <div v-if="isLoggedIn" class="header-wrapper">
