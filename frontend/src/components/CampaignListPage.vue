@@ -37,14 +37,18 @@
       <p><strong>특장점 : </strong> {{ selectedItem.features }}</p>
       <p><strong>광고문구 : </strong> {{ selectedItem.ad_text }}</p>
       <p><strong>이미지 : </strong> {{ selectedItem.image_url }}</p>
-      <button class="delete-button" @click="deleteItem(selectedItem.campaignId, selectedItem.userId)">삭제</button>
+
+      <!-- 버튼 컨테이너: 수정/삭제 버튼을 나란히 배치 -->
+      <div class="button-container">
+        <button class="edit-button" @click="editItem(selectedItem)">수정하기</button>
+        <button class="delete-button" @click="deleteItem(selectedItem.campaignId, selectedItem.userId)">삭제</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {GetCampaignList} from "@/api/CampaignService";
-import {DeleteCampaign} from "@/api/CampaignService";
+import { GetCampaignList, DeleteCampaign } from "@/api/CampaignService";
 
 export default {
   data() {
@@ -66,6 +70,7 @@ export default {
     },
   },
   methods: {
+    // 캠페인 리스트 가져오기
     async GetCampaignList() {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
@@ -95,10 +100,13 @@ export default {
       this.$router.push("/CampaignPage");
     },
     editItem(item) {
-      alert(`수정하기 버튼이 클릭되었습니다. Item: ${item}`);
+      // 수정 로직 구현 또는 수정 페이지로 이동
+      alert(`수정하기 버튼이 클릭되었습니다. Item: ${item.product}`);
+      // 캠페인 페이지로 이동
+      this.$router.push("/CampaignPage")
     },
-    deleteItem(campaignId, userId){
-      DeleteCampaign(campaignId,userId)
+    deleteItem(campaignId, userId) {
+      DeleteCampaign(campaignId, userId);
     },
     navigateToDetail(campaignId) {
       // 아이템의 상세 정보 출력하기
@@ -192,6 +200,22 @@ export default {
   cursor: pointer;
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* 버튼이 서로 나란히 배치되도록 설정 */
+  margin-top: 20px;
+}
+
+.edit-button {
+  background-color: #1390af;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .delete-button {
   background-color: #ba0d0d;
   color: white;
@@ -202,7 +226,7 @@ export default {
 }
 
 .detail-view {
-  flex: 1.5; /* 오른쪽 섹션 크기 조정 */
+  flex: 0.5; /* 오른쪽 섹션 크기 조정 */
   display: flex;
   flex-direction: column;
   justify-content: center;
