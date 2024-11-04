@@ -28,10 +28,10 @@ public class AgentA {
 
         // 광고 모델이 있으면
         if (campaignEntity.getBrand_model() != null && !campaignEntity.getBrand_model().isBlank()) {
-            promptBuilder.append("광고 모델은 ").append(campaignEntity.getBrand_model()).append("이야.\n");
+            promptBuilder.append("광고 모델 이름은 [").append(campaignEntity.getBrand_model()).append("]이야.\n");
         }
         if (campaignEntity.getFeatures() != null && !campaignEntity.getFeatures().isBlank()) {
-            promptBuilder.append("제품의 특장점은 ").append(campaignEntity.getFeatures()).append("이야.\n");
+            promptBuilder.append("제품의 특장점은 [").append(campaignEntity.getFeatures()).append("]이야. \n");
         }
 
 
