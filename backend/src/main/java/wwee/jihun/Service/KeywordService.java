@@ -17,7 +17,7 @@ public class KeywordService {
     public Mono<String> suggestKeywords(CampaignEntity campaignEntity) {
 
         String prompt = String.format(
-                "\"%s\"에 대한 광고 문구를 생성하기 위한 키워드 3가지를 알려줘.",
+                "\"%s\"에 대한 광고 문구를 생성하기 위한 키워드 10가지를 알려줘.",
                 campaignEntity.getProduct()
         );
         String systemMessage = systemPrompt.getKeywordSystemMessage();
