@@ -135,13 +135,17 @@ export default {
           console.log('문구 생성에 사용될 features:', this.features);
           console.log('문구 생성에 사용될 brand_model:', this.modelName);
           console.log('문구 생성에 사용될 tone:', this.tone);
-          
+
+          // 로컬 스토리지에서 토큰 가져오기
+          const token = localStorage.getItem('token');
+
           // 문구 생성
-          const adText = await GenerateAdText(this.productName, this.brandName, this.tone, this.modelName, this.features, this.selectedKeywords);
+          const adText = await GenerateAdText(token, this.productName, this.brandName, this.tone, this.modelName, this.features, this.selectedKeywords);
           
           console.log('생성된 광고문구:', adText.data);
         } catch (error) {
-          console.error('광고 생성 오류:', error);
+          // console.error('광고 생성 오류:', error);
+          console.error('광고 생성 오류:', error.response ? error.response.data : error.message);
         }
     },
     async save() {
