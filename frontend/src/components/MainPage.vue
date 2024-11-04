@@ -42,7 +42,7 @@ export default {
       performLogout(); // 변경된 함수 호출
       this.isLoggedIn = false;
       this.userId = '';
-      this.$router.push('/login');
+      this.$router.push('/');
     }
   }
 };

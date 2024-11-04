@@ -1,12 +1,16 @@
-
 <template>
   <div class="container">
     <div class="form-wrapper">
       <h2 class="form-title">회원가입</h2>
 
+      <!-- 에러 메시지 -->
       <span v-if="errors.general" class="error-message">{{ errors.general }}</span>
 
+      <!-- 성공 메시지 -->
+      <span v-if="successMessage" class="success-message">{{ successMessage }}</span>
+
       <form @submit.prevent="handleSubmit">
+        <!-- 아이디 입력 필드 -->
         <div class="input-field">
           <label for="userId">아이디</label>
           <input
@@ -18,6 +22,7 @@
           />
         </div>
 
+        <!-- 비밀번호 입력 필드 -->
         <div class="input-field">
           <label for="password">비밀번호</label>
           <input
@@ -31,6 +36,7 @@
           <span v-if="errors.password" class="text-red-500">{{ errors.password }}</span>
         </div>
 
+        <!-- 비밀번호 재확인 필드 -->
         <div class="input-field">
           <label for="confirmPassword">비밀번호 재확인</label>
           <input
@@ -42,6 +48,7 @@
           />
         </div>
 
+        <!-- 이름 입력 필드 -->
         <div class="input-field">
           <label for="name">이름</label>
           <input
@@ -205,5 +212,12 @@ button:hover {
   color: #000000;
   text-align: center;
   font-weight: bold;
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 </style>

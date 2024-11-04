@@ -1,60 +1,58 @@
 <template>
-  <div class="container"> <!-- 전체 화면을 감싸는 컨테이너 -->
-    <div class="form-wrapper"> <!-- 로고와 폼을 감싸는 래퍼 -->
-
+  <div class="container">
+    <div class="form-wrapper">
       <!-- 로고를 클릭하면 홈(/)으로 이동 -->
       <router-link to="/">
         <img
-            :src="require('@/assets/HooniPing.jpg')"
-            alt="Logo"
-            class="logo"
+          :src="require('@/assets/KakaoTalk_20240926_155821857.jpg')"
+          alt="Logo"
+          class="logo"
         />
       </router-link>
 
-      <div class="form"> <!-- 로그인 폼을 감싸는 div -->
-        <h2 class="form-title">로그인</h2> <!-- 로그인 제목 -->
+      <div class="form">
+        <h2 class="form-title">로그인</h2>
 
         <!-- 로그인 폼 -->
-        <form @submit.prevent="submitLogin"> <!-- submit 시 페이지 리로드 방지 및 로그인 함수 호출 -->
+        <form @submit.prevent="submitLogin">
           <div class="input-field">
-            <label for="userId">아이디</label> <!-- 아이디 입력 레이블 -->
+            <label for="userId">아이디</label>
             <input
-                v-model="userId"
-                type="text"
-                id="userId"
-                placeholder="아이디 입력"
+              v-model="userId"
+              type="text"
+              id="userId"
+              placeholder="아이디 입력"
             />
           </div>
 
           <div class="input-field">
-            <label for="password">비밀번호</label> <!-- 비밀번호 입력 레이블 -->
+            <label for="password">비밀번호</label>
             <input
-                v-model="password"
-                type="password"
-                id="password"
-                placeholder="비밀번호 입력"
+              v-model="password"
+              type="password"
+              id="password"
+              placeholder="비밀번호 입력"
             />
           </div>
 
-          <button type="submit">로그인</button> <!-- 로그인 버튼 -->
+          <button type="submit">로그인</button>
         </form>
       </div>
 
       <!-- 회원가입 버튼 -->
       <button class="signup-button" @click="goToSignup">회원가입</button>
-
     </div>
   </div>
 </template>
 
 <script>
-import { Login } from '@/api/loginService'; // 로그인 서비스 임포트
+import { Login } from '@/api/loginService';
 
 export default {
   data() {
     return {
-      userId: '', // 사용자가 입력한 아이디를 저장하는 변수
-      password: '' // 사용자가 입력한 비밀번호를 저장하는 변수
+      userId: '', // 사용자가 입력한 아이디
+      password: '' // 사용자가 입력한 비밀번호
     };
   },
   methods: {
@@ -67,8 +65,6 @@ export default {
         // 로그인 성공 시, 서버 응답에서 받은 토큰과 사용자 아이디를 localStorage에 저장
         localStorage.setItem('token', response.data); // 토큰 저장
         localStorage.setItem('userId', this.userId); // 사용자 아이디 저장
-        console.log(localStorage.getItem('token'));
-        console.log(response);
 
         // 로그인 성공 후 메인 페이지로 이동
         this.$router.push('/CampaignListPage');
@@ -85,7 +81,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 /* 컨테이너: 화면의 중앙에 정렬 */
@@ -174,10 +169,10 @@ button:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
 /* 회원가입 버튼에 호버 스타일을 제거 */
 .signup-button:hover {
   background-color: transparent;
   color: #42b983;
 }
-
 </style>
