@@ -48,7 +48,7 @@ export const GetCampaign = async (token, userId, campaignId) => {
     }
   };
 
-// 새로운 캠페인 저장(생성)
+// 캠페인 저장
 export const SaveCampaign = async (token, campaignData) => {
     try {
         const response = await axios.post(`${API_URL}/content/save`, 
