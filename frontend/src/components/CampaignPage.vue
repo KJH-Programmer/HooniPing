@@ -8,7 +8,7 @@
           <label for="brand">브랜드명</label>
           <input 
             id="brand" 
-            v-model="brandName" 
+            v-model="brand" 
             placeholder="브랜드명을 입력하세요." 
             class="product-input"
           />
@@ -19,7 +19,7 @@
           <label for="model">모델 이름</label>
           <input 
             id="model" 
-            v-model="modelName" 
+            v-model="brand_model" 
             placeholder="모델 이름을 입력하세요." 
             class="product-input"
           />
@@ -43,8 +43,19 @@
           <label for="product">제품명</label>
           <input 
             id="product" 
-            v-model="productName" 
+            v-model="product" 
             placeholder="제품명을 입력하세요." 
+            class="product-input"
+          />
+        </div>
+
+
+        <div class="input-field">
+          <label for="features">제품 설명</label>
+          <input 
+            id="features" 
+            v-model="features" 
+            placeholder="제품 설명을 입력하세요." 
             class="product-input"
           />
         </div>
@@ -70,14 +81,14 @@
       <div class="form section">
         <div class="input-field">
           <label for="description2">내용</label>
-          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요." @input="resizeTextarea($event)" class="large-textarea"></textarea>
+          <textarea v-model="sourceText" @click="moveText" placeholder="Type here and click to move text"></textarea>
         </div>
       </div>
 
       <div class="form section">
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea id="preview" v-model="preview" :placeholder="description2" @input="resizeTextarea($event)" class="large-textarea"></textarea>
+          <textarea v-model="destinationText" placeholder="Text will appear here"></textarea>
         </div>
         <div class="button-container">
           <button @click="save">저장</button>
@@ -101,24 +112,26 @@ export default {
   name: 'CampaignPage',
   data() {
     return {
-      brandName: '',     // 브랜드명 입력란 바인딩
-      modelName: '',     // 모델 이름 입력란 바인딩
-      productName: '',   // 제품명 입력란 바인딩
+      brand: '',     // 브랜드명 입력란 바인딩
+      brand_model: '',     // 모델 이름 입력란 바인딩
+      product: '',   // 제품명 입력란 바인딩
       tone: '',          // 말투 선택 바인딩
       features: '',
       description2: '',
       preview: '',
       keywords: [],
-      selectedKeywords: [] // 여러 개 선택 가능하도록 배열로 변경
+      selectedKeywords: [],
+      sourceText: '', 
+      destinationText: '' 
     };
   },
   methods: {
     async addProduct() {
       try {
-        console.log('추가된 제품명:', this.productName);
+        console.log('추가된 제품명:', this.product);
         
         // 제품명을 기반으로 키워드를 추출
-        const response = await ExtractKeyword(this.productName);
+        const response = await ExtractKeyword(this.product);
 
         //서버로부터 받은 키워드를 keywords 배열에 할당
         this.keywords = response.data.keywords;
@@ -130,16 +143,20 @@ export default {
     async generateRecommendation() {
       try {
           console.log('문구 생성에 사용될 키워드:', this.selectedKeywords);
-          console.log('문구 생성에 사용될 product:', this.productName);
-          console.log('문구 생성에 사용될 brand:', this.brandName);
+          console.log('문구 생성에 사용될 product:', this.product);
+          console.log('문구 생성에 사용될 brand:', this.brand);
           console.log('문구 생성에 사용될 features:', this.features);
-          console.log('문구 생성에 사용될 brand_model:', this.modelName);
+          console.log('문구 생성에 사용될 brand_model:', this.brand_model);
           console.log('문구 생성에 사용될 tone:', this.tone);
-          
+          const token = localStorage.getItem("token");
+          const keywords = this.selectedKeywords.join(', '); // 쉼표로 구분된 문자열로 변환
           // 문구 생성
-          const adText = await GenerateAdText(this.productName, this.brandName, this.tone, this.modelName, this.features, this.selectedKeywords);
+          const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
           
-          console.log('생성된 광고문구:', adText.data);
+          console.log('생성된 광고문구:', ad_text.data);
+
+          this.sourceText = ad_text.data;
+          
         } catch (error) {
           console.error('광고 생성 오류:', error);
         }
@@ -147,12 +164,12 @@ export default {
     async save() {
       try {
           const campaignData = {
-            product: this.productName,
+            product: this.product,
             keywords: this.selectedKeywords,
             features: this.features,
             tone: this.tone,
-            brand: this.brandName,
-            brand_model: this.modelName,
+            brand: this.brand,
+            brand_model: this.brand_model,
             ad_text: this.preview
           }
   
@@ -171,6 +188,9 @@ export default {
       const textarea = event.target;
       textarea.style.height = 'auto'; 
       textarea.style.height = textarea.scrollHeight + 'px'; 
+    },
+    moveText() {
+      this.destinationText = this.sourceText;
     },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
@@ -207,8 +227,8 @@ export default {
 }
 
 .form {
-  width: 50%; 
-  border-radius: 10px;
+  width: 48%; 
+  border-radius: 8px;
 }
 
 .input-field {
@@ -217,11 +237,11 @@ export default {
 
 .input-field label {
   display: block;
-  margin-bottom: 8px; /* 레이블과 입력 칸 사이의 여백 */
+  margin-bottom: 6px; /* 레이블과 입력 칸 사이의 여백 */
 }
 
 .keyword-section {
-  margin-top: 30px; /* 여백 추가 */
+  margin-top: 10px; /* 여백 추가 */
 }
 
 .keyword-wrapper {
@@ -282,25 +302,25 @@ export default {
 }
 
 textarea {
-  width: 100%; 
-  padding: 15px;
+  width: 100%;
+  padding: 10px; 
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
   font-size: inherit;
-  height: 150px; 
-  overflow: hidden; 
-  resize: none; 
+  height: 130px; 
+  overflow: hidden;
+  resize: none;
 }
 
 .large-textarea {
-  height: 240px; 
+  height: 120px; 
 }
 
 button {
-  width: 100%; 
-  padding: 15px; 
+  width: 100%;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;

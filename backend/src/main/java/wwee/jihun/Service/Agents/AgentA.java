@@ -18,7 +18,7 @@ public class AgentA {
         StringBuilder promptBuilder = new StringBuilder(String.format(
                 "%s 제품을 위한 광고 문구 3가지를 생성해줘." +
                         "광고 문구에 반드시 들어가야할 키워드는 %s이 들어가야해." +
-                        "제품의 특장점은 [%s]이야.\n",
+                        "제품의 특징이자 장점은 \"%s\"이야.\n",
                 campaignEntity.getProduct(),
                 keywords,
                 campaignEntity.getFeatures()
@@ -28,7 +28,7 @@ public class AgentA {
         ));
 
         // 브랜드명(brand)이 있으면 추가
-        if (campaignEntity.getBrand() != null && !campaignEntity.getBrand().isBlank()) {
+        if (campaignEntity.getBrand() != null && !campaignEntity.getBrand().isBlank() && !campaignEntity.getBrand().isEmpty()) {
             promptBuilder.append("제품의 브랜드 이름은 [").append(campaignEntity.getBrand()).append("]이야.\n");
         }
         // 광고 모델(brand_model)이 있으면 추가
