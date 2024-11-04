@@ -4,7 +4,7 @@
       <!-- 제품 입력 폼 -->
       <div class="form">
         <div class="input-field">
-          <label for="product">제품명</label>
+          <label for="product">제품명.</label>
           <input 
             id="product" 
             v-model="brand" 
