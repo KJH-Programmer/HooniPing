@@ -80,3 +80,4 @@ native
 wrapper
 /daemon/
 /backend/daemon/
+/backend/.tmp

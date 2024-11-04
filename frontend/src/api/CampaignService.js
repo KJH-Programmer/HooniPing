@@ -25,6 +25,49 @@ export const GetCampaign = async (token, userId, campaignId) => {
     }
   };
 
+// 캠페인 내용 가져오기
+export const GetCampaignList = async (token, userId) => {
+    try {
+        const response = await axios.post(`${API_URL}/user-campaign`,
+            {
+                userId: userId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        console.log("response:", response);
+        return response.data;
+    } catch (error) {
+        console.error('캠페인 내용 가져오기 중 오류:', error);
+        throw error;
+    }
+};
+
+// 캠페인 내용 가져오기
+export const DeleteCampaign = async (token, userId, campaignId) => {
+    try {
+        const response = await axios.post(`${API_URL}/delete`,
+            {
+                userId: userId,
+                campaignId: campaignId
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        console.log("response:", response);
+        return response.data;
+    } catch (error) {
+        console.error('캠페인 내용 가져오기 중 오류:', error);
+        throw error;
+    }
+};
+
 // // 캠페인 생성
 // export const CreateCampaign = async (token, campaignData) => {
 //     try {

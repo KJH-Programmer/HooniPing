@@ -4,7 +4,8 @@ import CampaignPage from '@/components/CampaignPage.vue';
 import LoginPage from '@/components/LoginPage.vue';
 import MainPage from '@/components/MainPage.vue';
 import SignupPage from '@/components/SignupPage.vue';
-import WebPage from '@/components/WebPage.vue';  
+import WebPage from '@/components/WebPage.vue';
+import CampaignListPage from '@/components/CampaignListPage.vue';
 Vue.use(Router);
 
 export default new Router({
@@ -34,5 +35,10 @@ export default new Router({
       name: 'SignupPage',
       component: SignupPage,  // /signup 경로는 SignupPage
     },
+    {
+      path :'/CampaignListPage',
+      name : "CampaignListPage",
+      component : CampaignListPage,
+    }
   ],
 });
