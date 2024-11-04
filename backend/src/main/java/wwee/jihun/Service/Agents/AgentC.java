@@ -17,12 +17,7 @@ public class AgentC {
         this.tonePrompt = tonePrompt;
         this.systemPrompt = systemPrompt;
     }
-    public Mono<String> convertToCasualTone(CampaignEntity campaignEntity, String adFormat) {
-
-        // 광고 문구의 형식 설정
-        String promptTemplate = adFormat +
-                "해당 광고 문구의 어조를 %s 형식으로 작성해줘. 출력은 인사말, 맺음말 빼고 광고문구 3가지만 출력해줘. 어조의 예시는 다음과 같아:\n%s";
-
+    public Mono<String> convertToCasualTone(CampaignEntity campaignEntity) {
         // Tone에 따른 프롬프트 예시 텍스트 선택
         String toneExample = switch (campaignEntity.getTone()) {
             case "럭키비키체" -> tonePrompt.getLuckviki();
@@ -32,8 +27,16 @@ public class AgentC {
             default -> tonePrompt.getSeubnida();  // 습니다체
         };
 
+        // 광고 문구의 형식 설정
+        String prompt = String.format(
+                "해당 광고 문구의 어조를 %s 형식으로 작성해줘. " +
+                        "어조의 예시는 다음과 같아:\n%s",
+                campaignEntity.getTone(),
+                toneExample
+        );
+
         // 최종 프롬프트 생성
-        String prompt = String.format(promptTemplate, campaignEntity.getTone(), toneExample);
+//        String prompt = String.format(promptTemplate, campaignEntity.getTone(), toneExample);
 
         String systemMessage = systemPrompt.getAgentCSystemMessage();
         // GPT 서비스 호출
