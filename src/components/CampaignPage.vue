@@ -81,14 +81,14 @@
       <div class="form section">
         <div class="input-field">
           <label for="description2">내용</label>
-          <textarea id="description2" v-model="description2" placeholder="내용을 입력하세요." @input="resizeTextarea($event)" class="large-textarea"></textarea>
+          <textarea v-model="sourceText" @click="moveText" placeholder="Type here and click to move text"></textarea>
         </div>
       </div>
 
       <div class="form section">
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea id="preview" v-model="preview" :placeholder="description2" @input="resizeTextarea($event)" class="large-textarea"></textarea>
+          <textarea v-model="destinationText" placeholder="Text will appear here"></textarea>
         </div>
         <div class="button-container">
           <button @click="save">저장</button>
@@ -113,7 +113,9 @@ export default {
       description2: '',
       preview: '',
       keywords: ['무료 체험', '한정 판매', '특별 제공', '신규 가입', '쿠폰 혜택', '시즌 세일', '무료 배송', '파격 할인'],
-      selectedKeywords: [] 
+      selectedKeywords: [],
+      sourceText: '', 
+      destinationText: '' 
     };
   },
   methods: {
@@ -134,6 +136,9 @@ export default {
       const textarea = event.target;
       textarea.style.height = 'auto'; 
       textarea.style.height = textarea.scrollHeight + 'px'; 
+    },
+    moveText() {
+      this.destinationText = this.sourceText;
     },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
@@ -163,13 +168,6 @@ export default {
   width: 90%;
 }
 
-.section {
-  background-color: #f7f7f7;
-  padding: 15px; 
-  border-radius: 8px; 
-  border: 1px solid #ddd;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 .form {
   width: 48%; 
@@ -177,7 +175,7 @@ export default {
 }
 
 .input-field {
-  margin-bottom: 15px; 
+  margin-bottom: 20px; 
 }
 
 .input-field label {
@@ -186,7 +184,7 @@ export default {
 }
 
 .keyword-section {
-  margin-top: 20px; 
+  margin-top: 10px; 
 }
 
 .keyword-wrapper {
@@ -260,7 +258,7 @@ textarea {
 }
 
 .large-textarea {
-  height: 200px; 
+  height: 120px; 
 }
 
 button {
@@ -276,6 +274,4 @@ button {
 button:hover {
   background-color: #36996e;
 }
-
-
 </style>
