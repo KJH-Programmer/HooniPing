@@ -1,4 +1,5 @@
 <template>
+  <div id="app">
   <div class="app-container">
     <!-- 헤더: 로그인 상태일 때만 표시 -->
     <div v-if="isLoggedIn" class="header-wrapper">
@@ -13,6 +14,7 @@
 
     <!-- 푸터: 항상 표시 -->
     <AppFooter />
+  </div>
   </div>
 </template>
 

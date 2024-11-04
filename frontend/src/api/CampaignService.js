@@ -48,11 +48,62 @@ export const GetCampaign = async (token, userId, campaignId) => {
     }
   };
 
+// 캠페인 내용 가져오기
+export const GetCampaignList = async (token, userId) => {
+    try {
+        const response = await axios.post(`${API_URL}/user-campaign`,
+            {
+                userId: userId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        console.log("response:", response);
+        return response.data;
+    } catch (error) {
+        console.error('캠페인 내용 가져오기 중 오류:', error);
+        throw error;
+    }
+};
+
+
+// // 캠페인 생성
+// export const CreateCampaign = async (token, campaignData) => {
+//     try {
+//         const response = await axios.post(API_URL, campaignData, {
+//             headers: {
+//                 Authorization: `Bearer ${token}`,
+//             },
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('캠페인 생성 중 오류:', error);
+//         throw error;
+//     }
+// };
+
+// // 특정 캠페인(campaignId) 수정
+// export const UpdateCampaign = async (token, campaignId, updatedData) => {
+//     try {
+//         const response = await axios.put(`${API_URL}${campaignId}`, updatedData, {
+//             headers: {
+//                 Authorization: `Bearer ${token}`,
+//             },
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('캠페인 내용 수정 중 오류:', error);
+//         throw error;
+//     }
+// };
 // 캠페인 저장
 export const SaveCampaign = async (token, campaignData) => {
     try {
-        const response = await axios.post(`${API_URL}/content/save`, 
-          campaignData, 
+        const response = await axios.post(`${API_URL}/content/save`,
+          campaignData,
           {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -68,8 +119,8 @@ export const SaveCampaign = async (token, campaignData) => {
 // 기존 캠페인 업데이트
 export const UpdateCampaign = async (token, campaignId, updatedData) => {
     try {
-        const response = await axios.put(`${API_URL}/content/update`, 
-          updatedData, 
+        const response = await axios.put(`${API_URL}/content/update`,
+          updatedData,
           {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -86,11 +137,11 @@ export const UpdateCampaign = async (token, campaignId, updatedData) => {
 // userId, campaignId로 캠페인 삭제
 export const DeleteCampaign = async (token, userId, campaignId) => {
   try {
-      const response = await axios.put(`${API_URL}/delete`, 
+      const response = await axios.put(`${API_URL}/delete`,
         {
           userId: userId,
           campaignId: campaignId
-        }, 
+        },
         {
           headers: {
               Authorization: `Bearer ${token}`,
@@ -107,11 +158,11 @@ export const DeleteCampaign = async (token, userId, campaignId) => {
 // userId, product로 캠페인 검색
 export const SearchCampaign = async (token, userId, product) => {
   try {
-      const response = await axios.put(`${API_URL}/search`, 
+      const response = await axios.put(`${API_URL}/search`,
         {
           userId: userId,
           product: product
-        }, 
+        },
         {
           headers: {
               Authorization: `Bearer ${token}`,
