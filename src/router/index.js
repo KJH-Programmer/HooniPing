@@ -15,7 +15,7 @@ export default new Router({
       component: WebPage,    
     },
     { 
-      path: '/campaignpage',
+      path: '/campaignPage',
       name: 'CampaignPage',
       component: CampaignPage,  
     },

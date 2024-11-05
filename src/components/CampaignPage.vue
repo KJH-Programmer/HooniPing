@@ -80,15 +80,27 @@
 
       <div class="form section">
         <div class="input-field">
-          <label for="description2">내용</label>
-          <textarea v-model="sourceText" @click="moveText" placeholder="Type here and click to move text"></textarea>
+          <label for="description2">내용1</label>
+          <textarea v-model="sourceText" @click="moveText"></textarea>
+        </div>
+      </div>
+      <div class="form section">
+        <div class="input-field">
+          <label for="description2">내용2</label>
+          <textarea v-model="sourceText" @click="moveText"></textarea>
+        </div>
+      </div>
+      <div class="form section">
+        <div class="input-field">
+          <label for="description2">내용3</label>
+          <textarea v-model="sourceText" @click="moveText"></textarea>
         </div>
       </div>
 
       <div class="form section">
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea v-model="destinationText" placeholder="Text will appear here"></textarea>
+          <textarea v-model="destinationText"></textarea>
         </div>
         <div class="button-container">
           <button @click="save">저장</button>
@@ -196,7 +208,7 @@ export default {
 }
 
 .product-input {
-  width: 100%;
+  width: 80%;
   padding: 8px; 
   border: 1px solid #ccc;
   border-radius: 5px;

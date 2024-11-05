@@ -1,125 +1,140 @@
 <template>
-  <div class="container"> 
-    <div class="header-wrapper">
-
-      <div v-if="!isLoggedIn" class="button-group"> 
-        <button class="login-button" @click="goToLogin">로그인</button>
-        <button class="signup-button" @click="goToSignup">회원가입</button>
+  <div class="container">
+    <div class="row">
+      <div class="column">
+        <h3>제품 입력</h3>
+        <input type="text" class="input-box" placeholder="제품을 입력하세요." />
+        <button class="btn-green" @click="generateKeywords">키워드 생성하기</button>
       </div>
 
-      <div v-else class="welcome-wrapper">
-        <span class="welcome-message">환영합니다, {{ userId }}님!</span>
-        <button class="logout-button" @click="handleLogout">로그아웃</button>
+      <div class="column">
+        <h3>키워드 칸</h3>
+        <div class="keyword-box">
+        </div>
+        <button class="btn-green" @click="generateContent">문구 생성하기</button>
       </div>
 
+      <div class="column">
+        <h3>생성된 문구 콘텐츠</h3>
+        <div class="content-box">
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+    <div class="row">
+      <div class="column">
+        <h3>톤앤매너</h3>
+        <div class="tone-box">
+        </div>
+      </div>
+
+      <div class="column">
+        <h3>브랜드명</h3>
+        <input type="text" class="input-box" placeholder="브랜드명을 입력하세요." />
+        <button class="btn-green" @click="generateBrandName">생성하기</button>
+      </div>
+
+      <div class="column">
+        <h3>생성된 이미지 콘텐츠</h3>
+        <div class="image-box">
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import { getLoginStatus, performLogout } from '@/api/authService.js'; // 변경된 이름 사용
-
-export default {
-  data() {
-    return {
-      userId: '', // 사용자 아이디
-      isLoggedIn: false // 로그인 상태
-    };
-  },
-  mounted() {
-    const { isLoggedIn, userId } = getLoginStatus(); // 변경된 함수 호출
-    this.isLoggedIn = isLoggedIn;
-    this.userId = userId;
-  },
-  methods: {
-    goToLogin() {
-      this.$router.push('/login'); 
-    },
-    goToSignup() {
-      this.$router.push('/signup'); 
-    },
-    handleLogout() {
-      performLogout(); // 변경된 함수 호출
-      this.isLoggedIn = false;
-      this.userId = '';
-      this.$router.push('/login');
-    }
-  }
-};
-</script>
-
-
-
 <style scoped>
-/* 전체 컨테이너 */
 .container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f0f3fb;
+  width: 80%;
+  margin-bottom: 40px;
 }
 
-/* 헤더 영역 */
-.header-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 15px;
-  position: absolute;
-  top: 20px;
-  right: 20px;
+.column {
+  width: 30%;
+  margin: 0 20px;
+  text-align: left;
 }
 
-/* 버튼 그룹 */
-.button-group {
-  display: flex;
-  gap: 10px;
+h3 {
+  margin-bottom: 10px;
 }
 
-/* 로그인 및 회원가입 버튼 스타일 */
-.login-button, .signup-button {
-  background-color: #42b983;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.input-box {
+  width: 93%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px; 
+  margin-bottom: 20px;
   font-size: 16px;
 }
 
-/* 버튼 호버 시 스타일 */
-.login-button:hover, .signup-button:hover {
-  background-color: #36996e;
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px; 
+  font-size: 16px;
+  margin-bottom: 20px;
 }
 
-/* 환영 메시지 및 로그아웃 버튼 */
-.welcome-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* 환영 메시지 */
-.welcome-message {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-
-/* 로그아웃 버튼 스타일 */
-.logout-button {
-  background-color: #f56565;
-  color: white;
-  padding: 10px 20px;
+.btn-green {
+  width: 93%;
+  padding: 15px;
+  background-color: #D9D9D9;
+  color: black; 
   border: none;
-  border-radius: 5px;
+  border-radius: 10px; 
   cursor: pointer;
   font-size: 16px;
+  margin-top: 10px; 
 }
 
-/* 로그아웃 버튼 호버 시 스타일 */
-.logout-button:hover {
-  background-color: #e53e3e;
+.btn-green:hover {  /*마우스 올렸을 때*/
+  background-color: #d9d9d9c2;
+}
+
+.keyword-box, .tone-box, .content-box, .image-box {
+  width: 93%;
+  height: 150px;
+  border: 1px solid #ccc;
+  border-radius: 10px; 
+  margin-top: 15px;
+}
+
+.divider {
+  width: 90%;
+  border: 0.5px solid lightgray;
+  margin: 20px 0;
 }
 </style>
+
+
+<script>
+export default {
+  name: "MyWebpage",
+  methods: {
+    generateKeywords() {
+      console.log('키워드 생성 버튼 클릭됨');
+    },
+    generateContent() {
+      console.log('문구 생성 버튼 클릭됨');
+    },
+    generateBrandName() {
+      console.log('브랜드명 생성 버튼 클릭됨');
+    }
+  }
+}
+</script>
