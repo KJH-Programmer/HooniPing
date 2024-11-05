@@ -99,11 +99,32 @@ export const GetCampaignList = async (token, userId) => {
 //         throw error;
 //     }
 // };
+
+// newCampaignId 받아오기
+export const GetNewCampaignId = async (token, userId) => {
+  try {
+    const response = await axios.post(`${API_URL}/content/new-campaignId`, {
+        userId: userId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+  } catch (error) {
+      console.error('새 campaignId 받아오는 중 오류:', error);
+      throw error;
+  }
+}
+
 // 캠페인 저장
-export const SaveCampaign = async (token, campaignData) => {
+export const SaveCampaign = async (token, userId, campaignData) => {
     try {
-        const response = await axios.post(`${API_URL}/content/save`,
-          campaignData,
+        const response = await axios.post(`${API_URL}/content/save`,{
+            userId: userId,
+            ...campaignData
+          },
           {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -120,7 +141,10 @@ export const SaveCampaign = async (token, campaignData) => {
 export const UpdateCampaign = async (token, campaignId, updatedData) => {
     try {
         const response = await axios.put(`${API_URL}/content/update`,
-          updatedData,
+          {
+            campaignId: campaignId,
+            updatedData: updatedData,
+          },
           {
             headers: {
                 Authorization: `Bearer ${token}`,

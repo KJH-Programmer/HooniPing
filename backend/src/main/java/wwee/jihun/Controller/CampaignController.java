@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Prompt.TonePrompt;
-import wwee.jihun.Repository.CampaignMapper;
 import wwee.jihun.Service.CampaignService;
 
 import java.util.List;
@@ -50,6 +49,12 @@ public class CampaignController {
         return campaignService.getCampaignContent(userId, campaignId);
     }
 
+    // 새로운 campaignId(max+1) 할당
+    @PostMapping("/content/new-campaignId")
+    public Long getNewCampaignId(@RequestBody CampaignEntity campaignEntity) {
+        String userId = campaignEntity.getUserId();
+        return campaignService.getNewCampaignId(userId);
+    }
     //새로운 campaignId의 내용(사용자 입력, 생성된 콘텐츠) 저장
     @PostMapping("/content/save")
     public ResponseEntity<CampaignEntity> saveCampaign(@RequestBody CampaignEntity campaignEntity) {

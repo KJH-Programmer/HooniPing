@@ -1,6 +1,9 @@
 package wwee.jihun.Service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Repository.CampaignMapper;
 import wwee.jihun.Repository.CampaignRepository;
@@ -32,11 +35,24 @@ public class CampaignService {
         return databaseService.getCampaignContentByUserIdAndCampaignId(userId, campaignId);
     }
 
-    //새로운 캠페인에 campaignId를 할당해서 캠페인 내용 저장
-    public CampaignEntity saveNewCampaign(String userId, CampaignEntity newCampaign) {
+    // 새로운 캠패인에 campgaignId 할당: max+1
+    public Long getNewCampaignId(String userId) {
         Long maxCampaignId = databaseService.getMaxCampaignIdForUser(userId);
-        Long nextCampaignId = maxCampaignId + 1;
-        newCampaign.setCampaignId(nextCampaignId);
+        return maxCampaignId + 1;
+    }
+    //새로운 캠페인 내용 저장
+    public CampaignEntity saveNewCampaign(String userId, CampaignEntity newCampaign) {
+        // 프론트에서 받아온 campaignId
+        Long newCampaignId = newCampaign.getCampaignId();
+
+        // userId에게 newCampaignId가 있는지 확인
+        boolean exists = campaignRepository.existsByUserIdAndCampaignId(userId, newCampaignId);
+        // newCampaignId가 있다면 200 ok 응답 반환
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Campaign ID already exists for this user.");
+        }
+        // newCampaignId가 없으면 새로운 캠페인으로 저장
+        newCampaign.setCampaignId(newCampaignId);
         return campaignRepository.save(newCampaign);
     }
 
