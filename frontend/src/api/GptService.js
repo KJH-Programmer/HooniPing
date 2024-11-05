@@ -50,3 +50,18 @@ export const GenerateAdText = async (token,product, brand, tone, brand_model, fe
 //         fileName: fileName
 //     })
 // }
+
+export const onlyImage = async (token, prompt) => {
+    try {
+        const response = await axios.post(`${API_URL}/onlyImage`, null, {
+            params: { prompt: prompt },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('이미지 받아오는 중 오류:', error);
+        throw error;
+    }
+};
