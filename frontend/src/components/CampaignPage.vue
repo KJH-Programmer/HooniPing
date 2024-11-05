@@ -78,32 +78,23 @@
         <button @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
 
-      <div class="container">
-        <div class="form-wrapper">
-          <div class="form section">
-            <!-- 기존 form 섹션들: 브랜드명, 모델 이름 등 -->
-          </div>
-
-          <div class="form section keyword-container">
-            <!-- 내용1, 내용2, 내용3을 포함하는 세로 정렬 컨테이너 -->
-            <div class="input-field">
-              <label for="description1">내용1</label>
-              <textarea v-model="sourceText1" @click="moveText(sourceText1)"></textarea>
-            </div>
-            <div class="input-field">
-              <label for="description2">내용2</label>
-              <textarea v-model="sourceText2" @click="moveText(sourceText2)"></textarea>
-            </div>
-            <div class="input-field">
-              <label for="description3">내용3</label>
-              <textarea v-model="sourceText3" @click="moveText(sourceText3)"></textarea>
-            </div>
-          </div>
-
-          <div class="form section">
-            <!-- 미리보기 및 저장 버튼 섹션 -->
-          </div>
+      <div class="form section">
+        <div class="input-field">
+            <label for="description1">내용1</label>
+            <div class="button-text" @click="moveText(sourceText1)">{{ sourceText1 }}</div>
         </div>
+      </div>
+      <div class="form section">
+          <div class="input-field">
+              <label for="description2">내용2</label>
+              <div class="button-text" @click="moveText(sourceText2)">{{ sourceText2 }}</div>
+          </div>
+      </div>
+      <div class="form section">
+          <div class="input-field">
+              <label for="description3">내용3</label>
+              <div class="button-text" @click="moveText(sourceText3)">{{ sourceText3 }}</div>
+          </div>
       </div>
 
       <div class="form section">
@@ -243,45 +234,45 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; 
 }
 
 .form-wrapper {
-  display: flex;
+  display: flex; 
   justify-content: space-between;
   width: 90%;
 }
 
 
 .form {
-  width: 60%;
+  width: 48%; 
   border-radius: 8px;
 }
 
 .input-field {
-  margin-bottom: 20px;
+  margin-bottom: 20px; 
 }
 
 .input-field label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 6px; 
 }
 
 .keyword-section {
-  margin-top: 10px;
+  margin-top: 10px; 
 }
 
 .keyword-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px; 
   max-width: 600px;
   margin-top: 8px;
 }
 
 .product-input {
   width: 80%;
-  padding: 8px;
+  padding: 8px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -290,7 +281,7 @@ export default {
 
 .product-button {
   width: 100%;
-  padding: 12px;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;
@@ -306,16 +297,16 @@ export default {
 }
 
 .keyword-button {
-  padding: 5px 8px;
-  background-color: transparent;
+  padding: 5px 8px; 
+  background-color: transparent; 
   border: 1px solid #ccc;
   border-radius: 20px;
   font-family: inherit;
-  font-size: 13px;
-  color: black;
+  font-size: 13px; 
+  color: black; 
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: calc(25% - 8px);
+  width: calc(25% - 8px); 
   box-sizing: border-box;
 }
 
@@ -330,24 +321,24 @@ export default {
 
 textarea {
   width: 100%;
-  padding: 10px;
+  padding: 10px; 
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
   font-size: inherit;
-  height: 130px;
+  height: 130px; 
   overflow: hidden;
   resize: none;
 }
 
 .large-textarea {
-  height: 120px;
+  height: 120px; 
 }
 
 button {
   width: 100%;
-  padding: 12px;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;
@@ -359,9 +350,18 @@ button:hover {
   background-color: #36996e;
 }
 
-.keyword-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* 각 form section 간 간격 */
+.button-text {
+    background-color: #f0f0f0; /* 배경색 */
+    padding: 10px; /* 여백 */
+    margin: 5px 0; /* 마진 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 모양 변경 */
+    user-select: none; /* 텍스트 선택 방지 */
 }
+
+.button-text:hover {
+    background-color: #e0e0e0; /* 호버 시 색상 변화 */
+}
+
 </style>
