@@ -2,8 +2,6 @@
   <div class="container">
     <div class="form-wrapper">
       <div class="form section">
-
-
         <div class="input-field">
           <label for="brand">브랜드명</label>
           <input 
@@ -14,7 +12,6 @@
           />
         </div>
 
-
         <div class="input-field">
           <label for="model">모델 이름</label>
           <input 
@@ -24,7 +21,6 @@
             class="product-input"
           />
         </div>
-
 
         <div class="input-field">
           <label for="tone">말투</label>
@@ -38,7 +34,6 @@
           </select>
         </div>
 
-
         <div class="input-field">
           <label for="product">제품명</label>
           <input 
@@ -48,7 +43,6 @@
             class="product-input"
           />
         </div>
-
 
         <div class="input-field">
           <label for="productDescription">제품 설명</label>
@@ -61,7 +55,7 @@
         </div>
 
         <button class="product-button" @click="addProduct">제품 입력하기</button>
-        
+
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
           <div class="keyword-wrapper">
@@ -75,38 +69,39 @@
             </button>
           </div>
         </div>
-        <button @click="generateRecommendation">추천 내용 생성하기</button>
+        <button class="product-button" @click="addProduct">추천 내용 생성하기</button>
       </div>
 
       <div class="form section">
         <div class="input-field">
-          <label for="description2">내용1</label>
-          <textarea v-model="sourceText" @click="moveText"></textarea>
+          <label for="description1">내용1</label>
+          <textarea v-model="sourceText1" @input="resizeTextarea" rows="8"></textarea>
         </div>
       </div>
+
       <div class="form section">
         <div class="input-field">
           <label for="description2">내용2</label>
-          <textarea v-model="sourceText" @click="moveText"></textarea>
+          <textarea v-model="sourceText2" @input="resizeTextarea" rows="8"></textarea>
         </div>
       </div>
+
       <div class="form section">
         <div class="input-field">
-          <label for="description2">내용3</label>
-          <textarea v-model="sourceText" @click="moveText"></textarea>
+          <label for="description3">내용3</label>
+          <textarea v-model="sourceText3" @input="resizeTextarea" rows="8"></textarea>
         </div>
       </div>
 
       <div class="form section">
         <div class="input-field">
           <label for="preview">미리보기</label>
-          <textarea v-model="destinationText"></textarea>
+          <textarea v-model="destinationText" @input="resizeTextarea" rows="8"></textarea>
         </div>
         <div class="button-container">
-          <button @click="save">저장</button>
+          <button class="product-button" @click="addProduct">저장</button>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -121,12 +116,11 @@ export default {
       productName: '',  
       productDescription: '', 
       tone: '',          
-      description: '',
-      description2: '',
-      preview: '',
       keywords: ['무료 체험', '한정 판매', '특별 제공', '신규 가입', '쿠폰 혜택', '시즌 세일', '무료 배송', '파격 할인'],
       selectedKeywords: [],
-      sourceText: '', 
+      sourceText1: '', 
+      sourceText2: '', 
+      sourceText3: '', 
       destinationText: '' 
     };
   },
@@ -142,22 +136,17 @@ export default {
       console.log('추천 내용 생성:', this.selectedKeywords);
     },
     save() {
-      console.log('저장:', this.preview);
+      console.log('저장:', this.destinationText);
     },
     resizeTextarea(event) {
       const textarea = event.target;
       textarea.style.height = 'auto'; 
       textarea.style.height = textarea.scrollHeight + 'px'; 
     },
-    moveText() {
-      this.destinationText = this.sourceText;
-    },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
-        
         this.selectedKeywords = this.selectedKeywords.filter(item => item !== keyword);
       } else {
-        
         this.selectedKeywords.push(keyword);
       }
       console.log('선택된 키워드들:', this.selectedKeywords);
@@ -167,6 +156,17 @@ export default {
 </script>
 
 <style scoped>
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* 사용자 크기 조절 비활성화 */
+  overflow-y: hidden; /* 스크롤바 감추기 */
+  font-family: inherit;
+  font-size: 14px;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -179,7 +179,6 @@ export default {
   justify-content: space-between;
   width: 90%;
 }
-
 
 .form {
   width: 48%; 
@@ -243,47 +242,10 @@ export default {
   color: black; 
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: calc(25% - 8px); 
-  box-sizing: border-box;
 }
 
 .keyword-button.selected {
   background-color: #42b983;
   color: white;
-}
-
-.keyword-button:hover {
-  background-color: #d3d3d3;
-}
-
-textarea {
-  width: 100%;
-  padding: 10px; 
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: inherit;
-  height: 130px; 
-  overflow: hidden;
-  resize: none;
-}
-
-.large-textarea {
-  height: 120px; 
-}
-
-button {
-  width: 100%;
-  padding: 12px; 
-  background-color: #42b983;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #36996e;
 }
 </style>
