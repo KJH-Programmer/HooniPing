@@ -89,6 +89,7 @@ export default {
     },
   },
   methods: {
+    // 캠페인 리스트 가져오기
     async GetCampaignList() {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");

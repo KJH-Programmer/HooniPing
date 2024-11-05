@@ -18,7 +18,7 @@ export const ExtractKeyword = async (product) => {
 
 //==================== 문구 ======================
 // 광고 문구 출력
-export const GenerateAdText = async (product, brand, tone, brand_model, features, keywords) => {
+export const GenerateAdText = async (token,product, brand, tone, brand_model, features, keywords) => {
     return await axios.post(`${API_URL}/adtext`, {
         product: product,
         brand: brand,
@@ -26,7 +26,12 @@ export const GenerateAdText = async (product, brand, tone, brand_model, features
         tone: tone,
         brand_model: brand_model,
         keywords: keywords
-    })
+    }, 
+    {
+        headers: {
+            Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+        }
+    });
 }
 
 // //==================== 이미지 =======================

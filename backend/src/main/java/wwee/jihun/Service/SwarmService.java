@@ -24,31 +24,15 @@ public class SwarmService {
         return agentA.generateKeywordsAndProductInfo(campaignEntity, keywords)
                 .flatMap(keywordsAndInfo ->
                         // Step 2: agentB를 통해 인스타그램 피드 광고 형식으로 수정
-                        agentB.generateAdFormat(campaignEntity, keywordsAndInfo).flatMap(adFormat ->
-                                // Step 3: agentC를 통해 특정 어조로 변환
-                                agentC.convertToCasualTone(campaignEntity, adFormat).map(casualAd ->
-                                        "광고 문구:\n" + casualAd
-                                )
+                        agentB.generateAdFormat(campaignEntity, keywordsAndInfo)
+                                .flatMap(adFormat ->
+                                    // Step 3: agentC를 통해 특정 어조로 변환
+                                    agentC.convertToCasualTone(campaignEntity, adFormat)
+                                            .map(casualAd ->
+                                                casualAd
+                                    )
                         )
                 );
     }
-//    public Mono<String> generateCasualInstagramAd(CampaignEntity campaignEntity) {
-//        return keywordService.suggestKeywords(campaignEntity)
-//                .flatMap(keywords -> {
-//                    campaignEntity.setKeywords(keywords);
-//                    // Step 1: agentA를 통해 키워드와 제품 정보 생성
-//                    return agentA.generateKeywordsAndProductInfo(campaignEntity, keywords)
-//                            .flatMap(keywordsAndInfo ->
-//                                    // Step 2: agentB를 통해 인스타그램 피드 광고 형식 생성
-//                                    agentB.generateAdFormat(campaignEntity,keywordsAndInfo).flatMap(adFormat ->
-//                                            // Step 3: agentC를 통해 반말 형식으로 변환
-//                                            agentC.convertToCasualTone(campaignEntity,adFormat).map(casualAd ->
-//                                                    "광고 문구:\n" + casualAd
-//                                            )
-//                                    )
-//                            );
-//                });
-//
-//    }
 
 }
