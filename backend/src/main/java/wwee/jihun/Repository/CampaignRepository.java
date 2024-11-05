@@ -25,6 +25,9 @@ public interface CampaignRepository extends JpaRepository<CampaignEntity, String
     // userID 와 Product 를 이용해 캠페인 검색 기능
     List<CampaignEntity> findAllByUserIdAndProduct(String userId, String product);
 
-    // // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능 추가
+    // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능 추가
     void deleteByUserIdAndCampaignId(String userId, Long campaignId);
+
+    // userId에 해당 campaignId가 있는지 확인
+    boolean existsByUserIdAndCampaignId(String userId, Long campaignId);
 }

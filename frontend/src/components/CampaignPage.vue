@@ -80,8 +80,20 @@
 
       <div class="form section">
         <div class="input-field">
-          <label for="description2">내용</label>
-          <textarea v-model="sourceText" @click="moveText" placeholder="Type here and click to move text"></textarea>
+          <label for="description2">내용1</label>
+          <textarea v-model="sourceText1" @click="moveText"></textarea>
+        </div>
+      </div>
+      <div class="form section">
+        <div class="input-field">
+          <label for="description2">내용2</label>
+          <textarea v-model="sourceText2" @click="moveText"></textarea>
+        </div>
+      </div>
+      <div class="form section">
+        <div class="input-field">
+          <label for="description2">내용3</label>
+          <textarea v-model="sourceText3" @click="moveText"></textarea>
         </div>
       </div>
 
@@ -105,6 +117,7 @@ import {
   GenerateAdText 
 } from '@/api/GptService';
 import {
+  GetNewCampaignId,
   SaveCampaign
 } from '@/api/CampaignService';
 
@@ -121,7 +134,9 @@ export default {
       preview: '',
       keywords: [],
       selectedKeywords: [],
-      sourceText: '', 
+      sourceText1: '', 
+      sourceText2: '',
+      sourceText3: '',
       destinationText: '' 
     };
   },
@@ -142,12 +157,6 @@ export default {
     },
     async generateRecommendation() {
       try {
-          console.log('문구 생성에 사용될 키워드:', this.selectedKeywords);
-          console.log('문구 생성에 사용될 product:', this.product);
-          console.log('문구 생성에 사용될 brand:', this.brand);
-          console.log('문구 생성에 사용될 features:', this.features);
-          console.log('문구 생성에 사용될 brand_model:', this.brand_model);
-          console.log('문구 생성에 사용될 tone:', this.tone);
           const token = localStorage.getItem("token");
           const keywords = this.selectedKeywords.join(', '); // 쉼표로 구분된 문자열로 변환
           // 문구 생성
@@ -155,31 +164,45 @@ export default {
           
           console.log('생성된 광고문구:', ad_text.data);
 
-          this.sourceText = ad_text.data;
+          // "hooniping"과 "\n"을 제거하고 각 광고 문구를 변수에 할당
+          const adTexts = ad_text.data.split("\n").map(text => text.replace("hooniping", "").trim()).filter(text => text !== "");
+
+          // 각 광고 문구를 sourceText 변수에 할당
+          this.sourceText1 = adTexts[0] || ""; // 첫 번째 광고 문구
+          this.sourceText2 = adTexts[1] || ""; // 두 번째 광고 문구
+          this.sourceText3 = adTexts[2] || ""; // 세 번째 광고 문구
+
+          console.log('sourceText1:', this.sourceText1);
+          console.log('sourceText2:', this.sourceText2);
+          console.log('sourceText3:', this.sourceText3);
           
         } catch (error) {
           console.error('광고 생성 오류:', error);
         }
     },
     async save() {
-      try {
-          const campaignData = {
-            product: this.product,
-            keywords: this.selectedKeywords,
-            features: this.features,
-            tone: this.tone,
-            brand: this.brand,
-            brand_model: this.brand_model,
-            ad_text: this.preview
-          }
-  
-          // 로컬 스토리지에서 userId 가져오기
-          const userId = localStorage.getItem('userId');
-          // 저장
-          const response = await SaveCampaign(userId, campaignData);
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
-          console.log('SaveCampaign response:', response);
-          console.log('캠페인 저장 성공:', this.preview);
+      try {
+        // 백엔드에서 우선 newCampaignId 받아옴
+        const newCampaignId = await GetNewCampaignId(token, userId);
+        const campaignData = {
+          campaignId: newCampaignId, // 백엔드에서 받은 newCampaignId
+          product: this.product,
+          keywords: this.selectedKeywords.join(','),
+          features: this.features,
+          tone: this.tone,
+          brand: this.brand,
+          brand_model: this.brand_model,
+          ad_text: this.destinationText
+        }
+
+        // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
+        const response = await SaveCampaign(token, userId, campaignData);
+
+        console.log('SaveCampaign response:', response);
+        console.log('캠페인 저장 성공(updatedAdText)');
         } catch (error) {
           console.log('캠페인 저장 실패:', error);
         }
@@ -190,7 +213,7 @@ export default {
       textarea.style.height = textarea.scrollHeight + 'px'; 
     },
     moveText() {
-      this.destinationText = this.sourceText;
+      this.destinationText = this.sourceText1;
     },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
@@ -220,11 +243,6 @@ export default {
   width: 90%;
 }
 
-.section {
-  background-color: #f7f7f7; 
-  padding: 13px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
-}
 
 .form {
   width: 48%; 
@@ -237,24 +255,24 @@ export default {
 
 .input-field label {
   display: block;
-  margin-bottom: 6px; /* 레이블과 입력 칸 사이의 여백 */
+  margin-bottom: 6px; 
 }
 
 .keyword-section {
-  margin-top: 10px; /* 여백 추가 */
+  margin-top: 10px; 
 }
 
 .keyword-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px; 
   max-width: 600px;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .product-input {
-  width: 100%; 
-  padding: 10px;
+  width: 80%;
+  padding: 8px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -262,39 +280,39 @@ export default {
 }
 
 .product-button {
-  width: 100%; 
-  padding: 10px; 
+  width: 100%;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px; /* 간격을 미리보기와 저장 버튼 간격과 동일하게 설정 */
+  margin-top: 8px;
 }
 
 .button-container {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px; /* 버튼과 위 요소 사이 간격 */
+  margin-top: 8px;
 }
 
 .keyword-button {
-  padding: 5px 10px;
+  padding: 5px 8px; 
   background-color: transparent; 
   border: 1px solid #ccc;
   border-radius: 20px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px; 
   color: black; 
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: calc(25% - 10px); /* 한 줄에 4개 들어가도록 크기 조정 */
+  width: calc(25% - 8px); 
   box-sizing: border-box;
 }
 
 .keyword-button.selected {
-  background-color: #42b983; 
-  color: white; 
+  background-color: #42b983;
+  color: white;
 }
 
 .keyword-button:hover {
