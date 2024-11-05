@@ -32,14 +32,20 @@
 
       <template v-if="isEditing">
         <!-- 수정 모드 -->
-        <p><strong>주제 : </strong> <input v-model="selectedItem.product" /></p>
-        <p><strong>키워드 : </strong> <input v-model="selectedItem.keywords" /></p>
-        <p><strong>브랜드 : </strong> <input v-model="selectedItem.brand" /></p>
-        <p><strong>모델 : </strong> <input v-model="selectedItem.brand_model" /></p>
-        <p><strong>어조 : </strong> <input v-model="selectedItem.tone" /></p>
-        <p><strong>특장점 : </strong> <input v-model="selectedItem.features" /></p>
-        <p><strong>광고문구 : </strong> <textarea v-model="selectedItem.ad_text"></textarea></p>
-        <p><strong>이미지 : </strong> <input v-model="selectedItem.image_url" /></p>
+        <p><strong>주제 <br> </strong><input v-model="selectedItem.product" /></p>
+        <p><strong>키워드 <br> </strong><input v-model="selectedItem.keywords" /></p>
+        <p><strong>브랜드 <br> </strong><input v-model="selectedItem.brand" /></p>
+        <p><strong>모델 <br> </strong><input v-model="selectedItem.brand_model" /></p>
+        <p><strong>어조 <br> </strong><input v-model="selectedItem.tone" /></p>
+        <p><strong>특장점 <br> </strong><input v-model="selectedItem.features" /></p>
+        <!-- 광고문구 : hooniping 단위로 쪼개서 각 부분 수정 가능 -->
+        <p><strong>광고문구 </strong></p>
+        <ol>
+          <li v-for="(textPart, index) in editableAdTextParts" :key="index">
+            <input v-model="editableAdTextParts[index]" class="ad-text-input" />
+          </li>
+        </ol>
+        <p><strong>이미지 </strong> <input v-model="selectedItem.image_url" /></p>
         <div class="button-container">
           <button class="save-button" @click="saveEdit">저장</button>
           <button class="cancel-button" @click="cancelEdit">취소</button>
@@ -48,14 +54,18 @@
 
       <template v-else>
         <!-- 보기 모드 -->
-        <p><strong>주제 : </strong> {{ selectedItem.product }}</p>
-        <p><strong>키워드 : </strong> {{ selectedItem.keywords }}</p>
-        <p><strong>브랜드 : </strong> {{ selectedItem.brand }}</p>
-        <p><strong>모델 : </strong> {{ selectedItem.brand_model }}</p>
-        <p><strong>어조 : </strong> {{ selectedItem.tone }}</p>
-        <p><strong>특장점 : </strong> {{ selectedItem.features }}</p>
-        <p><strong>광고문구 : </strong> {{ selectedItem.ad_text }}</p>
-        <p><strong>이미지 : </strong> {{ selectedItem.image_url }}</p>
+        <p><strong>주제 <br> </strong> - {{ selectedItem.product }}</p>
+        <p><strong>키워드 <br> </strong> - {{ selectedItem.keywords }}</p>
+        <p><strong>브랜드 <br> </strong> - {{ selectedItem.brand }}</p>
+        <p><strong>모델 <br> </strong> - {{ selectedItem.brand_model }}</p>
+        <p><strong>어조 <br> </strong> - {{ selectedItem.tone }}</p>
+        <p><strong>특장점 <br> </strong> - {{ selectedItem.features }}</p>
+        <!-- 광고문구 : hooniping 단위로 쪼개서 출력 -->
+        <p><strong>광고문구 </strong></p>
+        <ol>
+          <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
+        </ol>
+        <p><strong>이미지 </strong> {{ selectedItem.image_url }}</p>
         <div class="button-container">
           <button class="edit-button" @click="editItem">수정</button>
           <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>
@@ -86,6 +96,16 @@ export default {
         slides.push(this.items.slice(i, i + chunkSize));
       }
       return slides;
+    },
+    splitAdText(){
+      return this.selectedItem && this.selectedItem.ad_text ? this.selectedItem.ad_text.split("hooniping") : [];
+    },
+    splitAdTextFiltered() {
+      return this.splitAdText.filter(textPart => textPart.trim() !== "");
+    },
+    // 수정 모드용 필터링된 배열 추가
+    editableAdTextPartsFiltered() {
+      return this.editableAdTextParts.filter(textPart => textPart.trim() !== "");
     },
   },
   methods: {
@@ -120,12 +140,14 @@ export default {
     },
     editItem() {
       this.isEditing = true;
+      this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
     },
     async saveEdit() {
       this.isEditing = false;
       // 저장 로직을 추가할 수 있습니다 (예: API 호출로 서버에 수정 내용 전달)
       console.log("수정된 내용:", this.selectedItem);
       const token = localStorage.getItem('token');
+      this.selectedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
       const response = UpdateCampaign(token,this.selectedItem);
       console.log(response);
     },
@@ -283,21 +305,42 @@ export default {
 }
 
 .detail-view {
-  flex: 1.5; /* 오른쪽 섹션 크기 조정 */
+  flex: 1.5;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 20px;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
   background-color: #f9f9f9;
-  margin: auto 30px; /* 상하좌우 마진 조정 */
-  height: 700px; /* 높이 조정 */
+  margin: auto 30px;
+  height: 700px;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
 .detail-view h1 {
   font-size: 40px;
   font-weight: bold;
   margin: 0 0 30px;
+}
+
+input, .ad-text-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f9f9f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, .ad-text-input:focus {
+  border-color: #42b983;
+  box-shadow: 0 0 5px rgba(66, 185, 131, 0.5);
+  outline: none;
 }
 </style>

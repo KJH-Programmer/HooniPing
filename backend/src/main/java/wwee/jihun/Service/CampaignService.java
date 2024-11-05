@@ -8,8 +8,10 @@ import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Repository.CampaignMapper;
 import wwee.jihun.Repository.CampaignRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CampaignService {
@@ -29,7 +31,10 @@ public class CampaignService {
 
     //userId의 모든 캠페인 반환
     public List<CampaignEntity> getUserAllCampaigns(String userId) {
-        return databaseService.getUserAllCampaigns(userId);
+        return databaseService.getUserAllCampaigns(userId).stream()
+                .sorted(Comparator.comparing(CampaignEntity::getCampaignId).reversed())
+                .collect(Collectors.toList());
+
     }
 
     //campaignId의 캠페인 내용 가져오기
