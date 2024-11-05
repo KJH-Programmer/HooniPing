@@ -65,6 +65,7 @@ export const onlyImage = async (token, prompt) => {
                 Authorization: `Bearer ${token}`,
             },
         });
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('이미지 받아오는 중 오류:', error);

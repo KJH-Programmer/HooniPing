@@ -66,6 +66,13 @@ public class CampaignService {
         }
         // newCampaignId가 없으면 새로운 캠페인으로 저장
         newCampaign.setCampaignId(newCampaignId);
+
+        try {
+            newCampaign.setImage_url(s3Service.uploadFromUrl(newCampaign.getImage_url(), newCampaign.getUserId()+"-"+newCampaign.getCampaignId()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return campaignRepository.save(newCampaign);
     }
 

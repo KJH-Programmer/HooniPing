@@ -82,14 +82,13 @@
       <div class="form section">
         <div class="input-field">
           <label for="preview">이미지 요구사항</label>
-          <textarea v-model="prompt" @input="resizeTextarea" rows="5"></textarea>
+          <textarea v-model="prompt" @input="resizeTextarea" rows="5" placeholder="프롬프트 입력"></textarea>
         </div>
         <div class="button-container">
-          <input v-model="prompt" placeholder="프롬프트 입력" class="prompt-input" />
           <button class="product-button" @click="createImage">이미지 생성하기</button>
-          <div class="image-container" v-if="imageUrl">
-            <img :src="imageUrl" alt="Generated Image" class="generated-image" />
-          </div>
+        </div>
+        <div class="image-container" v-if="imageUrl">
+          <img :src="imageUrl" alt="Generated Image" class="generated-image" />
         </div>
       </div>
     </div>
@@ -100,7 +99,8 @@
 <script>
 import {
   ExtractKeyword,
-  GenerateAdText
+  GenerateAdText,
+  onlyImage
 } from '@/api/GptService';
 import {
   GetNewCampaignId,
@@ -171,12 +171,11 @@ export default {
     },
     async createImage() {
       const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
-      const campaignId = 3;
+      // const userId = localStorage.getItem('userId');
+      // const campaignId = 3;
+
       try {
-
-        this.imageUrl = await GenerateImageUrl(token, this.prompt, userId, campaignId);
-
+        this.imageUrl = await onlyImage(token, this.prompt);
       } catch (error) {
         console.error("이미지 생성 오류:", error);
       }
