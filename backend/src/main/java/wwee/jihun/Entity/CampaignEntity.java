@@ -13,6 +13,7 @@ import javax.annotation.processing.Generated;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@IdClass(CampaignEntityId.class)
 @Table(name = "tb_campaign")
 public class CampaignEntity {
 
@@ -20,6 +21,7 @@ public class CampaignEntity {
     @Column(name = "campaign_id", updatable = true)  // 캠페인 id
     private Long campaignId;
 
+    @Id
     @Column(name = "user_id")  // 사용자 id
     private String userId;
 
