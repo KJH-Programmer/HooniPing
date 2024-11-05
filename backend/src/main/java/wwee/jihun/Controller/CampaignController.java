@@ -65,9 +65,7 @@ public class CampaignController {
 
     @PutMapping("/content/update")
     public ResponseEntity<CampaignEntity> updateCampaign(@RequestBody CampaignEntity campaignEntity) {
-        String userId = campaignEntity.getUserId();
-        Long campaignId = campaignEntity.getCampaignId();
-        CampaignEntity updatedCampaign = campaignService.updateCampaign(userId, campaignId, campaignEntity);
+        CampaignEntity updatedCampaign = campaignService.updateCampaign(campaignEntity);
         return ResponseEntity.ok(updatedCampaign);
     }
 
@@ -81,7 +79,7 @@ public class CampaignController {
     }
     // userID 와 campaignId 를 이용한 캠페인 목록 삭제기능
     @Transactional
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<Void> deleteCampaign(@RequestBody CampaignEntity campaignEntity) {
         String userId = campaignEntity.getUserId();
         Long campaignId = campaignEntity.getCampaignId();

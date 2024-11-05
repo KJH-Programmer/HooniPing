@@ -138,7 +138,7 @@ export const SaveCampaign = async (token, userId, campaignData) => {
 };
 
 // 기존 캠페인 업데이트
-export const UpdateCampaign = async (token, campaignId, updatedData) => {
+export const UpdateCampaign = async (token, updatedData) => {
     try {
         const response = await axios.put(`${API_URL}/content/update`,
           {
@@ -159,24 +159,24 @@ export const UpdateCampaign = async (token, campaignId, updatedData) => {
 };
 
 // userId, campaignId로 캠페인 삭제
-export const DeleteCampaign = async (token, userId, campaignId) => {
-  try {
-      const response = await axios.put(`${API_URL}/delete`,
-        {
-          userId: userId,
-          campaignId: campaignId
-        },
-        {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-  } catch (error) {
-      console.error('캠페인 삭제 중 오류:', error);
-      throw error;
-  }
+export const DeleteCampaign = async (token, userId, campaignId ) => {
+    try {
+        const response = await axios.post(`${API_URL}/delete`,
+            {
+                userId: userId,
+                campaignId: campaignId
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        return response;
+    } catch (error) {
+        console.error('캠페인 삭제중 오류:', error);
+        throw error;
+    }
 };
 
 // userId, product로 캠페인 검색

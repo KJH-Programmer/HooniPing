@@ -1,20 +1,29 @@
 <template>
   <div id="app">
-  <div class="app-container">
-    <!-- 헤더: 로그인 상태일 때만 표시 -->
-    <div v-if="isLoggedIn" class="header-wrapper">
-      <div class="welcome-wrapper">
-        <span class="welcome-message">환영합니다, {{ userId }}님!</span>
-        <button class="logout-button" @click="handleLogout">로그아웃</button>
+    <div class="app-container">
+      <!-- 헤더: 로그인 상태일 때만 표시 -->
+      <div v-if="isLoggedIn" class="header-wrapper">
+        <div class="logo-wrapper">
+          <!-- 이미지 추가 및 클릭 이벤트 연결 (로그인 상태일 때만 표시) -->
+          <img
+            src="@/assets/KakaoTalk_20240926_155821857.jpg"
+            alt="Logo"
+            class="logo-image"
+            @click="goToCampaignListPage"
+          />
+        </div>
+        <div class="welcome-wrapper">
+          <span class="welcome-message">환영합니다, {{ userId }}님!</span>
+          <button class="logout-button" @click="handleLogout">로그아웃</button>
+        </div>
       </div>
+
+      <!-- 페이지 콘텐츠 -->
+      <router-view />
+
+      <!-- 푸터: 항상 표시 -->
+      <AppFooter />
     </div>
-
-    <!-- 페이지 콘텐츠 -->
-    <router-view />
-
-    <!-- 푸터: 항상 표시 -->
-    <AppFooter />
-  </div>
   </div>
 </template>
 
@@ -51,6 +60,12 @@ export default {
         this.$router.push('/');
       }
     },
+    goToCampaignListPage() {
+      // 현재 경로가 "/campaignlistpage" 인지 확인
+      if (this.$route.path !== '/campaignlistpage') {
+        this.$router.push('/campaignlistpage'); // 여기에서 'pust'를 'push'로 수정
+      }
+    },
   },
   watch: {
     // 라우트 변경을 감지하고 로그인 상태 업데이트
@@ -65,18 +80,27 @@ export default {
 /* 전체 스타일은 동일하게 유지 */
 .app-container {
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
+  flex-direction: column;
   min-height: 100vh;
   background-color: #f0f3fb;
-  justify-content: space-between; /* 헤더와 푸터 사이 공간을 확보 */
+  justify-content: space-between;
 }
 .header-wrapper {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
+}
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+.logo-image {
+  width: 50px; /* 이미지 크기 조정 */
+  height: 50px;
+  cursor: pointer; /* 클릭 가능한 커서 */
 }
 .welcome-wrapper {
   display: flex;

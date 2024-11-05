@@ -29,26 +29,54 @@
     <!-- 오른쪽 섹션: 상세 정보 -->
     <div class="detail-view" v-if="selectedItem">
       <h1>캠페인 정보</h1>
-      <p><strong>주제 : </strong> {{ selectedItem.product }}</p>
-      <p><strong>키워드 : </strong> {{ selectedItem.keywords }}</p>
-      <p><strong>브랜드 : </strong> {{ selectedItem.brand }}</p>
-      <p><strong>모델 : </strong> {{ selectedItem.brand_model }}</p>
-      <p><strong>어조 : </strong> {{ selectedItem.tone }}</p>
-      <p><strong>특장점 : </strong> {{ selectedItem.features }}</p>
-      <p><strong>광고문구 : </strong> {{ selectedItem.ad_text }}</p>
-      <p><strong>이미지 : </strong> {{ selectedItem.image_url }}</p>
 
-      <!-- 버튼 컨테이너: 수정/삭제 버튼을 나란히 배치 -->
-      <div class="button-container">
-        <button class="edit-button" @click="editItem(selectedItem)">수정하기</button>
-        <button class="delete-button" @click="deleteItem(selectedItem.campaignId, selectedItem.userId)">삭제</button>
-      </div>
+      <template v-if="isEditing">
+        <!-- 수정 모드 -->
+        <p><strong>주제 <br> </strong><input v-model="selectedItem.product" /></p>
+        <p><strong>키워드 <br> </strong><input v-model="selectedItem.keywords" /></p>
+        <p><strong>브랜드 <br> </strong><input v-model="selectedItem.brand" /></p>
+        <p><strong>모델 <br> </strong><input v-model="selectedItem.brand_model" /></p>
+        <p><strong>어조 <br> </strong><input v-model="selectedItem.tone" /></p>
+        <p><strong>특장점 <br> </strong><input v-model="selectedItem.features" /></p>
+        <!-- 광고문구 : hooniping 단위로 쪼개서 각 부분 수정 가능 -->
+        <p><strong>광고문구 </strong></p>
+        <ol>
+          <li v-for="(textPart, index) in editableAdTextParts" :key="index">
+            <input v-model="editableAdTextParts[index]" class="ad-text-input" />
+          </li>
+        </ol>
+        <p><strong>이미지 </strong> <input v-model="selectedItem.image_url" /></p>
+        <div class="button-container">
+          <button class="save-button" @click="saveEdit">저장</button>
+          <button class="cancel-button" @click="cancelEdit">취소</button>
+        </div>
+      </template>
+
+      <template v-else>
+        <!-- 보기 모드 -->
+        <p><strong>주제 <br> </strong> - {{ selectedItem.product }}</p>
+        <p><strong>키워드 <br> </strong> - {{ selectedItem.keywords }}</p>
+        <p><strong>브랜드 <br> </strong> - {{ selectedItem.brand }}</p>
+        <p><strong>모델 <br> </strong> - {{ selectedItem.brand_model }}</p>
+        <p><strong>어조 <br> </strong> - {{ selectedItem.tone }}</p>
+        <p><strong>특장점 <br> </strong> - {{ selectedItem.features }}</p>
+        <!-- 광고문구 : hooniping 단위로 쪼개서 출력 -->
+        <p><strong>광고문구 </strong></p>
+        <ol>
+          <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
+        </ol>
+        <p><strong>이미지 </strong> {{ selectedItem.image_url }}</p>
+        <div class="button-container">
+          <button class="edit-button" @click="editItem">수정</button>
+          <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import { GetCampaignList, DeleteCampaign } from "@/api/CampaignService";
+import {GetCampaignList,DeleteCampaign,UpdateCampaign} from "@/api/CampaignService";
 
 export default {
   data() {
@@ -56,6 +84,7 @@ export default {
       items: [], // 카드 아이템의 데이터
       currentIndex: 0,
       selectedItem: null, // 선택된 아이템을 저장할 변수
+      isEditing: false,
     };
   },
   computed: {
@@ -67,6 +96,16 @@ export default {
         slides.push(this.items.slice(i, i + chunkSize));
       }
       return slides;
+    },
+    splitAdText(){
+      return this.selectedItem && this.selectedItem.ad_text ? this.selectedItem.ad_text.split("hooniping") : [];
+    },
+    splitAdTextFiltered() {
+      return this.splitAdText.filter(textPart => textPart.trim() !== "");
+    },
+    // 수정 모드용 필터링된 배열 추가
+    editableAdTextPartsFiltered() {
+      return this.editableAdTextParts.filter(textPart => textPart.trim() !== "");
     },
   },
   methods: {
@@ -99,14 +138,50 @@ export default {
     createItem() {
       this.$router.push("/CampaignPage");
     },
-    editItem(item) {
-      // 수정 로직 구현 또는 수정 페이지로 이동
-      alert(`수정하기 버튼이 클릭되었습니다. Item: ${item.product}`);
-      // 캠페인 페이지로 이동
-      this.$router.push("/CampaignPage")
+    editItem() {
+      this.isEditing = true;
+      this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
     },
-    deleteItem(campaignId, userId) {
-      DeleteCampaign(campaignId, userId);
+    async saveEdit() {
+      this.isEditing = false;
+      // 저장 로직을 추가할 수 있습니다 (예: API 호출로 서버에 수정 내용 전달)
+      console.log("수정된 내용:", this.selectedItem);
+      const token = localStorage.getItem('token');
+      this.selectedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
+      const response = UpdateCampaign(token,this.selectedItem);
+      console.log(response);
+    },
+    cancelEdit() {
+      this.isEditing = false;
+      // 수정 취소 시에 원래 내용을 복원하는 로직을 추가할 수 있습니다.
+    },
+    async deleteItem(userId, campaignId) {
+      const token = localStorage.getItem('token');
+      if (window.confirm("캠페인을 정말로 삭제하시겠습니까?")) {
+        try {
+          const response = await DeleteCampaign(token, userId, campaignId);
+          console.log("Response 객체:", response);
+
+          // 응답이 204라면 items 배열 업데이트
+          if (response && response.status === 204) {
+
+            // 새로운 배열 생성 후 Vue.set으로 items 갱신
+            const updatedItems = this.items.filter(item => item.campaignId !== campaignId);
+            this.$set(this, 'items', updatedItems);
+
+            // 선택된 항목이 삭제된 항목이라면, 선택된 항목 초기화
+            if (this.selectedItem && this.selectedItem.campaignId === campaignId) {
+              this.selectedItem = null;
+            }
+            console.log("삭제 후 items:", this.items);
+          } else {
+            console.log("삭제 요청 응답이 예상과 다릅니다:", response);
+          }
+        } catch (error) {
+          console.error("삭제 중 오류 발생:", error);
+          alert("캠페인 삭제에 실패했습니다.");
+        }
+      }
     },
     navigateToDetail(campaignId) {
       // 아이템의 상세 정보 출력하기
@@ -200,47 +275,72 @@ export default {
   cursor: pointer;
 }
 
+
 .button-container {
   display: flex;
-  justify-content: space-between;
-  width: 100%; /* 버튼이 서로 나란히 배치되도록 설정 */
-  margin-top: 20px;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  gap: 10px; /* 버튼 사이의 간격 */
+  margin-top: auto; /* 하단에 위치 */
 }
-
-.edit-button {
-  background-color: #1390af;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
+.save-button,
+.cancel-button,
+.edit-button,
 .delete-button {
-  background-color: #ba0d0d;
+  background-color: #36996e; /* 기본 수정 버튼 색상 */
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.cancel-button,
+.delete-button {
+  background-color: #ba0d0d; /* 삭제 버튼 색상 */
+}
+
+.save-button,
+.edit-button {
+  background-color: #42b983; /* 수정 버튼 색상 */
 }
 
 .detail-view {
-  flex: 0.5; /* 오른쪽 섹션 크기 조정 */
+  flex: 1.5;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 20px;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
   background-color: #f9f9f9;
-  margin: auto 30px; /* 상하좌우 마진 조정 */
-  height: 700px; /* 높이 조정 */
+  margin: auto 30px;
+  height: 700px;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
 .detail-view h1 {
   font-size: 40px;
   font-weight: bold;
   margin: 0 0 30px;
+}
+
+input, .ad-text-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f9f9f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, .ad-text-input:focus {
+  border-color: #42b983;
+  box-shadow: 0 0 5px rgba(66, 185, 131, 0.5);
+  outline: none;
 }
 </style>
