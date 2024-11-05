@@ -65,7 +65,7 @@
         <ol>
           <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
         </ol>
-        <p><strong>이미지 </strong> {{ selectedItem.image_url }}</p>
+        <p><strong>이미지 </strong> <img :src="imageUrl" alt="이미지 설명" /></p>
         <div class="button-container">
           <button class="edit-button" @click="editItem">수정</button>
           <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>

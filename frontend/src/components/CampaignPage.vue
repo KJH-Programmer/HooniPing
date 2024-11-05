@@ -6,10 +6,10 @@
         <!-- 브랜드명 입력 -->
         <div class="input-field">
           <label for="brand">브랜드명</label>
-          <input 
-            id="brand" 
-            v-model="brand" 
-            placeholder="브랜드명을 입력하세요." 
+          <input
+            id="brand"
+            v-model="brand"
+            placeholder="브랜드명을 입력하세요."
             class="product-input"
           />
         </div>
@@ -17,10 +17,10 @@
         <!-- 모델 이름 입력 -->
         <div class="input-field">
           <label for="model">모델 이름</label>
-          <input 
-            id="model" 
-            v-model="brand_model" 
-            placeholder="모델 이름을 입력하세요." 
+          <input
+            id="model"
+            v-model="brand_model"
+            placeholder="모델 이름을 입력하세요."
             class="product-input"
           />
         </div>
@@ -41,10 +41,10 @@
         <!-- 제품명 입력 -->
         <div class="input-field">
           <label for="product">제품명</label>
-          <input 
-            id="product" 
-            v-model="product" 
-            placeholder="제품명을 입력하세요." 
+          <input
+            id="product"
+            v-model="product"
+            placeholder="제품명을 입력하세요."
             class="product-input"
           />
         </div>
@@ -52,23 +52,23 @@
 
         <div class="input-field">
           <label for="features">제품 설명</label>
-          <input 
-            id="features" 
-            v-model="features" 
-            placeholder="제품 설명을 입력하세요." 
+          <input
+            id="features"
+            v-model="features"
+            placeholder="제품 설명을 입력하세요."
             class="product-input"
           />
         </div>
 
         <button class="product-button" @click="addProduct">제품 입력하기</button>
-        
+
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
           <div class="keyword-wrapper">
-            <button 
-              v-for="(keyword, index) in keywords" 
-              :key="index" 
-              :class="['keyword-button', { selected: selectedKeywords.includes(keyword) }]" 
+            <button
+              v-for="(keyword, index) in keywords"
+              :key="index"
+              :class="['keyword-button', { selected: selectedKeywords.includes(keyword) }]"
               @click="toggleKeyword(keyword)"
             >
               {{ keyword }}
@@ -78,22 +78,31 @@
         <button @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
 
-      <div class="form section">
-        <div class="input-field">
-          <label for="description2">내용1</label>
-          <textarea v-model="sourceText1" @click="moveText(sourceText1)"></textarea>
-        </div>
-      </div>
-      <div class="form section">
-        <div class="input-field">
-          <label for="description2">내용2</label>
-          <textarea v-model="sourceText2" @click="moveText(sourceText2)"></textarea>
-        </div>
-      </div>
-      <div class="form section">
-        <div class="input-field">
-          <label for="description2">내용3</label>
-          <textarea v-model="sourceText3" @click="moveText(sourceText3)"></textarea>
+      <div class="container">
+        <div class="form-wrapper">
+          <div class="form section">
+            <!-- 기존 form 섹션들: 브랜드명, 모델 이름 등 -->
+          </div>
+
+          <div class="form section keyword-container">
+            <!-- 내용1, 내용2, 내용3을 포함하는 세로 정렬 컨테이너 -->
+            <div class="input-field">
+              <label for="description1">내용1</label>
+              <textarea v-model="sourceText1" @click="moveText(sourceText1)"></textarea>
+            </div>
+            <div class="input-field">
+              <label for="description2">내용2</label>
+              <textarea v-model="sourceText2" @click="moveText(sourceText2)"></textarea>
+            </div>
+            <div class="input-field">
+              <label for="description3">내용3</label>
+              <textarea v-model="sourceText3" @click="moveText(sourceText3)"></textarea>
+            </div>
+          </div>
+
+          <div class="form section">
+            <!-- 미리보기 및 저장 버튼 섹션 -->
+          </div>
         </div>
       </div>
 
@@ -112,9 +121,9 @@
 </template>
 
 <script>
-import { 
+import {
   ExtractKeyword,
-  GenerateAdText 
+  GenerateAdText
 } from '@/api/GptService';
 import {
   GetNewCampaignId,
@@ -134,17 +143,17 @@ export default {
       preview: '',
       keywords: [],
       selectedKeywords: [],
-      sourceText1: '', 
+      sourceText1: '',
       sourceText2: '',
       sourceText3: '',
-      destinationText: '' 
+      destinationText: ''
     };
   },
   methods: {
     async addProduct() {
       try {
         console.log('추가된 제품명:', this.product);
-        
+
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
 
@@ -161,7 +170,7 @@ export default {
           const keywords = this.selectedKeywords.join(', '); // 쉼표로 구분된 문자열로 변환
           // 문구 생성
           const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
-          
+
           console.log('생성된 광고문구:', ad_text.data);
 
           // "hooniping"과 "\n"을 제거하고 각 광고 문구를 변수에 할당
@@ -175,7 +184,7 @@ export default {
           console.log('sourceText1:', this.sourceText1);
           console.log('sourceText2:', this.sourceText2);
           console.log('sourceText3:', this.sourceText3);
-          
+
         } catch (error) {
           console.error('광고 생성 오류:', error);
         }
@@ -209,8 +218,8 @@ export default {
     },
     resizeTextarea(event) {
       const textarea = event.target;
-      textarea.style.height = 'auto'; 
-      textarea.style.height = textarea.scrollHeight + 'px'; 
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
     },
     moveText(selectedText) {
       this.destinationText = selectedText;
@@ -234,45 +243,45 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .form-wrapper {
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   width: 90%;
 }
 
 
 .form {
-  width: 48%; 
+  width: 60%;
   border-radius: 8px;
 }
 
 .input-field {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .input-field label {
   display: block;
-  margin-bottom: 6px; 
+  margin-bottom: 6px;
 }
 
 .keyword-section {
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 
 .keyword-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; 
+  gap: 8px;
   max-width: 600px;
   margin-top: 8px;
 }
 
 .product-input {
   width: 80%;
-  padding: 8px; 
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -281,7 +290,7 @@ export default {
 
 .product-button {
   width: 100%;
-  padding: 12px; 
+  padding: 12px;
   background-color: #42b983;
   color: white;
   border: none;
@@ -297,16 +306,16 @@ export default {
 }
 
 .keyword-button {
-  padding: 5px 8px; 
-  background-color: transparent; 
+  padding: 5px 8px;
+  background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 20px;
   font-family: inherit;
-  font-size: 13px; 
-  color: black; 
+  font-size: 13px;
+  color: black;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: calc(25% - 8px); 
+  width: calc(25% - 8px);
   box-sizing: border-box;
 }
 
@@ -321,24 +330,24 @@ export default {
 
 textarea {
   width: 100%;
-  padding: 10px; 
+  padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
   font-size: inherit;
-  height: 130px; 
+  height: 130px;
   overflow: hidden;
   resize: none;
 }
 
 .large-textarea {
-  height: 120px; 
+  height: 120px;
 }
 
 button {
   width: 100%;
-  padding: 12px; 
+  padding: 12px;
   background-color: #42b983;
   color: white;
   border: none;
@@ -348,5 +357,11 @@ button {
 
 button:hover {
   background-color: #36996e;
+}
+
+.keyword-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* 각 form section 간 간격 */
 }
 </style>
