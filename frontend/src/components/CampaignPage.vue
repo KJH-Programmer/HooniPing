@@ -81,19 +81,19 @@
       <div class="form section">
         <div class="input-field">
           <label for="description2">내용1</label>
-          <textarea v-model="sourceText1" @click="moveText"></textarea>
+          <textarea v-model="sourceText1" @click="moveText(sourceText1)"></textarea>
         </div>
       </div>
       <div class="form section">
         <div class="input-field">
           <label for="description2">내용2</label>
-          <textarea v-model="sourceText2" @click="moveText"></textarea>
+          <textarea v-model="sourceText2" @click="moveText(sourceText2)"></textarea>
         </div>
       </div>
       <div class="form section">
         <div class="input-field">
           <label for="description2">내용3</label>
-          <textarea v-model="sourceText3" @click="moveText"></textarea>
+          <textarea v-model="sourceText3" @click="moveText(sourceText3)"></textarea>
         </div>
       </div>
 
@@ -212,8 +212,8 @@ export default {
       textarea.style.height = 'auto'; 
       textarea.style.height = textarea.scrollHeight + 'px'; 
     },
-    moveText() {
-      this.destinationText = this.sourceText1;
+    moveText(selectedText) {
+      this.destinationText = selectedText;
     },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {

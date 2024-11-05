@@ -138,7 +138,7 @@ export const SaveCampaign = async (token, userId, campaignData) => {
 };
 
 // 기존 캠페인 업데이트
-export const UpdateCampaign = async (token, updatedData) => {
+export const UpdateCampaign = async (token, campaignId, updatedData) => {
     try {
         const response = await axios.put(`${API_URL}/content/update`,
           {
