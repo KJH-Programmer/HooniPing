@@ -300,4 +300,39 @@ export default {
   font-weight: bold;
   margin: 0 0 30px;
 }
+.detail-view {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 요소들을 왼쪽 정렬 */
+  justify-content: flex-start; /* 상단에 요소들 배치 */
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 부드럽게 */
+  border-radius: 12px; /* 둥근 모서리 조금 더 줄임 */
+  background-color: #ffffff; /* 더 밝은 배경색 */
+  margin: 20px auto; /* 상하좌우 마진 */
+  height: auto; /* 높이 자동 조정 */
+  max-width: 500px; /* 최대 너비 확장 */
+  overflow-y: auto; /* 내용이 많을 때 스크롤 */
+}
+
+input,
+textarea {
+  width: 100%;
+  max-width: 480px; /* 입력 필드 너비 늘림 */
+  padding: 12px; /* 안쪽 여백 확대 */
+  margin-bottom: 15px; /* 아래쪽 여백 확대 */
+  border: 1px solid #cccccc; /* 더 연한 테두리 색상 */
+  border-radius: 5px;
+  font-size: 14px; /* 폰트 크기 약간 줄임 */
+  background-color: #fafafa; /* 입력 필드 배경색 추가 */
+}
+
+textarea {
+  height: 100px; /* textarea 높이 조정 */
+  resize: vertical; /* 세로 크기 조정 가능 */
+}
+
+
+
 </style>
