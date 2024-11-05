@@ -4,20 +4,20 @@
       <div class="form section">
         <div class="input-field">
           <label for="brand">브랜드명</label>
-          <input 
-            id="brand" 
-            v-model="brand" 
-            placeholder="브랜드명을 입력하세요." 
+          <input
+            id="brand"
+            v-model="brand"
+            placeholder="브랜드명을 입력하세요."
             class="product-input"
           />
         </div>
 
         <div class="input-field">
           <label for="model">모델 이름</label>
-          <input 
-            id="model" 
+          <input
+            id="model"
             v-model="brand_model"
-            placeholder="모델 이름을 입력하세요." 
+            placeholder="모델 이름을 입력하세요."
             class="product-input"
           />
         </div>
@@ -36,10 +36,10 @@
 
         <div class="input-field">
           <label for="product">제품명</label>
-          <input 
-            id="product" 
-            v-model="product" 
-            placeholder="제품명을 입력하세요." 
+          <input
+            id="product"
+            v-model="product"
+            placeholder="제품명을 입력하세요."
             class="product-input"
           />
         </div>
@@ -59,10 +59,10 @@
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
           <div class="keyword-wrapper">
-            <button 
-              v-for="(keyword, index) in keywords" 
-              :key="index" 
-              :class="['keyword-button', { selected: selectedKeywords.includes(keyword) }]" 
+            <button
+              v-for="(keyword, index) in keywords"
+              :key="index"
+              :class="['keyword-button', { selected: selectedKeywords.includes(keyword) }]"
               @click="toggleKeyword(keyword)"
             >
               {{ keyword }}
@@ -98,10 +98,9 @@
 
 
 <script>
-import { 
+import {
   ExtractKeyword,
-  GenerateAdText,
-  GenerateImageUrl
+  GenerateAdText
 } from '@/api/GptService';
 import {
   GetNewCampaignId,
@@ -121,8 +120,7 @@ export default {
       preview: '',
       keywords: [],
       selectedKeywords: [],
-      
-      sourceText1: '', 
+      sourceText1: '',
       sourceText2: '',
       sourceText3: '',
       destinationText: '',
@@ -135,7 +133,7 @@ export default {
     async addProduct() {
       try {
         console.log('추가된 제품명:', this.product);
-        
+
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
 
@@ -152,7 +150,7 @@ export default {
           const keywords = this.selectedKeywords.join(', '); // 쉼표로 구분된 문자열로 변환
           // 문구 생성
           const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
-          
+
           console.log('생성된 광고문구:', ad_text.data);
 
           // "hooniping"과 "\n"을 제거하고 각 광고 문구를 변수에 할당
@@ -166,7 +164,7 @@ export default {
           console.log('sourceText1:', this.sourceText1);
           console.log('sourceText2:', this.sourceText2);
           console.log('sourceText3:', this.sourceText3);
-          
+
         } catch (error) {
           console.error('광고 생성 오류:', error);
         }
@@ -212,8 +210,8 @@ export default {
     },
     resizeTextarea(event) {
       const textarea = event.target;
-      textarea.style.height = 'auto'; 
-      textarea.style.height = textarea.scrollHeight + 'px'; 
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
     },
     moveText(selectedText) {
       this.destinationText = selectedText;

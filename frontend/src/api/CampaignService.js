@@ -138,13 +138,10 @@ export const SaveCampaign = async (token, userId, campaignData) => {
 };
 
 // 기존 캠페인 업데이트
-export const UpdateCampaign = async (token, campaignId, updatedData) => {
+export const UpdateCampaign = async (token,updatedData) => {
     try {
         const response = await axios.put(`${API_URL}/content/update`,
-          {
-            campaignId: campaignId,
-            updatedData: updatedData,
-          },
+            updatedData,
           {
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -11,6 +11,7 @@ import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Repository.CampaignMapper;
 import wwee.jihun.Repository.CampaignRepository;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +23,11 @@ public class CampaignService {
     private EntityManager entityManager;
     private final DatabaseService databaseService;
     private final CampaignRepository campaignRepository;
-    public CampaignService(DatabaseService databaseService, CampaignRepository campaignRepository) {
+    private final S3Service s3Service;
+    public CampaignService(DatabaseService databaseService, CampaignRepository campaignRepository, S3Service s3Service) {
         this.databaseService = databaseService;
         this.campaignRepository = campaignRepository;
+        this.s3Service = s3Service;
     }
 
     //db에 있는 모든 캠페인 반환
@@ -80,7 +83,11 @@ public class CampaignService {
         if (existingCampaign == null || !existingCampaign.getUserId().equals(campaignEntity.getUserId())) {
             throw new RuntimeException("Campaign not found or userId does not match");
         }
-
+        try {
+            campaignEntity.setImage_url(s3Service.uploadFromUrl(campaignEntity.getImage_url(), campaignEntity.getUserId()+"-"+campaignEntity.getCampaignId()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         // 필요한 필드만 수동으로 설정
         existingCampaign.setProduct(campaignEntity.getProduct());
         existingCampaign.setKeywords(campaignEntity.getKeywords());

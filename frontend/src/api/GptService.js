@@ -50,6 +50,12 @@ export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
     return response.data;
 }
 
+// // image 버킷에서 삭제
+// export const DeleteAdImage = async (prompt, userId, campaignId) => {
+//     return await axios.post(`${API_URL}/image-dlt`, {
+//         fileName: fileName
+//     })
+// }
 
 export const onlyImage = async (token, prompt) => {
     try {
@@ -65,9 +71,3 @@ export const onlyImage = async (token, prompt) => {
         throw error;
     }
 };
-// // image 버킷에서 삭제
-// export const DeleteAdImage = async (prompt, userId, campaignId) => {
-//     return await axios.post(`${API_URL}/image-dlt`, {
-//         fileName: fileName
-//     })
-// }

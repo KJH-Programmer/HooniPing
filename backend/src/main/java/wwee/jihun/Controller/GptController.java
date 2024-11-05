@@ -66,4 +66,10 @@ public class GptController {
         return keywordService.suggestKeywords(campaignEntity);
     }
 
+    @PostMapping("/onlyImage")
+    public String onlyImage(@RequestParam String prompt){
+        String url = dalleService.generateImage(prompt).block();
+        return url;
+    }
+
 }

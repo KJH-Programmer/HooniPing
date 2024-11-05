@@ -45,7 +45,13 @@
             <input v-model="editableAdTextParts[index]" class="ad-text-input" />
           </li>
         </ol>
-        <p><strong>이미지 </strong> <input v-model="selectedItem.image_url" /></p>
+        <p><strong>이미지 </strong></p>
+        <div class="image-container">
+          <img :src="selectedItem.image_url" alt="이미지 없음" class="editable-image" />
+          <button @click="updateImage" class="image-update-button">이미지 수정</button>
+        </div>
+        <p><input class="image-description-input" v-model="image_prompt" placeholder="본인이 원하는 이미지를 자세하게 입력하세요."/></p>
+
         <div class="button-container">
           <button class="save-button" @click="saveEdit">저장</button>
           <button class="cancel-button" @click="cancelEdit">취소</button>
@@ -65,7 +71,7 @@
         <ol>
           <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
         </ol>
-        <p><strong>이미지 </strong> {{ selectedItem.image_url }}</p>
+        <p><strong>이미지 </strong> <img :src="selectedItem.image_url" alt="이미지 없음" /></p>
         <div class="button-container">
           <button class="edit-button" @click="editItem">수정</button>
           <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>
@@ -76,7 +82,8 @@
 </template>
 
 <script>
-import {GetCampaignList,DeleteCampaign,UpdateCampaign} from "@/api/CampaignService";
+import {DeleteCampaign, GetCampaignList, UpdateCampaign} from "@/api/CampaignService";
+import {onlyImage} from "@/api/GptService";
 
 export default {
   data() {
@@ -85,6 +92,7 @@ export default {
       currentIndex: 0,
       selectedItem: null, // 선택된 아이템을 저장할 변수
       isEditing: false,
+      image_prompt: "",
     };
   },
   computed: {
@@ -142,13 +150,17 @@ export default {
       this.isEditing = true;
       this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
     },
+    async updateImage(){
+      const token = localStorage.getItem('token');
+      this.selectedItem.image_url = await onlyImage(token, this.image_prompt);
+      console.log(this.selectedItem);
+    },
     async saveEdit() {
-      this.isEditing = false;
       // 저장 로직을 추가할 수 있습니다 (예: API 호출로 서버에 수정 내용 전달)
-      console.log("수정된 내용:", this.selectedItem);
       const token = localStorage.getItem('token');
       this.selectedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
       const response = UpdateCampaign(token,this.selectedItem);
+      this.isEditing = false;
       console.log(response);
     },
     cancelEdit() {
@@ -343,4 +355,44 @@ input:focus, .ad-text-input:focus {
   box-shadow: 0 0 5px rgba(66, 185, 131, 0.5);
   outline: none;
 }
+
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 10px; /* 이미지와 아래 input 간격 추가 */
+}
+
+.editable-image {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.image-update-button {
+  position: absolute;
+  bottom: -40px; /* 이미지 하단 아래에 위치시킴 */
+  left: 0; /* 왼쪽 정렬 */
+  width: 100px; /* 원하는 버튼 너비 고정 */
+  padding: 8px 0;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.image-update-button:hover {
+  background-color: #36996e;
+}
+
+.image-description-input {
+  margin-top: 50px; /* 이미지와 input 요소 사이에 충분한 간격 추가 */
+}
+
 </style>
