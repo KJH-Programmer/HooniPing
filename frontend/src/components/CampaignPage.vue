@@ -80,21 +80,21 @@
 
       <div class="form section">
         <div class="input-field">
-          <label for="description2">내용1</label>
-          <textarea v-model="sourceText1" @click="moveText(sourceText1)"></textarea>
+            <label for="description1">내용1</label>
+            <div class="button-text" @click="moveText(sourceText1)">{{ sourceText1 }}</div>
         </div>
       </div>
       <div class="form section">
-        <div class="input-field">
-          <label for="description2">내용2</label>
-          <textarea v-model="sourceText2" @click="moveText(sourceText2)"></textarea>
-        </div>
+          <div class="input-field">
+              <label for="description2">내용2</label>
+              <div class="button-text" @click="moveText(sourceText2)">{{ sourceText2 }}</div>
+          </div>
       </div>
       <div class="form section">
-        <div class="input-field">
-          <label for="description2">내용3</label>
-          <textarea v-model="sourceText3" @click="moveText(sourceText3)"></textarea>
-        </div>
+          <div class="input-field">
+              <label for="description3">내용3</label>
+              <div class="button-text" @click="moveText(sourceText3)">{{ sourceText3 }}</div>
+          </div>
       </div>
 
       <div class="form section">
@@ -349,4 +349,19 @@ button {
 button:hover {
   background-color: #36996e;
 }
+
+.button-text {
+    background-color: #f0f0f0; /* 배경색 */
+    padding: 10px; /* 여백 */
+    margin: 5px 0; /* 마진 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 모양 변경 */
+    user-select: none; /* 텍스트 선택 방지 */
+}
+
+.button-text:hover {
+    background-color: #e0e0e0; /* 호버 시 색상 변화 */
+}
+
 </style>
