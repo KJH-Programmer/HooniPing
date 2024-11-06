@@ -78,14 +78,13 @@ export default {
         }
       }
     },
-    // 회원가입 페이지로 이동하는 함수
+    // 회원가입 페이지로 이동하는 함수  
     goToSignup() {
       this.$router.push('/signup'); // 회원가입 경로로 이동
     }
   }
 };
 </script>
-
 <style scoped>
 /* 컨테이너: 화면의 중앙에 정렬 */
 .container {
