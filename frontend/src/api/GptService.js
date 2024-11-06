@@ -34,15 +34,21 @@ export const GenerateAdText = async (token,product, brand, tone, brand_model, fe
     });
 }
 
-// //==================== 이미지 =======================
-// // image 생성 (> s3 버킷에 저장 > 이미지 url 반환)
-// export const GenerateAdImage = async (prompt, userId, campaignId) => {
-//     return await axios.post(`${API_URL}/image`, {
-//         prompt: prompt,
-//         userId: userId,
-//         campaignId: campaignId
-//     })
-// }
+//==================== 이미지 =======================
+// image 생성 (> s3 버킷에 저장 > 이미지 url 반환)
+export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
+    const response = await axios.post(`${API_URL}/image`, null, {
+        params: { 
+            prompt: prompt,
+            userId: userId,
+            campaignId: campaignId
+        },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+    return response.data;
+}
 
 // // image 버킷에서 삭제
 // export const DeleteAdImage = async (prompt, userId, campaignId) => {
@@ -59,6 +65,7 @@ export const onlyImage = async (token, prompt) => {
                 Authorization: `Bearer ${token}`,
             },
         });
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('이미지 받아오는 중 오류:', error);
