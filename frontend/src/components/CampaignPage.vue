@@ -2,8 +2,6 @@
   <div class="container">
     <div class="form-wrapper">
       <div class="form section">
-
-        <!-- 브랜드명 입력 -->
         <div class="input-field">
           <label for="brand">브랜드명</label>
           <input
@@ -14,7 +12,6 @@
           />
         </div>
 
-        <!-- 모델 이름 입력 -->
         <div class="input-field">
           <label for="model">모델 이름</label>
           <input
@@ -25,7 +22,6 @@
           />
         </div>
 
-        <!-- 말투 선택 드롭다운 -->
         <div class="input-field">
           <label for="tone">말투</label>
           <select id="tone" v-model="tone" class="product-input">
@@ -38,7 +34,6 @@
           </select>
         </div>
 
-        <!-- 제품명 입력 -->
         <div class="input-field">
           <label for="product">제품명</label>
           <input
@@ -49,14 +44,13 @@
           />
         </div>
 
-
         <div class="input-field">
           <label for="features">제품 설명</label>
-          <input
-            id="features"
-            v-model="features"
-            placeholder="제품 설명을 입력하세요."
-            class="product-input"
+          <input 
+            id="features" 
+            v-model="features" 
+            placeholder="제품 설명을 입력하세요." 
+            class="product-input1"
           />
         </div>
 
@@ -75,46 +69,39 @@
             </button>
           </div>
         </div>
-        <button @click="generateRecommendation">추천 내용 생성하기</button>
+        <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
 
       <div class="form section">
-        <div class="input-field">
-            <label for="description1">내용1</label>
-            <div class="button-text" @click="moveText(sourceText1)">{{ sourceText1 }}</div>
+        <div class="input-field1">
+          <label for="description3">광고 문구</label>
+          <textarea v-model="sourceText" @input="resizeTextarea" rows="20"></textarea>
         </div>
       </div>
-      <div class="form section">
-          <div class="input-field">
-              <label for="description2">내용2</label>
-              <div class="button-text" @click="moveText(sourceText2)">{{ sourceText2 }}</div>
-          </div>
-      </div>
-      <div class="form section">
-          <div class="input-field">
-              <label for="description3">내용3</label>
-              <div class="button-text" @click="moveText(sourceText3)">{{ sourceText3 }}</div>
-          </div>
-      </div>
 
       <div class="form section">
         <div class="input-field">
-          <label for="preview">미리보기</label>
-          <textarea v-model="destinationText" placeholder="Text will appear here"></textarea>
+          <label for="preview">이미지 요구사항</label>
+          <textarea v-model="prompt" @input="resizeTextarea" rows="5" placeholder="프롬프트 입력"></textarea>
         </div>
         <div class="button-container">
-          <button @click="save">저장</button>
+          <button class="product-button" @click="createImage">이미지 생성하기</button>
+        </div>
+        <div class="image-container" v-if="imageUrl">
+          <img :src="imageUrl" alt="Generated Image" class="generated-image" />
+          <button class="product-button" @click="save">저장하기</button>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
+
 <script>
 import {
   ExtractKeyword,
-  GenerateAdText
+  GenerateAdText,
+  onlyImage
 } from '@/api/GptService';
 import {
   GetNewCampaignId,
@@ -137,7 +124,11 @@ export default {
       sourceText1: '',
       sourceText2: '',
       sourceText3: '',
-      destinationText: ''
+      sourceText: '',
+      destinationText: '',
+      
+      prompt: "귀여운 시골 강아지 사진",
+      imageUrl: null
     };
   },
   methods: {
@@ -172,22 +163,33 @@ export default {
           this.sourceText1 = adTexts[0] || ""; // 첫 번째 광고 문구
           this.sourceText2 = adTexts[1] || ""; // 두 번째 광고 문구
           this.sourceText3 = adTexts[2] || ""; // 세 번째 광고 문구
-
           console.log('sourceText1:', this.sourceText1);
           console.log('sourceText2:', this.sourceText2);
           console.log('sourceText3:', this.sourceText3);
+
+          this.sourceText = "1.\n" + this.sourceText1 + "\n\n2.\n" + this.sourceText2 + "\n\n3.\n" + this.sourceText3 + "\n";
+          
 
         } catch (error) {
           console.error('광고 생성 오류:', error);
         }
     },
+    async createImage() {
+      const token = localStorage.getItem('token');
+      
+      try {
+        this.imageUrl = await onlyImage(token, this.prompt);
+      } catch (error) {
+        console.error("이미지 생성 오류:", error);
+      }
+    },
     async save() {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
+      const newCampaignId = await GetNewCampaignId(token, userId);
 
       try {
         // 백엔드에서 우선 newCampaignId 받아옴
-        const newCampaignId = await GetNewCampaignId(token, userId);
         const campaignData = {
           campaignId: newCampaignId, // 백엔드에서 받은 newCampaignId
           product: this.product,
@@ -196,7 +198,8 @@ export default {
           tone: this.tone,
           brand: this.brand,
           brand_model: this.brand_model,
-          ad_text: this.destinationText
+          ad_text: this.sourceText,
+          image_url: this.imageUrl
         }
 
         // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
@@ -231,6 +234,17 @@ export default {
 </script>
 
 <style scoped>
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* 사용자 크기 조절 비활성화 */
+  overflow-y: hidden; /* 스크롤바 감추기 */
+  font-family: inherit;
+  font-size: 14px;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -244,7 +258,6 @@ export default {
   width: 90%;
 }
 
-
 .form {
   width: 48%; 
   border-radius: 8px;
@@ -252,6 +265,13 @@ export default {
 
 .input-field {
   margin-bottom: 20px; 
+}
+
+.input-field1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .input-field label {
@@ -272,8 +292,18 @@ export default {
 }
 
 .product-input {
-  width: 80%;
-  padding: 8px; 
+  width: 100%;
+  padding: 10px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+
+.product-input1 {
+  width: 100%;
+  padding: 10px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -307,62 +337,10 @@ export default {
   color: black; 
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: calc(25% - 8px); 
-  box-sizing: border-box;
 }
 
 .keyword-button.selected {
   background-color: #42b983;
   color: white;
 }
-
-.keyword-button:hover {
-  background-color: #d3d3d3;
-}
-
-textarea {
-  width: 100%;
-  padding: 10px; 
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: inherit;
-  height: 130px; 
-  overflow: hidden;
-  resize: none;
-}
-
-.large-textarea {
-  height: 120px; 
-}
-
-button {
-  width: 100%;
-  padding: 12px; 
-  background-color: #42b983;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #36996e;
-}
-
-.button-text {
-    background-color: #f0f0f0; /* 배경색 */
-    padding: 10px; /* 여백 */
-    margin: 5px 0; /* 마진 */
-    border: 1px solid #ccc; /* 테두리 */
-    border-radius: 4px; /* 모서리 둥글게 */
-    cursor: pointer; /* 커서 모양 변경 */
-    user-select: none; /* 텍스트 선택 방지 */
-}
-
-.button-text:hover {
-    background-color: #e0e0e0; /* 호버 시 색상 변화 */
-}
-
 </style>
