@@ -20,12 +20,12 @@ export default new Router({
       component: CampaignPage,  
     },
     {
-      path: '/',
+      path: '/login',
       name: 'LoginPage',
       component: LoginPage,   
     },
     {
-      path: '/main',
+      path: '/',
       name: 'MainPage',
       component: MainPage,   
     },

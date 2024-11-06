@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     goToLogin() {
-      this.$router.push('/');
+      this.$router.push('/login');
     },
     goToSignup() {
       this.$router.push('/signup');
@@ -59,7 +59,9 @@ export default {
       performLogout();
       this.isLoggedIn = false;
       this.userId = '';
-      this.$router.push('/');
+      if (this.$route.path !== '/') {
+        this.$router.push('/');
+      }
     },
   },
 };

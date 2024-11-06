@@ -3,7 +3,7 @@
     <div class="form-wrapper"> <!-- 로고와 폼을 감싸는 래퍼 -->
 
       <!-- 로고를 클릭하면 홈(/)으로 이동 -->
-      <router-link to="/main">
+      <router-link to="/">
         <img
             :src="require('@/assets/HooniPing.jpg')"
             alt="Logo"
@@ -50,6 +50,7 @@
 <script>
 import { Login } from '@/api/loginService'; // 로그인 서비스 임포트
 
+
 export default {
   data() {
     return {
@@ -61,20 +62,25 @@ export default {
     // 로그인 처리 함수
     async submitLogin() {
       try {
-        // loginService를 사용해 로그인 요청 수행
+        // 로그인 요청 수행
         const response = await Login(this.userId, this.password);
 
-        // 로그인 성공 시, 서버 응답에서 받은 토큰과 사용자 아이디를 localStorage에 저장
-        localStorage.setItem('token', response.data); // 토큰 저장
-        localStorage.setItem('userId', this.userId); // 사용자 아이디 저장
-        console.log(localStorage.getItem('token'));
-        console.log(response);
+        // 서버 응답이 "Not User"일 경우 로그인 실패 처리
+        if (response.data === 'Not User') {
+          alert('아이디 또는 비밀번호가 잘못되었습니다.');
+          return; // 함수 종료
+        }
+
+        // 로그인 성공 시 사용자 아이디를 localStorage에 저장
+        localStorage.setItem('userId', this.userId);
+        localStorage.setItem('token', response.data);
+        console.log('로그인 성공:', response.data);
 
         // 로그인 성공 후 메인 페이지로 이동
-        this.$router.push('/main');
+        this.$router.push('/');
       } catch (error) {
-        // 로그인 실패 시 에러 로그를 출력하고 알림 표시
-        console.error('로그인 실패:', error);
+        // 서버 연결 실패 또는 기타 오류 발생 시 처리
+        console.error('로그인 중 오류 발생:', error);
         alert('로그인에 실패했습니다. 다시 시도해주세요.');
       }
     },
