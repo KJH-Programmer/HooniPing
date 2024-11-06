@@ -10,10 +10,16 @@ export const GenerateAnswer = async (question) => {
 };
 
 // 키워드 추출
-export const ExtractKeyword = async (product) => {
+export const ExtractKeyword = async (token, product) => {
     return await axios.post(`${API_URL}/keyword`, {
         product: product
-    });
+    },
+        {
+            headers : {
+                Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+            }
+        }
+        );
 };
 
 //==================== 문구 ======================

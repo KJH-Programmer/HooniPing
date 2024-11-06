@@ -143,10 +143,11 @@ export default {
   methods: {
     async addProduct() {
       try {
+        const token = localStorage.getItem('token');
         console.log('추가된 제품명:', this.product);
 
         // 제품명을 기반으로 키워드를 추출
-        const response = await ExtractKeyword(this.product);
+        const response = await ExtractKeyword(token,this.product);
 
         //서버로부터 받은 키워드를 keywords 배열에 할당
         this.keywords = response.data.keywords;
