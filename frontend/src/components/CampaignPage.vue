@@ -69,13 +69,13 @@
             </button>
           </div>
         </div>
-        <button class="product-button" @click="addProduct">추천 내용 생성하기</button>
+        <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
 
       <div class="form section">
         <div class="input-field1">
           <label for="description3">광고 문구</label>
-          <textarea v-model="sourceText3" @input="resizeTextarea" rows="20"></textarea>
+          <textarea v-model="sourceText" @input="resizeTextarea" rows="20"></textarea>
         </div>
       </div>
 
@@ -89,6 +89,7 @@
         </div>
         <div class="image-container" v-if="imageUrl">
           <img :src="imageUrl" alt="Generated Image" class="generated-image" />
+          <button class="product-button" @click="save">저장하기</button>
         </div>
       </div>
     </div>
@@ -123,6 +124,7 @@ export default {
       sourceText1: '',
       sourceText2: '',
       sourceText3: '',
+      sourceText: '',
       destinationText: '',
       
       prompt: "귀여운 시골 강아지 사진",
@@ -160,10 +162,12 @@ export default {
           this.sourceText1 = adTexts[0] || ""; // 첫 번째 광고 문구
           this.sourceText2 = adTexts[1] || ""; // 두 번째 광고 문구
           this.sourceText3 = adTexts[2] || ""; // 세 번째 광고 문구
-
           console.log('sourceText1:', this.sourceText1);
           console.log('sourceText2:', this.sourceText2);
           console.log('sourceText3:', this.sourceText3);
+
+          this.sourceText = "1.\n" + this.sourceText1 + "\n\n2.\n" + this.sourceText2 + "\n\n3.\n" + this.sourceText3 + "\n";
+          
 
         } catch (error) {
           console.error('광고 생성 오류:', error);
@@ -171,9 +175,7 @@ export default {
     },
     async createImage() {
       const token = localStorage.getItem('token');
-      // const userId = localStorage.getItem('userId');
-      // const campaignId = 3;
-
+      
       try {
         this.imageUrl = await onlyImage(token, this.prompt);
       } catch (error) {
@@ -195,7 +197,8 @@ export default {
           tone: this.tone,
           brand: this.brand,
           brand_model: this.brand_model,
-          ad_text: this.destinationText
+          ad_text: this.sourceText,
+          image_url: this.imageUrl
         }
 
         // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
