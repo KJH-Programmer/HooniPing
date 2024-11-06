@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Prompt.TonePrompt;
 import wwee.jihun.Service.CampaignService;
+import wwee.jihun.Service.S3Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +18,13 @@ import java.util.Optional;
 public class CampaignController {
     private final CampaignService campaignService;
     private final TonePrompt tonePrompt;
+    private final S3Service s3Service;
 
     @Autowired
-    public CampaignController(CampaignService campaignService, TonePrompt tonePrompt) {
+    public CampaignController(CampaignService campaignService, TonePrompt tonePrompt, S3Service s3Service) {
         this.campaignService = campaignService;
         this.tonePrompt = tonePrompt;
+        this.s3Service = s3Service;
     }
 
     // ***************<로그인 된 사용자(userId)의 캠페인 관리>****************
@@ -83,6 +86,7 @@ public class CampaignController {
     public ResponseEntity<Void> deleteCampaign(@RequestBody CampaignEntity campaignEntity) {
         String userId = campaignEntity.getUserId();
         Long campaignId = campaignEntity.getCampaignId();
+        s3Service.deleteFile(userId+"-"+campaignId);
 
         // 서비스에서 캠페인 삭제 실행
         campaignService.deleteCampaign(userId, campaignId);

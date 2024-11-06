@@ -47,8 +47,18 @@
         </ol>
         <p><strong>이미지 </strong></p>
         <div class="image-container">
-          <img :src="selectedItem.image_url" alt="이미지 없음" class="editable-image" />
-          <button @click="updateImage" class="image-update-button">이미지 수정</button>
+          <!-- 로딩 중이 아닐 때만 이미지 표시 -->
+          <img v-if="!isLoading" :src="selectedItem.image_url" alt="이미지 없음" class="editable-image" />
+
+          <!-- 로딩 중일 때 프로그래스바와 진행도 표시 -->
+          <div v-if="isLoading" class="loading-wrapper">
+            <div class="loading-bar" :style="{ background: `linear-gradient(to right, #42b983 ${progress}%, white ${progress}%)` }"></div>
+            <span class="loading-text">{{ progress }}%</span>
+          </div>
+
+          <button @click="updateImage" class="image-update-button" :disabled="isLoading">
+            {{ isLoading ? "이미지 생성 중..." : "이미지 수정" }}
+          </button>
         </div>
         <p><input class="image-description-input" v-model="image_prompt" placeholder="본인이 원하는 이미지를 자세하게 입력하세요."/></p>
 
@@ -71,7 +81,7 @@
         <ol>
           <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
         </ol>
-        <p><strong>이미지 </strong> <img :src="selectedItem.image_url" alt="이미지 없음" /></p>
+        <p><strong>이미지 </strong> <img :src="selectedItem.image_url" alt="이미지 없음" class="editable-image" /></p>
         <div class="button-container">
           <button class="edit-button" @click="editItem">수정</button>
           <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>
@@ -91,8 +101,11 @@ export default {
       items: [], // 카드 아이템의 데이터
       currentIndex: 0,
       selectedItem: null, // 선택된 아이템을 저장할 변수
+      originalSelectedItem : null,
       isEditing: false,
       image_prompt: "",
+      isLoading : false,
+      progress: 0,
     };
   },
   computed: {
@@ -148,24 +161,53 @@ export default {
     },
     editItem() {
       this.isEditing = true;
+      this.originalSelectedItem = JSON.parse(JSON.stringify(this.selectedItem));
       this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
     },
     async updateImage(){
       const token = localStorage.getItem('token');
-      this.selectedItem.image_url = await onlyImage(token, this.image_prompt);
-      console.log(this.selectedItem);
+      this.isLoading = true;
+      this.progress = 0;
+      const interval = setInterval(() => {
+        if (this.progress < 100) {
+          this.progress += 1;
+        }
+      }, 200);
+      try{
+        this.selectedItem.image_url = await onlyImage(token, this.image_prompt);
+        console.log(this.selectedItem);
+      } catch (error) {
+        console.error("이미지 업데이트 실패 : ", error);
+      } finally {
+        clearInterval(interval);
+        this.progress = 100;
+        setTimeout(() => {
+          this.isLoading = false;
+          this.progress = 0;
+        }, 500);
+
+      }
     },
     async saveEdit() {
-      // 저장 로직을 추가할 수 있습니다 (예: API 호출로 서버에 수정 내용 전달)
-      const token = localStorage.getItem('token');
-      this.selectedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
-      const response = UpdateCampaign(token,this.selectedItem);
-      this.isEditing = false;
-      console.log(response);
+      if(window.confirm("캠페인을 정말로 수정하겠습니까?")){
+        const token = localStorage.getItem('token');
+        this.selectedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
+        const response = UpdateCampaign(token,this.selectedItem);
+        this.isEditing = false;
+        console.log(response);
+      }
     },
     cancelEdit() {
+      this.selectedItem = JSON.parse(JSON.stringify(this.originalSelectedItem));
       this.isEditing = false;
-      // 수정 취소 시에 원래 내용을 복원하는 로직을 추가할 수 있습니다.
+      // items 배열에서 selectedItem과 일치하는 항목을 찾아 복원
+      const index = this.items.findIndex(item => item.campaignId === this.selectedItem.campaignId);
+      if (index !== -1) {
+        this.$set(this.items, index, JSON.parse(JSON.stringify(this.originalSelectedItem)));
+      }
+
+      // 복원 후 originalSelectedItem 초기화
+      this.originalSelectedItem = null;
     },
     async deleteItem(userId, campaignId) {
       const token = localStorage.getItem('token');
@@ -366,7 +408,8 @@ input:focus, .ad-text-input:focus {
 
 .editable-image {
   max-width: 100%;
-  height: auto;
+  width: 512px;
+  height: 512px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -393,6 +436,27 @@ input:focus, .ad-text-input:focus {
 
 .image-description-input {
   margin-top: 50px; /* 이미지와 input 요소 사이에 충분한 간격 추가 */
+}
+
+/* 로딩 바와 진행도 텍스트 스타일 */
+.loading-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.loading-bar {
+  height: 5px;
+  background: linear-gradient(to right, #42b983 0%, white 0%);
+  transition: width 0.2s ease;
+  flex-grow: 1; /* 남은 공간을 채우도록 설정 */
+}
+
+.loading-text {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #333;
 }
 
 </style>
