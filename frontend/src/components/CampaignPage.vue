@@ -54,7 +54,7 @@
           />
         </div>
 
-        <button class="product-button" @click="addProduct">제품 입력하기</button>
+        <button class="product-button" @click="addProduct">키워드 생성하기</button>
 
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
@@ -133,12 +133,13 @@ export default {
   },
   methods: {
     async addProduct() {
+      const token = localStorage.getItem("token");
       try {
         console.log('추가된 제품명:', this.product);
-
+        
         // 제품명을 기반으로 키워드를 추출
-        const response = await ExtractKeyword(this.product);
-
+        const response = await ExtractKeyword(token, this.product);
+        console.log('');
         //서버로부터 받은 키워드를 keywords 배열에 할당
         this.keywords = response.data.keywords;
         console.log('키워드 추출 성공:', this.keywords);
