@@ -1,13 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/gpt';
-
-// 질문-대답(GPT 테스트)
-export const GenerateAnswer = async (question) => {
-    return await axios.post(API_URL, {
-        question: question
-    });
-};
+const API_URL = `http://${process.env.VUE_APP_API_URL}/api/gpt`;
 
 // 키워드 추출
 export const ExtractKeyword = async (product) => {
@@ -49,13 +42,6 @@ export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
     });
     return response.data;
 }
-
-// // image 버킷에서 삭제
-// export const DeleteAdImage = async (prompt, userId, campaignId) => {
-//     return await axios.post(`${API_URL}/image-dlt`, {
-//         fileName: fileName
-//     })
-// }
 
 export const onlyImage = async (token, prompt) => {
     try {
