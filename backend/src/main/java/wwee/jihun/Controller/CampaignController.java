@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/campaign")
-@CrossOrigin(origins = {"http://localhost:8081"})
+@CrossOrigin(origins = {"http://hooniping-bucket.s3-website.ap-northeast-2.amazonaws.com"})
 public class CampaignController {
     private final CampaignService campaignService;
     private final TonePrompt tonePrompt;
