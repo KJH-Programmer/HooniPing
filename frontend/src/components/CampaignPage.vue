@@ -202,7 +202,7 @@ export default {
     // 로딩 진행률 증가 - 이미지 생성용
     increaseLoading() {
       if (this.loadingPercentage < 100) {
-        this.loadingPercentage += 3;
+        this.loadingPercentage += 5;
         setTimeout(this.increaseLoading, 100);
       } else {
         this.isLoading = false;
