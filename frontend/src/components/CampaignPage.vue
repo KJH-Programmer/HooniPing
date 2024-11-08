@@ -55,7 +55,7 @@
           />
         </div>
 
-        <button class="product-button" @click="addProduct">제품 입력하기</button>
+        <button class="product-button" @click="addProduct">추천 키워드 생성</button>
 
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
@@ -250,7 +250,7 @@ export default {
 
         // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
         const response = await SaveCampaign(token, userId, campaignData);
-
+        this.$router.push('/CampaignListPage');
         console.log('SaveCampaign response:', response);
         console.log('캠페인 저장 성공(updatedAdText)');
         } catch (error) {
