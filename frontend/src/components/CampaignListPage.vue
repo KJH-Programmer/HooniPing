@@ -48,7 +48,7 @@
         <p><strong>이미지 </strong></p>
         <div class="image-container">
           <!-- 로딩 중이 아닐 때만 이미지 표시 -->
-          <img v-if="!isLoading" :src="editedItem.image_url" alt="이미지 없음" class="editable-image"/>
+          <img v-if="!isLoading" :src="editedItem.image_url" :key="imageKey" alt="이미지 없음" class="editable-image"/>
 
           <!-- 로딩 중일 때 프로그래스바와 진행도 표시 -->
           <div v-if="isLoading" class="loading-wrapper">
@@ -82,7 +82,7 @@
         <ol>
           <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
         </ol>
-        <p><strong>이미지 </strong> <img :src="selectedItem.image_url" alt="이미지 없음" class="editable-image"/></p>
+        <p><strong>이미지 </strong> <img :src="selectedItem.image_url" :key="imageKey" alt="이미지 없음" class="editable-image"/></p>
         <div class="button-container">
           <button class="edit-button" @click="editItem">수정</button>
           <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>
@@ -107,6 +107,7 @@ export default {
       image_prompt: "",
       isLoading: false,
       progress: 0,
+      imageKey : new Date().getTime(),
     };
   },
   computed: {
@@ -175,6 +176,7 @@ export default {
       }, 200);
       try {
         this.editedItem.image_url = await onlyImage(token, this.image_prompt);
+        this.imageKey = new Date().getTime();
       } catch (error) {
         console.error("이미지 업데이트 실패 : ", error);
       } finally {
