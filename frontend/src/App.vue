@@ -13,7 +13,7 @@
           />
         </div>
         <div class="welcome-wrapper">
-          <span class="welcome-message">환영합니다, {{ userId }}님!</span>
+          <span class="welcome-message">{{ timeRemaining }}남음 - 환영합니다, {{ userId }}님!</span>
           <button class="logout-button" @click="handleLogout">로그아웃</button>
         </div>
       </div>
@@ -30,6 +30,7 @@
 <script>
 import AppFooter from '@/components/AppFooter.vue'; // Footer 컴포넌트 import
 import { getLoginStatus, performLogout } from '@/api/authService.js';
+import jwt_decode from 'jsonwebtoken';
 
 export default {
   components: {
@@ -39,21 +40,36 @@ export default {
     return {
       userId: '',
       isLoggedIn: false,
+      timeRemaining : '',
+      intervalId: null,
     };
   },
   mounted() {
     this.updateLoginStatus();
+    this.startTokenTimer();
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   },
   methods: {
     updateLoginStatus() {
       const { isLoggedIn, userId } = getLoginStatus();
       this.isLoggedIn = isLoggedIn;
       this.userId = userId;
+
+      if(isLoggedIn){
+        this.startTokenTimer();
+      }else{
+        clearInterval(this.intervalId);
+        this.timeRemaining = '';
+      }
     },
     handleLogout() {
       performLogout();
       this.isLoggedIn = false;
       this.userId = '';
+      clearInterval(this.intervalId);
+      this.timeRemaining = '';
 
       // 현재 경로가 '/'이 아닐 때만 이동
       if (this.$route.path !== '/') {
@@ -65,6 +81,32 @@ export default {
       if (this.$route.path !== '/campaignlistpage') {
         this.$router.push('/campaignlistpage'); // 여기에서 'pust'를 'push'로 수정
       }
+    },
+    startTokenTimer() {
+      // 기존 타이머가 있다면 정리
+      if (this.intervalId) {
+        clearInterval(this.intervalId);
+      }
+
+      // 1초마다 남은 시간을 계산하는 타이머 설정
+      this.intervalId = setInterval(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const decoded = jwt_decode.decode(token);
+          if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            const timeLeft = decoded.exp - currentTime;
+            if (timeLeft > 0) {
+              const minutes = Math.floor(timeLeft / 60);
+              const seconds = timeLeft % 60;
+              this.timeRemaining = `${minutes}분 ${seconds}초`;
+            } else {
+              this.timeRemaining = '토큰 만료';
+              this.handleLogout();
+            }
+          }
+        }
+      }, 1000);
     },
   },
   watch: {

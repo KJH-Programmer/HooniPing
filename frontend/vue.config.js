@@ -1,5 +1,5 @@
-
-const { defineConfig } = require('@vue/cli-service');
+const { defineConfig } = require('@vue/cli-service')
+const webpack = require("webpack");
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
@@ -11,5 +11,20 @@ module.exports = defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  configureWebpack: {
+    resolve: {
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+        util: require.resolve("util"),
+        process: require.resolve("process/browser"),
+      },
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: "process/browser", // process 폴리필 제공
+      }),
+    ],
   },
 });
