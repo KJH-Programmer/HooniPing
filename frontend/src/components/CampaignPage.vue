@@ -141,7 +141,7 @@ export default {
         const response = await ExtractKeyword(token,this.product);
 
         //서버로부터 받은 키워드를 keywords 배열에 할당
-        this.keywords = response.data.keywords;
+        this.keywords = response.keywords;
         console.log('키워드 추출 성공:', this.keywords);
       } catch (error) {
         console.error('키워드 추출 오류:', error);

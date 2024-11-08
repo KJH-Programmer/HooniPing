@@ -2,12 +2,10 @@ package wwee.jihun.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.*;
 
 import java.io.IOException;
-import java.security.Key;
 
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
@@ -37,8 +35,8 @@ public class GptController {
     }
     //광고 문구 출력
     @PostMapping("/adtext")
-    public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
-        return swarmService.generateCasualInstagramAd(campaignEntity, keywords);
+    public String AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
+        return swarmService.generateCasualInstagramAd(campaignEntity, keywords).block();
     }
     //image생성후 s3 bucket에 저장 하고 이미지 url을 반환
     @PostMapping("/image")
@@ -62,14 +60,13 @@ public class GptController {
     }
 
     @PostMapping("/keyword")
-    public Mono<String> Chat(@RequestBody CampaignEntity campaignEntity) {
-        return keywordService.suggestKeywords(campaignEntity);
+    public String Chat(@RequestBody CampaignEntity campaignEntity) {
+        return keywordService.suggestKeywords(campaignEntity).block();
     }
 
     @PostMapping("/onlyImage")
     public String onlyImage(@RequestParam String prompt){
-        String url = dalleService.generateImage(prompt).block();
-        return url;
+        return dalleService.generateImage(prompt).block();
     }
 
 }

@@ -11,16 +11,23 @@ export const GenerateAnswer = async (question) => {
 
 // 키워드 추출
 export const ExtractKeyword = async (token, product) => {
-    return await axios.post(`${API_URL}/keyword`, {
-        product: product
-    },
-        {
-            headers : {
-                Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
-            }
-        }
-        );
+    try {
+        const response = await axios.post(`${API_URL}/keyword`, {
+                product: product
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+                },
+            });
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };
+
 
 //==================== 문구 ======================
 // 광고 문구 출력
@@ -78,3 +85,4 @@ export const onlyImage = async (token, prompt) => {
         throw error;
     }
 };
+
