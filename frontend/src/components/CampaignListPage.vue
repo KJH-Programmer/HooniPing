@@ -192,6 +192,7 @@ export default {
         const token = localStorage.getItem('token');
         this.editedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
         try{
+          console.log(this.editedItem);
           await UpdateCampaign(token, this.editedItem);
           this.selectedItem = JSON.parse(JSON.stringify(this.editedItem));
           const index = this.items.findIndex(item => item.campaignId === this.editedItem.campaignId);
