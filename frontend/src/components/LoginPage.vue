@@ -69,19 +69,22 @@ export default {
         // 로그인 성공 후 메인 페이지로 이동
         this.$router.push('/CampaignListPage');
       } catch (error) {
-        // 로그인 실패 시 에러 로그를 출력하고 알림 표시
-        console.error('로그인 실패:', error);
-        alert('로그인에 실패했습니다. 다시 시도해주세요.');
+        // 로그인 실패 시 상태 코드 확인
+        if (error.response && error.response.status === 401) {
+          alert('아이디 또는 비밀번호가 잘못되었습니다.'); // 401 에러 메시지
+        } else {
+          console.error('로그인 실패:', error);
+          alert('로그인에 실패했습니다. 다시 시도해주세요.');
+        }
       }
     },
-    // 회원가입 페이지로 이동하는 함수
+    // 회원가입 페이지로 이동하는 함수  
     goToSignup() {
       this.$router.push('/signup'); // 회원가입 경로로 이동
     }
   }
 };
 </script>
-
 <style scoped>
 /* 컨테이너: 화면의 중앙에 정렬 */
 .container {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 백엔드 캠페인 API
-const API_URL = 'http://localhost:8080/api/campaign';
+const API_URL = `http://${process.env.VUE_APP_API_URL}/api/campaign`;
 
 //========================< 특정 사용자의 캠페인 >=============================
 // userId의 모든 캠페인 조회
@@ -68,37 +68,6 @@ export const GetCampaignList = async (token, userId) => {
         throw error;
     }
 };
-
-
-// // 캠페인 생성
-// export const CreateCampaign = async (token, campaignData) => {
-//     try {
-//         const response = await axios.post(API_URL, campaignData, {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             },
-//         });
-//         return response.data;
-//     } catch (error) {
-//         console.error('캠페인 생성 중 오류:', error);
-//         throw error;
-//     }
-// };
-
-// // 특정 캠페인(campaignId) 수정
-// export const UpdateCampaign = async (token, campaignId, updatedData) => {
-//     try {
-//         const response = await axios.put(`${API_URL}${campaignId}`, updatedData, {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             },
-//         });
-//         return response.data;
-//     } catch (error) {
-//         console.error('캠페인 내용 수정 중 오류:', error);
-//         throw error;
-//     }
-// };
 
 // newCampaignId 받아오기
 export const GetNewCampaignId = async (token, userId) => {

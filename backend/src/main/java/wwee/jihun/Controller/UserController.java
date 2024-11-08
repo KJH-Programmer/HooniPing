@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = {"http://localhost:8081"})
+@CrossOrigin(origins = {"http://hooniping-bucket.s3-website.ap-northeast-2.amazonaws.com"})
 public class UserController {
     private final UserAuthService userAuthService;
 
@@ -28,17 +28,17 @@ public class UserController {
     }
 
     //회원가입
-    @PostMapping("/create")
-    public String CreateUser(@RequestBody UserEntity userEntity){
-        return userAuthService.CreateUser(userEntity);
-    }
-
-    //로그인
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserEntity userEntity) {
-        //토큰을 발급받아서 token 저장
         String token = userAuthService.Login(userEntity.getUserId(), userEntity.getUserPassword());
-        //login api 요청에 대한 token 반환
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+
+        if (token != null) {
+            // 로그인 성공 시 토큰 반환
+            return ResponseEntity.status(HttpStatus.OK).body(token);
+        } else {
+            // 로그인 실패 시 401 상태 코드와 오류 메시지 반환
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
+        }
     }
+
 }
