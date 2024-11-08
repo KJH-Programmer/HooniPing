@@ -4,18 +4,12 @@ import CampaignPage from '@/components/CampaignPage.vue';
 import LoginPage from '@/components/LoginPage.vue';
 import MainPage from '@/components/MainPage.vue';
 import SignupPage from '@/components/SignupPage.vue';
-import WebPage from '@/components/WebPage.vue';
 import CampaignListPage from '@/components/CampaignListPage.vue';
 Vue.use(Router);
 
 const router = new Router({
   mode: 'history', // URL에서 해시(#)를 제거하기 위해 history 모드 사용
   routes: [
-    {
-      path: '/webpage',
-      name: 'WebPage',
-      component: WebPage,
-    },
     {
       path: '/CampaignPage',
       name: 'CampaignPage',
