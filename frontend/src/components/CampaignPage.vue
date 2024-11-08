@@ -157,7 +157,7 @@ export default {
       const token = localStorage.getItem("token");
       try {
         console.log('추가된 제품명:', this.product);
-        
+
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(token, this.product);
         console.log('');

@@ -3,11 +3,24 @@ import axios from 'axios';
 const API_URL = `http://${process.env.VUE_APP_API_URL}/api/gpt`;
 
 // 키워드 추출
-export const ExtractKeyword = async (product) => {
-    return await axios.post(`${API_URL}/keyword`, {
-        product: product
-    });
+export const ExtractKeyword = async (token, product) => {
+    try {
+        const response = await axios.post(`${API_URL}/keyword`, {
+                product: product
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+                },
+            });
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };
+
 
 //==================== 문구 ======================
 // 광고 문구 출력
@@ -58,3 +71,4 @@ export const onlyImage = async (token, prompt) => {
         throw error;
     }
 };
+

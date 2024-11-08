@@ -2,12 +2,10 @@ package wwee.jihun.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.*;
 
 import java.io.IOException;
-import java.security.Key;
 
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
@@ -68,8 +66,7 @@ public class GptController {
 
     @PostMapping("/onlyImage")
     public String onlyImage(@RequestParam String prompt){
-        String url = dalleService.generateImage(prompt).block();
-        return url;
+        return dalleService.generateImage(prompt).block();
     }
 
 }
