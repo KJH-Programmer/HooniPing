@@ -37,8 +37,8 @@ public class GptController {
     }
     //광고 문구 출력
     @PostMapping("/adtext")
-    public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
-        return swarmService.generateCasualInstagramAd(campaignEntity, keywords);
+    public String AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
+        return swarmService.generateCasualInstagramAd(campaignEntity, keywords).block();
     }
     //image생성후 s3 bucket에 저장 하고 이미지 url을 반환
     @PostMapping("/image")
@@ -62,8 +62,8 @@ public class GptController {
     }
 
     @PostMapping("/keyword")
-    public Mono<String> Chat(@RequestBody CampaignEntity campaignEntity) {
-        return keywordService.suggestKeywords(campaignEntity);
+    public String Chat(@RequestBody CampaignEntity campaignEntity) {
+        return keywordService.suggestKeywords(campaignEntity).block();
     }
 
     @PostMapping("/onlyImage")

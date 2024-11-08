@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="form-wrapper">
+      <!-- 폼 섹션 -->
       <div class="form section">
         <div class="input-field">
           <label for="brand">브랜드명</label>
@@ -11,7 +12,7 @@
             class="product-input"
           />
         </div>
-
+        
         <div class="input-field">
           <label for="model">모델 이름</label>
           <input
@@ -46,15 +47,15 @@
 
         <div class="input-field">
           <label for="features">제품 설명</label>
-          <input 
-            id="features" 
-            v-model="features" 
-            placeholder="제품 설명을 입력하세요." 
+          <input
+            id="features"
+            v-model="features"
+            placeholder="제품 설명을 입력하세요."
             class="product-input1"
           />
         </div>
 
-        <button class="product-button" @click="addProduct">키워드 생성하기</button>
+        <button class="product-button" @click="addProduct">제품 입력하기</button>
 
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
@@ -71,7 +72,16 @@
         </div>
         <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
+      
+      <div id="recommendationLoadingContainer" v-if="isGeneratingRecommendation">
+        <span id="loadingText">추천 내용 생성 중...</span>
+        <div id="progressBar">
+          <div id="progress" :style="{ width: recommendationLoadingPercentage + '%' }"></div>
+        </div>
+        <span id="percentage">{{ recommendationLoadingPercentage }}%</span>
+      </div>
 
+      <!-- 광고 문구 섹션 -->
       <div class="form section">
         <div class="input-field1">
           <label for="description3">광고 문구</label>
@@ -79,18 +89,32 @@
         </div>
       </div>
 
+      <!-- 이미지 생성 섹션 -->
       <div class="form section">
         <div class="input-field">
           <label for="preview">이미지 요구사항</label>
-          <textarea v-model="prompt" @input="resizeTextarea" rows="5" placeholder="프롬프트 입력"></textarea>
+          <textarea v-model="prompt" @input="resizeTextarea" rows="5" placeholder="보고 싶은 이미지를 설명해주세요!"></textarea>
         </div>
+        
         <div class="button-container">
-          <button class="product-button" @click="createImage">이미지 생성하기</button>
+          <button class="product-button" @click="startLoading">이미지 생성하기</button>
         </div>
-        <div class="image-container" v-if="imageUrl">
+        
+        <!-- 이미지 로딩 상태 -->
+        <div id="loadingContainer" v-if="isLoading">
+          <span id="loadingText">이미지 생성 중...</span>
+          <div id="progressBar">
+            <div id="progress" :style="{ width: loadingPercentage + '%' }"></div>
+          </div>
+          <span id="percentage">{{ loadingPercentage }}%</span>
+        </div>
+
+        <!-- 생성된 이미지 표시 -->
+        <div class="image-container" v-if="imageUrl && !isLoading">
           <img :src="imageUrl" alt="Generated Image" class="generated-image" />
-          <button class="product-button" @click="save">저장하기</button>
         </div>
+
+        <button class="product-button" @click="save">저장하기</button>
       </div>
     </div>
   </div>
@@ -112,23 +136,20 @@ export default {
   name: 'CampaignPage',
   data() {
     return {
-      brand: '',     // 브랜드명 입력란 바인딩
-      brand_model: '',     // 모델 이름 입력란 바인딩
-      product: '',   // 제품명 입력란 바인딩
-      tone: '',          // 말투 선택 바인딩
+      brand: '',
+      brand_model: '',
+      product: '',
+      tone: '',
       features: '',
-      description2: '',
-      preview: '',
       keywords: [],
       selectedKeywords: [],
-      sourceText1: '',
-      sourceText2: '',
-      sourceText3: '',
       sourceText: '',
-      destinationText: '',
-      
-      prompt: "귀여운 시골 강아지 사진",
-      imageUrl: null
+      prompt: '',
+      imageUrl: null,
+      isLoading: false,
+      loadingPercentage: 0,
+      isGeneratingRecommendation: false, // 추천 내용 생성 로딩 상태
+      recommendationLoadingPercentage: 0 // 추천 내용 생성 로딩 퍼센트
     };
   },
   methods: {
@@ -141,38 +162,34 @@ export default {
         const response = await ExtractKeyword(token, this.product);
         console.log('');
         //서버로부터 받은 키워드를 keywords 배열에 할당
-        this.keywords = response.data.keywords;
+        this.keywords = response.keywords;
         console.log('키워드 추출 성공:', this.keywords);
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }
     },
+    // 광고 문구 생성
     async generateRecommendation() {
+      // 추천 내용 생성 로딩 상태 설정
+      this.recommendationLoadingPercentage = 0;
+      this.isGeneratingRecommendation = true;
+      this.increaseRecommendationLoading();
+      
       try {
-          const token = localStorage.getItem("token");
-          const keywords = this.selectedKeywords.join(', '); // 쉼표로 구분된 문자열로 변환
-          // 문구 생성
-          const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
+        const token = localStorage.getItem("token");
+        const keywords = this.selectedKeywords.join(', ');
+        const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
 
-          console.log('생성된 광고문구:', ad_text.data);
+        const adTexts = ad_text.data.split("\n")
+          .map(text => text.replace("hooniping", "").trim())
+          .filter(text => text !== "");
 
-          // "hooniping"과 "\n"을 제거하고 각 광고 문구를 변수에 할당
-          const adTexts = ad_text.data.split("\n").map(text => text.replace("hooniping", "").trim()).filter(text => text !== "");
-
-          // 각 광고 문구를 sourceText 변수에 할당
-          this.sourceText1 = adTexts[0] || ""; // 첫 번째 광고 문구
-          this.sourceText2 = adTexts[1] || ""; // 두 번째 광고 문구
-          this.sourceText3 = adTexts[2] || ""; // 세 번째 광고 문구
-          console.log('sourceText1:', this.sourceText1);
-          console.log('sourceText2:', this.sourceText2);
-          console.log('sourceText3:', this.sourceText3);
-
-          this.sourceText = "1.\n" + this.sourceText1 + "\n\n2.\n" + this.sourceText2 + "\n\n3.\n" + this.sourceText3 + "\n";
-          
-
-        } catch (error) {
-          console.error('광고 생성 오류:', error);
-        }
+        this.sourceText = adTexts.map((text, index) => `${index + 1}.\n${text}`).join("\n\n");
+      } catch (error) {
+        console.error('광고 생성 오류:', error);
+      } finally {
+        this.isGeneratingRecommendation = false;
+      }
     },
     async createImage() {
       const token = localStorage.getItem('token');
@@ -183,6 +200,35 @@ export default {
         console.error("이미지 생성 오류:", error);
       }
     },
+
+        // 로딩 진행률 증가 - 이미지 생성용
+        increaseLoading() {
+      if (this.loadingPercentage < 100) {
+        this.loadingPercentage += 5;
+        setTimeout(this.increaseLoading, 100);
+      } else {
+        this.isLoading = false;
+      }
+    },
+
+    // 로딩 진행률 증가 - 문구 생성용
+    increaseRecommendationLoading() {
+      if (this.recommendationLoadingPercentage < 100) {
+        this.recommendationLoadingPercentage += 1;
+        setTimeout(this.increaseRecommendationLoading, 100);
+      } else {
+        this.isGeneratingRecommendation = false;
+      }
+    },
+
+    // 이미지 생성 시작
+    async startLoading() {
+      this.loadingPercentage = 0;
+      this.isLoading = true;
+      this.increaseLoading();
+      await this.createImage();
+    },
+
     async save() {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
