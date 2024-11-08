@@ -48,7 +48,7 @@
         <p><strong>이미지 </strong></p>
         <div class="image-container">
           <!-- 로딩 중이 아닐 때만 이미지 표시 -->
-          <img v-if="!isLoading" :src="selectedItem.image_url" alt="이미지 없음" class="editable-image"/>
+          <img v-if="!isLoading" :src="editedItem.image_url" alt="이미지 없음" class="editable-image"/>
 
           <!-- 로딩 중일 때 프로그래스바와 진행도 표시 -->
           <div v-if="isLoading" class="loading-wrapper">
@@ -102,7 +102,6 @@ export default {
       items: [], // 카드 아이템의 데이터
       currentIndex: 0,
       selectedItem: null, // 선택된 아이템을 저장할 변수
-      originalSelectedItem: null,
       editedItem : null,
       isEditing: false,
       image_prompt: "",
@@ -163,7 +162,6 @@ export default {
     },
     editItem() {
       this.isEditing = true;
-      this.originalSelectedItem = JSON.parse(JSON.stringify(this.selectedItem));
       this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
     },
     async updateImage() {
@@ -176,8 +174,7 @@ export default {
         }
       }, 200);
       try {
-        this.selectedItem.image_url = await onlyImage(token, this.image_prompt);
-        console.log(this.selectedItem);
+        this.editedItem.image_url = await onlyImage(token, this.image_prompt);
       } catch (error) {
         console.error("이미지 업데이트 실패 : ", error);
       } finally {
@@ -193,23 +190,24 @@ export default {
     async saveEdit() {
       if (window.confirm("캠페인을 정말로 수정하겠습니까?")) {
         const token = localStorage.getItem('token');
-        this.selectedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
-        const response = UpdateCampaign(token, this.selectedItem);
-        this.isEditing = false;
-        console.log(response);
+        this.editedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
+        try{
+          await UpdateCampaign(token, this.editedItem);
+          this.selectedItem = JSON.parse(JSON.stringify(this.editedItem));
+          const index = this.items.findIndex(item => item.campaignId === this.editedItem.campaignId);
+          if(index !== -1){
+            this.$set(this.items, index, JSON.parse(JSON.stringify(this.editedItem)));
+          }
+          this.isEditing = false;
+        } catch (error){
+          console.log("업데이트 중 오류 : ",error);
+        }
       }
     },
     cancelEdit() {
-      this.selectedItem = JSON.parse(JSON.stringify(this.originalSelectedItem));
+      this.editedItem = JSON.parse(JSON.stringify(this.selectedItem));
+      this.image_prompt = "";
       this.isEditing = false;
-      // items 배열에서 selectedItem과 일치하는 항목을 찾아 복원
-      const index = this.items.findIndex(item => item.campaignId === this.selectedItem.campaignId);
-      if (index !== -1) {
-        this.$set(this.items, index, JSON.parse(JSON.stringify(this.originalSelectedItem)));
-      }
-
-      // 복원 후 originalSelectedItem 초기화
-      this.originalSelectedItem = null;
     },
     async deleteItem(userId, campaignId) {
       const token = localStorage.getItem('token');
@@ -242,7 +240,7 @@ export default {
     navigateToDetail(campaignId) {
       // 아이템의 상세 정보 출력하기
       this.selectedItem = this.items.find(item => item.campaignId === campaignId);
-      this.editedItem = this.items.find(item => item.campaignId === campaignId);
+      this.editedItem = JSON.parse(JSON.stringify(this.selectedItem));
     },
   },
   created() {

@@ -17,7 +17,8 @@ import wwee.jihun.Service.SwarmService;
 // /api/gpt 경로로 들어오는 요청 처리
 @RequestMapping("/api/gpt")
 // 다른 도메인에서 요청(CORS) 허용을 http://localhost:8081 로 설정
-@CrossOrigin(origins = "http://hooniping-bucket.s3-website.ap-northeast-2.amazonaws.com")
+//@CrossOrigin(origins = "http://hooniping-bucket.s3-website.ap-northeast-2.amazonaws.com")
+@CrossOrigin(origins = {"http://localhost:8081"})
 public class GptController {
     // JsonDecoderService 클래스를 new 키워드를 통해 jsonDecoderService 객체를 만듬
     JsonDecoderService jsonDecoderService = new JsonDecoderService();

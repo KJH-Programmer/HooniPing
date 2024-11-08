@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // 백엔드 캠페인 API
-const API_URL = `http://${process.env.VUE_APP_API_URL}/api/campaign`;
+//const API_URL = `http://${process.env.VUE_APP_API_URL}/api/campaign`;
+const API_URL = `http://localhost:8080/api/campaign`;
 
 //========================< 특정 사용자의 캠페인 >=============================
 // userId의 모든 캠페인 조회

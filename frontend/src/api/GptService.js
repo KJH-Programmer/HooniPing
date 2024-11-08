@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = `http://${process.env.VUE_APP_API_URL}/api/gpt`;
+//const API_URL = `http://${process.env.VUE_APP_API_URL}/api/gpt`;
+const API_URL = `http://localhost:8080/api/gpt`;
 
 // 키워드 추출
 export const ExtractKeyword = async (token, product) => {
