@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => {
     next('/'); // 로그인 페이지로 리디렉션
   } else if (to.path === '/' && isLoggedIn) {
     // 로그인 상태에서 로그인 페이지로 이동하려고 하면
-    next('/CampaignPage'); // 캠페인 페이지로 리디렉션
+    next('/CampaignListPage'); // 캠페인 페이지로 리디렉션
   } else {
     next(); // 그 외의 경우는 정상적으로 진행
   }
