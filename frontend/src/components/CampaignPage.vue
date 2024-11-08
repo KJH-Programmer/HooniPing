@@ -104,9 +104,9 @@
         <div id="loadingContainer" v-if="isLoading">
           <span id="loadingText">이미지 생성 중...</span>
           <div id="progressBar">
-            <div id="progress" :style="{ width: loadingPercentage + '%' }"></div>
+            <div id="progress" :style="{ width: loadingImagePercentage + '%' }"></div>
           </div>
-          <span id="percentage">{{ loadingPercentage }}%</span>
+          <span id="percentage">{{ loadingImagePercentage }}%</span>
         </div>
 
         <!-- 생성된 이미지 표시 -->
@@ -148,6 +148,7 @@ export default {
       imageUrl: null,
       isLoading: false,
       loadingPercentage: 0,
+      loadingImagePercentage: 0,
       isGeneratingRecommendation: false, // 추천 내용 생성 로딩 상태
       recommendationLoadingPercentage: 0 // 추천 내용 생성 로딩 퍼센트
     };
@@ -191,42 +192,40 @@ export default {
         this.isGeneratingRecommendation = false;
       }
     },
-    async createImage() {
-      const token = localStorage.getItem('token');
-      
-      try {
-        this.imageUrl = await onlyImage(token, this.prompt);
-      } catch (error) {
-        console.error("이미지 생성 오류:", error);
-      }
-    },
 
-        // 로딩 진행률 증가 - 이미지 생성용
-        increaseLoading() {
-      if (this.loadingPercentage < 100) {
-        this.loadingPercentage += 5;
-        setTimeout(this.increaseLoading, 100);
-      } else {
-        this.isLoading = false;
-      }
-    },
 
     // 로딩 진행률 증가 - 문구 생성용
     increaseRecommendationLoading() {
       if (this.recommendationLoadingPercentage < 100) {
         this.recommendationLoadingPercentage += 1;
-        setTimeout(this.increaseRecommendationLoading, 100);
+        setTimeout(this.increaseRecommendationLoading, 150);
       } else {
         this.isGeneratingRecommendation = false;
       }
     },
 
-    // 이미지 생성 시작
+    // 이미지 생성 + 로딩
     async startLoading() {
-      this.loadingPercentage = 0;
+      const token = localStorage.getItem('token');
+      this.loadingImagePercentage = 0;
       this.isLoading = true;
-      this.increaseLoading();
-      await this.createImage();
+      const interval = setInterval(() => {
+        if (this.loadingImagePercentage < 100) {
+          this.loadingImagePercentage += 1;
+        }
+      }, 200);
+      try {
+        this.imageUrl = await onlyImage(token, this.prompt);
+      } catch (error) {
+        console.error('이미지 업데이트 실패:', error);
+      } finally {
+        clearInterval(interval);
+        this.loadingImagePercentage = 100;
+        setTimeout(() => {
+          this.isLoading = false;
+          this.progress = 0;
+        }, 100);
+      }
     },
 
     async save() {
@@ -285,8 +284,8 @@ textarea {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  resize: none; /* 사용자 크기 조절 비활성화 */
-  overflow-y: hidden; /* 스크롤바 감추기 */
+  resize: none; 
+  overflow-y: hidden; 
   font-family: inherit;
   font-size: 14px;
 }
@@ -389,4 +388,63 @@ textarea {
   background-color: #42b983;
   color: white;
 }
+
+#generateButton {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+#loadingContainer {
+  display: flex; 
+  position: fixed;
+  top: 50%;
+  right: 0%;
+  transform: translate(-40%, -30%);
+  width: 300px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}
+
+#progressBar {
+  width: 100%;
+  background-color: #f3f3f3;
+  height: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+#progress {
+  height: 100%;
+  width: 0;
+  background-color: #4caf50;
+  transition: width 0.2s;
+}
+
+#loadingText {
+  font-size: 14px;
+  color: #333;
+}
+
+#percentage {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+#recommendationLoadingContainer {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}
+
 </style>
