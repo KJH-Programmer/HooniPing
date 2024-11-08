@@ -90,7 +90,7 @@ export default {
 
       // 1초마다 남은 시간을 계산하는 타이머 설정
       this.intervalId = setInterval(() => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
           const decoded = jwt_decode.decode(token);
           if (decoded && decoded.exp) {

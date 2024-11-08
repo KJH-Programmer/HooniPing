@@ -134,11 +134,8 @@ export default {
   methods: {
     // 캠페인 리스트 가져오기
     async GetCampaignList() {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-
       try {
-        const response = await GetCampaignList(token, userId);
+        const response = await GetCampaignList();
         this.items = response;
       } catch (error) {
         console.error("캠페인 목록을 가져오는 중 오류:", error);
@@ -166,7 +163,6 @@ export default {
       this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
     },
     async updateImage() {
-      const token = localStorage.getItem('token');
       this.isLoading = true;
       this.progress = 0;
       const interval = setInterval(() => {
@@ -175,7 +171,7 @@ export default {
         }
       }, 200);
       try {
-        this.editedItem.image_url = await onlyImage(token, this.image_prompt);
+        this.editedItem.image_url = await onlyImage(this.image_prompt);
         this.imageKey = new Date().getTime();
       } catch (error) {
         console.error("이미지 업데이트 실패 : ", error);
@@ -191,11 +187,10 @@ export default {
     },
     async saveEdit() {
       if (window.confirm("캠페인을 정말로 수정하겠습니까?")) {
-        const token = localStorage.getItem('token');
         this.editedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
         try{
           console.log(this.editedItem);
-          await UpdateCampaign(token, this.editedItem);
+          await UpdateCampaign(this.editedItem);
           this.selectedItem = JSON.parse(JSON.stringify(this.editedItem));
           const index = this.items.findIndex(item => item.campaignId === this.editedItem.campaignId);
           if(index !== -1){
@@ -213,10 +208,9 @@ export default {
       this.isEditing = false;
     },
     async deleteItem(userId, campaignId) {
-      const token = localStorage.getItem('token');
       if (window.confirm("캠페인을 정말로 삭제하시겠습니까?")) {
         try {
-          const response = await DeleteCampaign(token, userId, campaignId);
+          const response = await DeleteCampaign(userId, campaignId);
           console.log("Response 객체:", response);
 
           // 응답이 204라면 items 배열 업데이트

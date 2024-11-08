@@ -154,12 +154,11 @@ export default {
   },
   methods: {
     async addProduct() {
-      const token = localStorage.getItem("token");
       try {
         console.log('추가된 제품명:', this.product);
 
         // 제품명을 기반으로 키워드를 추출
-        const response = await ExtractKeyword(token, this.product);
+        const response = await ExtractKeyword(this.product);
         console.log('');
         //서버로부터 받은 키워드를 keywords 배열에 할당
         this.keywords = response.keywords;
@@ -176,9 +175,8 @@ export default {
       this.increaseRecommendationLoading();
       
       try {
-        const token = localStorage.getItem("token");
         const keywords = this.selectedKeywords.join(', ');
-        const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
+        const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
 
         const adTexts = ad_text.data.split("\n")
           .map(text => text.replace("hooniping", "").trim())
@@ -192,10 +190,9 @@ export default {
       }
     },
     async createImage() {
-      const token = localStorage.getItem('token');
       
       try {
-        this.imageUrl = await onlyImage(token, this.prompt);
+        this.imageUrl = await onlyImage(this.prompt);
       } catch (error) {
         console.error("이미지 생성 오류:", error);
       }
@@ -230,9 +227,8 @@ export default {
     },
 
     async save() {
-      const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
-      const newCampaignId = await GetNewCampaignId(token, userId);
+      const userId = sessionStorage.getItem('userId');
+      const newCampaignId = await GetNewCampaignId(userId);
 
       try {
         // 백엔드에서 우선 newCampaignId 받아옴
@@ -249,7 +245,7 @@ export default {
         }
 
         // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
-        const response = await SaveCampaign(token, userId, campaignData);
+        const response = await SaveCampaign(userId, campaignData);
         this.$router.push('/CampaignListPage');
         console.log('SaveCampaign response:', response);
         console.log('캠페인 저장 성공(updatedAdText)');

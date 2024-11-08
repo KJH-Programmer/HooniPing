@@ -6,7 +6,8 @@ const API_URL = `http://localhost:8080/api/campaign`;
 
 //========================< 특정 사용자의 캠페인 >=============================
 // userId의 모든 캠페인 조회
-export const GetAllCampaigns = async (token, userId) => {
+export const GetAllCampaigns = async (userId) => {
+    const token = sessionStorage.getItem('token');
   try {
     const response = await axios.get(`${API_URL}/user-campaign`,
       {
@@ -28,7 +29,8 @@ export const GetAllCampaigns = async (token, userId) => {
 
 // =====================< 특정 캠페인 >=========================
 // 캠페인 내용 조회
-export const GetCampaign = async (token, userId, campaignId) => {
+export const GetCampaign = async (userId, campaignId) => {
+    const token = sessionStorage.getItem('token');
     try {
       const response = await axios.post(`${API_URL}/content`,
         {
@@ -50,7 +52,9 @@ export const GetCampaign = async (token, userId, campaignId) => {
   };
 
 // 캠페인 내용 가져오기
-export const GetCampaignList = async (token, userId) => {
+export const GetCampaignList = async () => {
+    const token = sessionStorage.getItem('token');
+    const userId = sessionStorage.getItem("userId");
     try {
         const response = await axios.post(`${API_URL}/user-campaign`,
             {
@@ -71,7 +75,8 @@ export const GetCampaignList = async (token, userId) => {
 };
 
 // newCampaignId 받아오기
-export const GetNewCampaignId = async (token, userId) => {
+export const GetNewCampaignId = async (userId) => {
+    const token = sessionStorage.getItem('token');
   try {
     const response = await axios.post(`${API_URL}/content/new-campaignId`, {
         userId: userId,
@@ -89,7 +94,8 @@ export const GetNewCampaignId = async (token, userId) => {
 }
 
 // 캠페인 저장
-export const SaveCampaign = async (token, userId, campaignData) => {
+export const SaveCampaign = async (userId, campaignData) => {
+    const token = sessionStorage.getItem('token');
     try {
         const response = await axios.post(`${API_URL}/content/save`,{
             userId: userId,
@@ -108,7 +114,8 @@ export const SaveCampaign = async (token, userId, campaignData) => {
 };
 
 // 기존 캠페인 업데이트
-export const UpdateCampaign = async (token,updatedData) => {
+export const UpdateCampaign = async (updatedData) => {
+    const token = sessionStorage.getItem('token');
     try {
         const response = await axios.put(`${API_URL}/content/update`,
             updatedData,
@@ -126,7 +133,8 @@ export const UpdateCampaign = async (token,updatedData) => {
 };
 
 // userId, campaignId로 캠페인 삭제
-export const DeleteCampaign = async (token, userId, campaignId ) => {
+export const DeleteCampaign = async (userId, campaignId ) => {
+    const token = sessionStorage.getItem('token');
     try {
         const response = await axios.post(`${API_URL}/delete`,
             {
@@ -147,7 +155,8 @@ export const DeleteCampaign = async (token, userId, campaignId ) => {
 };
 
 // userId, product로 캠페인 검색
-export const SearchCampaign = async (token, userId, product) => {
+export const SearchCampaign = async (userId, product) => {
+    const token = sessionStorage.getItem('token');
   try {
       const response = await axios.put(`${API_URL}/search`,
         {

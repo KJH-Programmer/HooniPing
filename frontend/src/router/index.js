@@ -42,7 +42,7 @@ const router = new Router({
 
 // 라우터 가드 추가
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = !!localStorage.getItem('token'); // 로그인 상태를 확인
+  const isLoggedIn = !!sessionStorage.getItem('token'); // 로그인 상태를 확인
 
   if (to.meta.requiresAuth && !isLoggedIn) {
     // 인증이 필요한 페이지인데 로그인되지 않은 경우

@@ -4,7 +4,8 @@ import axios from 'axios';
 const API_URL = `http://localhost:8080/api/gpt`;
 
 // 키워드 추출
-export const ExtractKeyword = async (token, product) => {
+export const ExtractKeyword = async (product) => {
+    const token = sessionStorage.getItem('token');
     try {
         const response = await axios.post(`${API_URL}/keyword`, {
                 product: product
@@ -25,7 +26,8 @@ export const ExtractKeyword = async (token, product) => {
 
 //==================== 문구 ======================
 // 광고 문구 출력
-export const GenerateAdText = async (token,product, brand, tone, brand_model, features, keywords) => {
+export const GenerateAdText = async (product, brand, tone, brand_model, features, keywords) => {
+    const token = sessionStorage.getItem('token');
     return await axios.post(`${API_URL}/adtext`, {
         product: product,
         brand: brand,
@@ -43,7 +45,8 @@ export const GenerateAdText = async (token,product, brand, tone, brand_model, fe
 
 //==================== 이미지 =======================
 // image 생성 (> s3 버킷에 저장 > 이미지 url 반환)
-export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
+export const GenerateImageUrl = async (prompt, userId, campaignId) => {
+    const token = sessionStorage.getItem('token');
     const response = await axios.post(`${API_URL}/image`, null, {
         params: { 
             prompt: prompt,
@@ -57,7 +60,8 @@ export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
     return response.data;
 }
 
-export const onlyImage = async (token, prompt) => {
+export const onlyImage = async (prompt) => {
+    const token = sessionStorage.getItem('token');
     try {
         const response = await axios.post(`${API_URL}/onlyImage`, null, {
             params: { prompt: prompt },
