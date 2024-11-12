@@ -170,11 +170,7 @@ export default {
         console.log('추가된 제품명:', this.product);
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
-        // 서버로부터 받은 키워드를 기존 keywords 배열에 병합
-        const newKeywords = response.keywords.filter(keyword => !this.keywords.includes(keyword));
-        
-        // 기존 키워드와 추천 키워드 병합
-        this.keywords = [...this.keywords, ...newKeywords];
+        this.keywords = response.keywords;
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }

@@ -14,6 +14,7 @@
         </div>
         <div class="welcome-wrapper">
           <span class="welcome-message">{{ timeRemaining }}남음 - 환영합니다, {{ userId }}님!</span>
+          <button class="extend-button" @click="extendLogin">로그인연장</button>
           <button class="logout-button" @click="handleLogout">로그아웃</button>
         </div>
       </div>
@@ -30,6 +31,7 @@
 <script>
 import AppFooter from '@/components/AppFooter.vue'; // Footer 컴포넌트 import
 import { getLoginStatus, performLogout } from '@/api/authService.js';
+import {extendLogin} from "@/api/loginService";
 import jwt_decode from 'jsonwebtoken';
 
 export default {
@@ -52,6 +54,12 @@ export default {
     clearInterval(this.intervalId);
   },
   methods: {
+    async extendLogin(){
+      const response = await extendLogin()
+      if(response != null){
+        sessionStorage.setItem('token', response);
+      }
+    },
     updateLoginStatus() {
       const { isLoggedIn, userId } = getLoginStatus();
       this.isLoggedIn = isLoggedIn;
@@ -164,5 +172,14 @@ export default {
 }
 .logout-button:hover {
   background-color: #e53e3e;
+}
+
+.extend-button {
+  background-color: #36996e;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>

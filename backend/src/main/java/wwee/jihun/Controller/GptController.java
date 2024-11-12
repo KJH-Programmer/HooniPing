@@ -36,7 +36,8 @@ public class GptController {
     }
     //광고 문구 출력
     @PostMapping("/adtext")
-    public String AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
+    public String AdText(@RequestBody CampaignEntity campaignEntity) {
+        String keywords = campaignEntity.getKeywords();
         return swarmService.generateCasualInstagramAd(campaignEntity, keywords).block();
     }
     //image생성후 s3 bucket에 저장 하고 이미지 url을 반환

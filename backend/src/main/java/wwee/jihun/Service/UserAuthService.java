@@ -1,5 +1,7 @@
 package wwee.jihun.Service;
 
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.JwtToken.TokenProvider;
@@ -45,6 +47,19 @@ public class UserAuthService {
         } else {
             // 검증 성공 시 토큰 반환
             return tokenProvider.CreateAccessToken(tokenId, tokenName);
+        }
+    }
+
+    //로그인 시간 연장
+    public String ExtendLogin(String token) {
+        boolean validateToken = tokenProvider.validateToken(token);
+        if (validateToken) {
+            Claims claims = tokenProvider.parseClaims(token);
+            String userId = claims.get("userId", String.class);
+            String userName = claims.get("userName", String.class);
+            return tokenProvider.CreateAccessToken(userId, userName);
+        }else{
+            return null;
         }
     }
 }
