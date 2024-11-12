@@ -167,23 +167,44 @@ export default {
   methods: {
     async addProduct() {  // 추천 키워드 생성
       try {
-        console.log('추가된 제품명:', this.product);
+        this.keywords = [];  // 배열 초기화
+        console.log('키워드 생성할 제품명:', this.product);
+
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
-        // 서버로부터 받은 키워드를 기존 keywords 배열에 병합
-        const newKeywords = response.keywords.filter(keyword => !this.keywords.includes(keyword));
-        
-        // 기존 키워드와 추천 키워드 병합
-        this.keywords = [...this.keywords, ...newKeywords];
+        const extractedKeywords = response.keywords;
+        console.log('키워드 추출 성공(keywords):', extractedKeywords);
+
+        // 추출한 키워드(extractedKeywords)에 selectedKeywords랑 겹치는게 있는지 확인
+        const filteredKeywords = extractedKeywords.filter(
+          keyword => !this.selectedKeywords.includes(keyword)
+        );
+
+        // 비어있는 keywords 배열에 filteredKeywords + selectedKeywords 합치기
+        this.keywords = [...filteredKeywords, ...this.selectedKeywords];
+        console.log('최종 보여지는 키워드(미선택+선택):', this.keywords);
+        console.log('미선택 키워드(keywords):', filteredKeywords, '\n선택 키워드(selectedKeywords):', this.selectedKeywords);
+
+
+        // //서버로부터 받은 키워드를 keywords 배열에 할당
+        // this.keywords = response.keywords;
+
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }
     },
-    addKeyword() {  // 추가 키워드 입력
+    addKeyword() {
+      // 새로운 키워드가 있고, 기존 keywords 배열에 없을 때 추가
       if (this.newKeyword && !this.keywords.includes(this.newKeyword)) {
+        // 키워드 목록에 추가
         this.keywords.push(this.newKeyword);
-        console.log('새로운 키워드 추가:', this.newKeyword);
-        this.newKeyword = '';  // 추가 후 입력란 비우기
+        // 자동으로 선택된 상태로 selectedKeywords에도 추가
+        this.selectedKeywords.push(this.newKeyword);
+        
+        console.log('새로운 키워드 추가 및 선택됨:', this.newKeyword);
+        
+        // 입력 필드 초기화
+        this.newKeyword = '';
       } else {
         console.log('추가할 키워드가 없거나 이미 존재합니다.');
       }
@@ -197,8 +218,8 @@ export default {
       
       try {
         const keywords = this.selectedKeywords.join(', ');
-        const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
         console.log('문구 생성에 사용되는 키워드:', keywords);
+        const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
         const adTexts = ad_text.data.split("\n")
           .map(text => text.replace("hooniping", "").trim())
           .filter(text => text !== "");
