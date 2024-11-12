@@ -29,6 +29,11 @@ public class UserController {
     }
 
     //회원가입
+    @PostMapping("/create")
+    public String CreateUser(@RequestBody UserEntity userEntity){
+        return userAuthService.CreateUser(userEntity);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserEntity userEntity) {
         String token = userAuthService.Login(userEntity.getUserId(), userEntity.getUserPassword());
@@ -41,5 +46,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         }
     }
+
 
 }

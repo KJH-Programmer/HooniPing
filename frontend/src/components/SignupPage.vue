@@ -118,19 +118,14 @@ export default {
 
       try {
         const response = await registerUser(payload);
-        this.handleResponse(response);
+        if(response === "success"){
+          this.resetForm();
+          await this.$router.push('/');
+        } else if (response === "Unavailable"){
+          this.showError('general', '이미 사용 중인 아이디입니다');
+        }
       } catch (error) {
         this.showError('general', '서버 오류가 발생했습니다. 나중에 다시 시도해주세요.');
-      }
-    },
-    handleResponse(data) {
-      if (data === 'Available') {
-        this.successMessage = '회원가입이 완료되었습니다.';
-        this.errors.general = '';
-        this.resetForm();
-        this.$router.push('/');
-      } else if (data === 'Unavailable') {
-        this.showError('general', '이미 사용 중인 아이디입니다');
       }
     },
     resetForm() {

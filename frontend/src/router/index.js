@@ -44,7 +44,10 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const isLoggedIn = !!sessionStorage.getItem('token'); // 로그인 상태를 확인
 
-  if (to.meta.requiresAuth && !isLoggedIn) {
+  if (to.path === '/signup') {
+    // 회원가입 페이지는 로그인 여부와 무관하게 접근 가능
+    next();
+  } else if (to.meta.requiresAuth && !isLoggedIn) {
     // 인증이 필요한 페이지인데 로그인되지 않은 경우
     next('/'); // 로그인 페이지로 리디렉션
   } else if (to.path === '/' && isLoggedIn) {
