@@ -17,7 +17,7 @@ public class AgentA {
     public Mono<String> generateKeywordsAndProductInfo(CampaignEntity campaignEntity, String keywords) {
         StringBuilder promptBuilder = new StringBuilder(String.format(
                 "%s 제품을 위한 광고 문구 3가지를 생성해줘." +
-                        "광고 문구에 반드시 들어가야할 키워드는 %s이 들어가야해." +
+                        "광고 문구에 반드시 들어가야할 키워드는 %s이 들어가야해. 꼭 들어가야 해." +
                         "제품의 특징이자 장점은 \"%s\"이야.\n",
                 campaignEntity.getProduct(),
                 keywords,
