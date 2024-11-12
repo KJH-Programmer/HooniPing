@@ -69,6 +69,16 @@
               {{ keyword }}
             </button>
           </div>
+          <!-- '추가 키워드 입력란'과 '추가' 버튼 -->
+          <div class="add-keyword-section">
+            <input
+              v-model="newKeyword"
+              type="text"
+              placeholder="새로운 키워드를 입력하세요"
+              class="new-keyword-input"
+            />
+            <button @click="addKeyword" class="add-keyword-button">추가</button>
+          </div>
         </div>
         <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
@@ -141,8 +151,9 @@ export default {
       product: '',
       tone: '',
       features: '',
-      keywords: [],
-      selectedKeywords: [],
+      keywords: [],  // 추천 키워드 목록
+      newKeyword: '',  // 사용자 추가 키워드
+      selectedKeywords: [],  // 최종 선택 키워드
       sourceText: '',
       prompt: '',
       imageUrl: null,
@@ -154,18 +165,27 @@ export default {
     };
   },
   methods: {
-    async addProduct() {
+    async addProduct() {  // 추천 키워드 생성
       try {
         console.log('추가된 제품명:', this.product);
-
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
-        console.log('');
-        //서버로부터 받은 키워드를 keywords 배열에 할당
-        this.keywords = response.keywords;
-        console.log('키워드 추출 성공:', this.keywords);
+        // 서버로부터 받은 키워드를 기존 keywords 배열에 병합
+        const newKeywords = response.keywords.filter(keyword => !this.keywords.includes(keyword));
+        
+        // 기존 키워드와 추천 키워드 병합
+        this.keywords = [...this.keywords, ...newKeywords];
       } catch (error) {
         console.error('키워드 추출 오류:', error);
+      }
+    },
+    addKeyword() {  // 추가 키워드 입력
+      if (this.newKeyword && !this.keywords.includes(this.newKeyword)) {
+        this.keywords.push(this.newKeyword);
+        console.log('새로운 키워드 추가:', this.newKeyword);
+        this.newKeyword = '';  // 추가 후 입력란 비우기
+      } else {
+        console.log('추가할 키워드가 없거나 이미 존재합니다.');
       }
     },
     // 광고 문구 생성
@@ -178,12 +198,13 @@ export default {
       try {
         const keywords = this.selectedKeywords.join(', ');
         const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
-
+        console.log('문구 생성에 사용되는 키워드:', keywords);
         const adTexts = ad_text.data.split("\n")
           .map(text => text.replace("hooniping", "").trim())
           .filter(text => text !== "");
 
         this.sourceText = adTexts.map((text, index) => `${index + 1}.\n${text}`).join("\n\n");
+        console.log('selectedKeywords:', this.selectedKeywords);
       } catch (error) {
         console.error('광고 생성 오류:', error);
       } finally {
@@ -236,7 +257,23 @@ export default {
     async save() {
       const userId = sessionStorage.getItem('userId');
       const newCampaignId = await GetNewCampaignId(userId);
-
+      // 필수 입력 항목 체크
+      if (this.product.trim() === "") {
+        alert("제품명을 입력해주세요!");
+        return;
+      }
+      if (this.selectedKeywords.length === 0) {
+        alert("키워드를 입력해주세요!");
+        return;
+      }
+      if (this.features.trim() === "") {
+        alert("제품 설명을 입력해주세요!");
+        return;
+      }
+      if (this.sourceText.trim() === "") {
+        alert("광고 문구를 입력해주세요!");
+        return;
+      }
       try {
         // 백엔드에서 우선 newCampaignId 받아옴
         const campaignData = {
