@@ -1,24 +1,33 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/gpt';
-
-// 질문-대답(GPT 테스트)
-export const GenerateAnswer = async (question) => {
-    return await axios.post(API_URL, {
-        question: question
-    });
-};
+//const API_URL = `http://${process.env.VUE_APP_API_URL}/api/gpt`;
+const API_URL = `http://localhost:8080/api/gpt`;
 
 // 키워드 추출
 export const ExtractKeyword = async (product) => {
-    return await axios.post(`${API_URL}/keyword`, {
-        product: product
-    });
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await axios.post(`${API_URL}/keyword`, {
+                product: product
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+                },
+            });
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };
+
 
 //==================== 문구 ======================
 // 광고 문구 출력
-export const GenerateAdText = async (token,product, brand, tone, brand_model, features, keywords) => {
+export const GenerateAdText = async (product, brand, tone, brand_model, features, keywords) => {
+    const token = sessionStorage.getItem('token');
     return await axios.post(`${API_URL}/adtext`, {
         product: product,
         brand: brand,
@@ -36,7 +45,8 @@ export const GenerateAdText = async (token,product, brand, tone, brand_model, fe
 
 //==================== 이미지 =======================
 // image 생성 (> s3 버킷에 저장 > 이미지 url 반환)
-export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
+export const GenerateImageUrl = async (prompt, userId, campaignId) => {
+    const token = sessionStorage.getItem('token');
     const response = await axios.post(`${API_URL}/image`, null, {
         params: { 
             prompt: prompt,
@@ -50,14 +60,8 @@ export const GenerateImageUrl = async (token, prompt, userId, campaignId) => {
     return response.data;
 }
 
-// // image 버킷에서 삭제
-// export const DeleteAdImage = async (prompt, userId, campaignId) => {
-//     return await axios.post(`${API_URL}/image-dlt`, {
-//         fileName: fileName
-//     })
-// }
-
-export const onlyImage = async (token, prompt) => {
+export const onlyImage = async (prompt) => {
+    const token = sessionStorage.getItem('token');
     try {
         const response = await axios.post(`${API_URL}/onlyImage`, null, {
             params: { prompt: prompt },

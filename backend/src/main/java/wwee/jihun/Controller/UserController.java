@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+//@CrossOrigin(origins = {"http://hooniping-bucket.s3-website.ap-northeast-2.amazonaws.com"})
 @CrossOrigin(origins = {"http://localhost:8081"})
 public class UserController {
     private final UserAuthService userAuthService;

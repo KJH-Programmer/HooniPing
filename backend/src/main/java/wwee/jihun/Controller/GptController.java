@@ -2,12 +2,10 @@ package wwee.jihun.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 import wwee.jihun.Entity.CampaignEntity;
 import wwee.jihun.Service.*;
 
 import java.io.IOException;
-import java.security.Key;
 
 import wwee.jihun.Service.GptService;
 import wwee.jihun.Service.JsonDecoderService;
@@ -19,7 +17,8 @@ import wwee.jihun.Service.SwarmService;
 // /api/gpt 경로로 들어오는 요청 처리
 @RequestMapping("/api/gpt")
 // 다른 도메인에서 요청(CORS) 허용을 http://localhost:8081 로 설정
-@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = "http://hooniping-bucket.s3-website.ap-northeast-2.amazonaws.com")
+@CrossOrigin(origins = {"http://localhost:8081"})
 public class GptController {
     // JsonDecoderService 클래스를 new 키워드를 통해 jsonDecoderService 객체를 만듬
     JsonDecoderService jsonDecoderService = new JsonDecoderService();
@@ -37,8 +36,8 @@ public class GptController {
     }
     //광고 문구 출력
     @PostMapping("/adtext")
-    public Mono<String> AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
-        return swarmService.generateCasualInstagramAd(campaignEntity, keywords);
+    public String AdText(@RequestBody CampaignEntity campaignEntity, String keywords) {
+        return swarmService.generateCasualInstagramAd(campaignEntity, keywords).block();
     }
     //image생성후 s3 bucket에 저장 하고 이미지 url을 반환
     @PostMapping("/image")
@@ -62,14 +61,13 @@ public class GptController {
     }
 
     @PostMapping("/keyword")
-    public Mono<String> Chat(@RequestBody CampaignEntity campaignEntity) {
-        return keywordService.suggestKeywords(campaignEntity);
+    public String Chat(@RequestBody CampaignEntity campaignEntity) {
+        return keywordService.suggestKeywords(campaignEntity).block();
     }
 
     @PostMapping("/onlyImage")
     public String onlyImage(@RequestParam String prompt){
-        String url = dalleService.generateImage(prompt).block();
-        return url;
+        return dalleService.generateImage(prompt).block();
     }
 
 }

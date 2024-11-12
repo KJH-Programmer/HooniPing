@@ -55,7 +55,7 @@
           />
         </div>
 
-        <button class="product-button" @click="addProduct">제품 입력하기</button>
+        <button class="product-button" @click="addProduct">추천 키워드 생성</button>
 
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
@@ -104,9 +104,9 @@
         <div id="loadingContainer" v-if="isLoading">
           <span id="loadingText">이미지 생성 중...</span>
           <div id="progressBar">
-            <div id="progress" :style="{ width: loadingPercentage + '%' }"></div>
+            <div id="progress" :style="{ width: loadingImagePercentage + '%' }"></div>
           </div>
-          <span id="percentage">{{ loadingPercentage }}%</span>
+          <span id="percentage">{{ loadingImagePercentage }}%</span>
         </div>
 
         <!-- 생성된 이미지 표시 -->
@@ -148,21 +148,26 @@ export default {
       imageUrl: null,
       isLoading: false,
       loadingPercentage: 0,
+      loadingImagePercentage: 0,
       isGeneratingRecommendation: false, // 추천 내용 생성 로딩 상태
       recommendationLoadingPercentage: 0 // 추천 내용 생성 로딩 퍼센트
     };
   },
   methods: {
-    // 키워드 추출
     async addProduct() {
       try {
+        console.log('추가된 제품명:', this.product);
+
+        // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
-        this.keywords = response.data.keywords;
+        console.log('');
+        //서버로부터 받은 키워드를 keywords 배열에 할당
+        this.keywords = response.keywords;
+        console.log('키워드 추출 성공:', this.keywords);
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }
     },
-
     // 광고 문구 생성
     async generateRecommendation() {
       // 추천 내용 생성 로딩 상태 설정
@@ -171,9 +176,8 @@ export default {
       this.increaseRecommendationLoading();
       
       try {
-        const token = localStorage.getItem("token");
         const keywords = this.selectedKeywords.join(', ');
-        const ad_text = await GenerateAdText(token, this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
+        const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
 
         const adTexts = ad_text.data.split("\n")
           .map(text => text.replace("hooniping", "").trim())
@@ -186,91 +190,97 @@ export default {
         this.isGeneratingRecommendation = false;
       }
     },
-
-    // 이미지 생성
     async createImage() {
-      const token = localStorage.getItem('token');
+
       try {
-        this.imageUrl = await onlyImage(token, this.prompt);
+        this.imageUrl = await onlyImage(this.prompt);
       } catch (error) {
         console.error("이미지 생성 오류:", error);
-      } finally {
-        this.isLoading = false;
       }
     },
 
-    // 로딩 진행률 증가 - 이미지 생성용
-    increaseLoading() {
-      if (this.loadingPercentage < 100) {
-        this.loadingPercentage += 5;
-        setTimeout(this.increaseLoading, 100);
-      } else {
-        this.isLoading = false;
-      }
-    },
 
     // 로딩 진행률 증가 - 문구 생성용
     increaseRecommendationLoading() {
       if (this.recommendationLoadingPercentage < 100) {
         this.recommendationLoadingPercentage += 1;
-        setTimeout(this.increaseRecommendationLoading, 100);
+        setTimeout(this.increaseRecommendationLoading, 150);
       } else {
         this.isGeneratingRecommendation = false;
       }
     },
 
-    // 이미지 생성 시작
+    // 이미지 생성 + 로딩
     async startLoading() {
-      this.loadingPercentage = 0;
+      this.loadingImagePercentage = 0;
       this.isLoading = true;
-      this.increaseLoading();
-      await this.createImage();
-    },
-
-    // 캠페인 저장
-    async save() {
-      const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
-      const newCampaignId = await GetNewCampaignId(token, userId);
-
-      const campaignData = {
-        campaignId: newCampaignId,
-        product: this.product,
-        keywords: this.selectedKeywords.join(','),
-        features: this.features,
-        tone: this.tone,
-        brand: this.brand,
-        brand_model: this.brand_model,
-        ad_text: this.sourceText,
-        image_url: this.imageUrl
-      };
-
+      const interval = setInterval(() => {
+        if (this.loadingImagePercentage < 100) {
+          this.loadingImagePercentage += 1;
+        }
+      }, 200);
       try {
-        await SaveCampaign(token, userId, campaignData);
+        this.imageUrl = await onlyImage(this.prompt);
       } catch (error) {
-        console.error('캠페인 저장 오류:', error);
+        console.error('이미지 업데이트 실패:', error);
+      } finally {
+        clearInterval(interval);
+        this.loadingImagePercentage = 100;
+        setTimeout(() => {
+          this.isLoading = false;
+          this.progress = 0;
+        }, 100);
       }
     },
 
-    // 텍스트 영역 크기 자동 조정
+    async save() {
+      const userId = sessionStorage.getItem('userId');
+      const newCampaignId = await GetNewCampaignId(userId);
+
+      try {
+        // 백엔드에서 우선 newCampaignId 받아옴
+        const campaignData = {
+          campaignId: newCampaignId, // 백엔드에서 받은 newCampaignId
+          product: this.product,
+          keywords: this.selectedKeywords.join(','),
+          features: this.features,
+          tone: this.tone,
+          brand: this.brand,
+          brand_model: this.brand_model,
+          ad_text: this.sourceText,
+          image_url: this.imageUrl
+        }
+
+        // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
+        const response = await SaveCampaign(userId, campaignData);
+        this.$router.push('/CampaignListPage');
+        console.log('SaveCampaign response:', response);
+        console.log('캠페인 저장 성공(updatedAdText)');
+        } catch (error) {
+          console.log('캠페인 저장 실패:', error);
+        }
+    },
     resizeTextarea(event) {
       const textarea = event.target;
       textarea.style.height = 'auto';
       textarea.style.height = textarea.scrollHeight + 'px';
     },
-
-    // 키워드 선택 토글
+    moveText(selectedText) {
+      this.destinationText = selectedText;
+    },
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
+        // 이미 선택된 키워드면 배열에서 제거
         this.selectedKeywords = this.selectedKeywords.filter(item => item !== keyword);
       } else {
+        // 선택되지 않은 키워드면 배열에 추가
         this.selectedKeywords.push(keyword);
       }
+      console.log('선택된 키워드들:', this.selectedKeywords);
     }
   }
 };
 </script>
-
 
 <style scoped>
 textarea {
@@ -278,8 +288,8 @@ textarea {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  resize: none; 
-  overflow-y: hidden; 
+  resize: none;
+  overflow-y: hidden;
   font-family: inherit;
   font-size: 14px;
 }
@@ -389,7 +399,7 @@ textarea {
 }
 
 #loadingContainer {
-  display: flex; 
+  display: flex;
   position: fixed;
   top: 50%;
   right: 0%;

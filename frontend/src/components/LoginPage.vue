@@ -63,8 +63,8 @@ export default {
         const response = await Login(this.userId, this.password);
 
         // 로그인 성공 시, 서버 응답에서 받은 토큰과 사용자 아이디를 localStorage에 저장
-        localStorage.setItem('token', response.data); // 토큰 저장
-        localStorage.setItem('userId', this.userId); // 사용자 아이디 저장
+        sessionStorage.setItem('token',response.data);
+        sessionStorage.setItem('userId', this.userId);
 
         // 로그인 성공 후 메인 페이지로 이동
         this.$router.push('/CampaignListPage');
