@@ -77,6 +77,16 @@
               {{ keyword }}
             </button>
           </div>
+          <!-- '추가 키워드 입력란'과 '추가' 버튼 -->
+          <div class="add-keyword-section">
+            <input
+              v-model="newKeyword"
+              type="text"
+              placeholder="새로운 키워드를 입력하세요"
+              class="new-keyword-input"
+            />
+            <button @click="addKeyword" class="add-keyword-button">추가</button>
+          </div>
         </div>
         <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
@@ -88,7 +98,6 @@
         </div>
         <span id="percentage">{{ recommendationLoadingPercentage }}%</span>
       </div>
-      
 
       <!-- 광고 문구 섹션 -->
       <div class="form section">
@@ -132,6 +141,8 @@
           </div>
           <span id="percentage">{{ saveloadingPercentage }}%</span>
         </div>
+
+        <button class="product-button" @click="save">저장하기</button>
       </div>
     </div>
   </div>
@@ -158,14 +169,18 @@ export default {
       product: '',
       tone: '',
       features: '',
-      keywords: [],
-      selectedKeywords: [],
+
+      keywords: [],  // 추천 키워드 목록
+      newKeyword: '',  // 사용자 추가 키워드
+      selectedKeywords: [],  // 최종 선택 키워드
+
       sourceText: '',
       prompt: '',
       imageUrl: null,
       isLoading: false,
       loadingPercentage: 0,
       loadingImagePercentage: 0,
+
       isGeneratingRecommendation: false, 
       recommendationLoadingPercentage: 0, 
       isGeneratingKeywords: false, 
@@ -182,18 +197,33 @@ export default {
       this.increaseKeywordLoading();
 
       try {
-        console.log('추가된 제품명:', this.product);
+        this.keywords = [];  // 배열 초기화
+        console.log('키워드 생성할 제품명:', this.product);
 
         // 제품명을 기반으로 키워드를 추출
         const response = await ExtractKeyword(this.product);
-        console.log('');
-        //서버로부터 받은 키워드를 keywords 배열에 할당
-        this.keywords = response.keywords;
-        console.log('키워드 추출 성공:', this.keywords);
+        const extractedKeywords = response.keywords;
+        console.log('키워드 추출 성공(keywords):', extractedKeywords);
+
+        // 추출한 키워드(extractedKeywords)에 selectedKeywords랑 겹치는게 있는지 확인
+        const filteredKeywords = extractedKeywords.filter(
+          keyword => !this.selectedKeywords.includes(keyword)
+        );
+
+        // 비어있는 keywords 배열에 filteredKeywords + selectedKeywords 합치기
+        this.keywords = [...filteredKeywords, ...this.selectedKeywords];
+        console.log('최종 보여지는 키워드(미선택+선택):', this.keywords);
+        console.log('미선택 키워드(keywords):', filteredKeywords, '\n선택 키워드(selectedKeywords):', this.selectedKeywords);
+
+
+        // //서버로부터 받은 키워드를 keywords 배열에 할당
+        // this.keywords = response.keywords;
+
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }
     },
+
     // 로딩 진행률 증가 - 키워드 생성용
     increaseKeywordLoading() {
       if (this.keywordLoadingPercentage < 100) {
@@ -201,6 +231,22 @@ export default {
         setTimeout(this.increaseKeywordLoading, 150);
       } else {
         this.isGeneratingKeywords = false;
+
+    addKeyword() {
+      // 새로운 키워드가 있고, 기존 keywords 배열에 없을 때 추가
+      if (this.newKeyword && !this.keywords.includes(this.newKeyword)) {
+        // 키워드 목록에 추가
+        this.keywords.push(this.newKeyword);
+        // 자동으로 선택된 상태로 selectedKeywords에도 추가
+        this.selectedKeywords.push(this.newKeyword);
+        
+        console.log('새로운 키워드 추가 및 선택됨:', this.newKeyword);
+        
+        // 입력 필드 초기화
+        this.newKeyword = '';
+      } else {
+        console.log('추가할 키워드가 없거나 이미 존재합니다.');
+
       }
     },
     // 광고 문구 생성
@@ -219,6 +265,23 @@ export default {
           .filter(text => text !== "");
 
         this.sourceText = adTexts.map((text, index) => `${index + 1}.\n${text}`).join("\n\n");
+      } catch (error) {
+        console.error('광고 생성 오류:', error);
+      } finally {
+        this.isGeneratingRecommendation = false;
+      }
+    },
+    async createImage() {
+
+
+        console.log('문구 생성에 사용되는 키워드:', keywords);
+        const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
+        const adTexts = ad_text.data.split("\n")
+          .map(text => text.replace("hooniping", "").trim())
+          .filter(text => text !== "");
+
+        this.sourceText = adTexts.map((text, index) => `${index + 1}.\n${text}`).join("\n\n");
+        console.log('selectedKeywords:', this.selectedKeywords);
       } catch (error) {
         console.error('광고 생성 오류:', error);
       } finally {
@@ -252,6 +315,82 @@ export default {
       const interval = setInterval(() => {
         if (this.loadingImagePercentage < 100) {
           this.loadingImagePercentage += 1;
+        }
+      }, 200);
+
+      try {
+        this.imageUrl = await onlyImage(this.prompt);
+      } catch (error) {
+        console.error('이미지 업데이트 실패:', error);
+      } finally {
+        clearInterval(interval);
+        this.loadingImagePercentage = 100;
+        setTimeout(() => {
+          this.isLoading = false;
+          this.progress = 0;
+        }, 100);
+      }
+    },
+
+
+    // 로딩 진행률 증가 - 문구 생성용
+    increaseRecommendationLoading() {
+      if (this.recommendationLoadingPercentage < 100) {
+        this.recommendationLoadingPercentage += 1;
+        setTimeout(this.increaseRecommendationLoading, 150);
+      } else {
+        this.isGeneratingRecommendation = false;
+      }
+    },
+
+    // 이미지 생성 + 로딩
+    async startLoading() {
+      this.loadingImagePercentage = 0;
+      this.isLoading = true;
+      const interval = setInterval(() => {
+        if (this.loadingImagePercentage < 100) {
+          this.loadingImagePercentage += 1;
+    async save() {
+      const userId = sessionStorage.getItem('userId');
+      const newCampaignId = await GetNewCampaignId(userId);
+      // 필수 입력 항목 체크
+      if (this.product.trim() === "") {
+        alert("제품명을 입력해주세요!");
+        return;
+      }
+      if (this.selectedKeywords.length === 0) {
+        alert("키워드를 입력해주세요!");
+        return;
+      }
+      if (this.features.trim() === "") {
+        alert("제품 설명을 입력해주세요!");
+        return;
+      }
+      if (this.sourceText.trim() === "") {
+        alert("광고 문구를 입력해주세요!");
+        return;
+      }
+      try {
+        // 백엔드에서 우선 newCampaignId 받아옴
+        const campaignData = {
+          campaignId: newCampaignId, // 백엔드에서 받은 newCampaignId
+          product: this.product,
+          keywords: this.selectedKeywords.join(','),
+          features: this.features,
+          tone: this.tone,
+          brand: this.brand,
+          brand_model: this.brand_model,
+          ad_text: this.sourceText,
+          image_url: this.imageUrl
+        }
+
+        // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
+        const response = await SaveCampaign(userId, campaignData);
+        this.$router.push('/CampaignListPage');
+        console.log('SaveCampaign response:', response);
+        console.log('캠페인 저장 성공(updatedAdText)');
+        } catch (error) {
+          console.log('캠페인 저장 실패:', error);
         }
       }, 200);
       try {
@@ -500,6 +639,7 @@ textarea {
   padding: 20px;
   z-index: 1000;
 }
+
 
 #keywordLoadingContainer {
   display: flex;

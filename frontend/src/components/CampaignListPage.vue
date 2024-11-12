@@ -196,6 +196,7 @@ export default {
           if(index !== -1){
             this.$set(this.items, index, JSON.parse(JSON.stringify(this.editedItem)));
           }
+          this.imageKey = new Date().getTime();
           this.isEditing = false;
         } catch (error){
           console.log("업데이트 중 오류 : ",error);
@@ -238,6 +239,8 @@ export default {
       // 아이템의 상세 정보 출력하기
       this.selectedItem = this.items.find(item => item.campaignId === campaignId);
       this.editedItem = JSON.parse(JSON.stringify(this.selectedItem));
+      this.isEditing = false;
+
     },
   },
   created() {
@@ -261,6 +264,7 @@ export default {
   justify-content: center;
   position: relative;
   padding: 20px;
+  overflow : hidden;
 }
 
 .carousel-wrapper {
