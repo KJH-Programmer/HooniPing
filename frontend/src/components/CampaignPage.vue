@@ -57,6 +57,14 @@
 
         <button class="product-button" @click="addProduct">추천 키워드 생성</button>
 
+        <div id="keywordLoadingContainer" v-if="isGeneratingKeywords">
+          <span id="loadingText">키워드 생성 중...</span>
+          <div id="progressBar">
+            <div id="progress" :style="{ width: keywordLoadingPercentage + '%' }"></div>
+          </div>
+          <span id="percentage">{{ keywordLoadingPercentage }}%</span>
+        </div>
+
         <div class="input-field keyword-section">
           <label for="keywords">키워드</label>
           <div class="keyword-wrapper">
@@ -80,6 +88,7 @@
         </div>
         <span id="percentage">{{ recommendationLoadingPercentage }}%</span>
       </div>
+      
 
       <!-- 광고 문구 섹션 -->
       <div class="form section">
@@ -115,6 +124,14 @@
         </div>
 
         <button class="product-button" @click="save">저장하기</button>
+
+        <div id="saveloadingContainer" v-if="saveloading">
+          <span id="loadingText">저장 중...</span>
+          <div id="progressBar">
+            <div id="progress" :style="{ width: saveloadingPercentage + '%' }"></div>
+          </div>
+          <span id="percentage">{{ saveloadingPercentage }}%</span>
+        </div>
       </div>
     </div>
   </div>
@@ -149,12 +166,21 @@ export default {
       isLoading: false,
       loadingPercentage: 0,
       loadingImagePercentage: 0,
-      isGeneratingRecommendation: false, // 추천 내용 생성 로딩 상태
-      recommendationLoadingPercentage: 0 // 추천 내용 생성 로딩 퍼센트
+      isGeneratingRecommendation: false, 
+      recommendationLoadingPercentage: 0, 
+      isGeneratingKeywords: false, 
+      keywordLoadingPercentage: 0, 
+      saveloading: false,
+      saveloadingPercentage: 0,
     };
   },
   methods: {
     async addProduct() {
+
+      this.keywordLoadingPercentage = 0;
+      this.isGeneratingKeywords = true;
+      this.increaseKeywordLoading();
+
       try {
         console.log('추가된 제품명:', this.product);
 
@@ -166,6 +192,15 @@ export default {
         console.log('키워드 추출 성공:', this.keywords);
       } catch (error) {
         console.error('키워드 추출 오류:', error);
+      }
+    },
+    // 로딩 진행률 증가 - 키워드 생성용
+    increaseKeywordLoading() {
+      if (this.keywordLoadingPercentage < 100) {
+        this.keywordLoadingPercentage += 10;
+        setTimeout(this.increaseKeywordLoading, 150);
+      } else {
+        this.isGeneratingKeywords = false;
       }
     },
     // 광고 문구 생성
@@ -234,32 +269,37 @@ export default {
     },
 
     async save() {
-      const userId = sessionStorage.getItem('userId');
-      const newCampaignId = await GetNewCampaignId(userId);
+  this.saveloading = true; // 로딩 중 상태로 설정
+  this.saveloadingPercentage = 0; // 로딩 퍼센티지 초기화
+  this.increaseSaveLoading(); // 로딩 퍼센티지 증가 함수 호출
+  
+  const userId = sessionStorage.getItem('userId');
+  const newCampaignId = await GetNewCampaignId(userId);
 
-      try {
-        // 백엔드에서 우선 newCampaignId 받아옴
-        const campaignData = {
-          campaignId: newCampaignId, // 백엔드에서 받은 newCampaignId
-          product: this.product,
-          keywords: this.selectedKeywords.join(','),
-          features: this.features,
-          tone: this.tone,
-          brand: this.brand,
-          brand_model: this.brand_model,
-          ad_text: this.sourceText,
-          image_url: this.imageUrl
-        }
+  try {
+    const campaignData = {
+      campaignId: newCampaignId,
+      product: this.product,
+      keywords: this.selectedKeywords.join(','),
+      features: this.features,
+      tone: this.tone,
+      brand: this.brand,
+      brand_model: this.brand_model,
+      ad_text: this.sourceText,
+      image_url: this.imageUrl
+    };
 
-        // 백엔드에서 받은 newCampaignId와 저장할 정보를 -> 백엔드로 전송
-        const response = await SaveCampaign(userId, campaignData);
-        this.$router.push('/CampaignListPage');
-        console.log('SaveCampaign response:', response);
-        console.log('캠페인 저장 성공(updatedAdText)');
-        } catch (error) {
-          console.log('캠페인 저장 실패:', error);
-        }
-    },
+    const response = await SaveCampaign(userId, campaignData);
+    this.$router.push('/CampaignListPage');
+    console.log('SaveCampaign response:', response);
+    console.log('캠페인 저장 성공');
+  } catch (error) {
+    console.log('캠페인 저장 실패:', error);
+  } finally {
+    this.saveloading = false; // 로딩 상태 종료
+  }
+},
+
     resizeTextarea(event) {
       const textarea = event.target;
       textarea.style.height = 'auto';
@@ -268,6 +308,16 @@ export default {
     moveText(selectedText) {
       this.destinationText = selectedText;
     },
+
+    increaseSaveLoading() {
+      if (this.saveloadingPercentage < 100) {
+        this.saveloadingPercentage += 10;
+        setTimeout(this.increaseSaveLoading, 150);
+      } else {
+        this.saveloading = false;
+      }
+    },
+
     toggleKeyword(keyword) {
       if (this.selectedKeywords.includes(keyword)) {
         // 이미 선택된 키워드면 배열에서 제거
@@ -451,4 +501,81 @@ textarea {
   z-index: 1000;
 }
 
+#keywordLoadingContainer {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}
+
+#progressBar {
+  width: 100%;
+  background-color: #f3f3f3;
+  height: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+#progress {
+  height: 100%;
+  width: 0;
+  background-color: #4caf50;
+  transition: width 0.2s;
+}
+
+#loadingText {
+  font-size: 14px;
+  color: #333;
+}
+
+#percentage {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+#saveloadingContainer {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}
+
+#progressBar {
+  width: 100%;
+  background-color: #f3f3f3;
+  height: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+#progress {
+  height: 100%;
+  width: 0;
+  background-color: #4caf50;
+  transition: width 0.2s;
+}
+
+#loadingText {
+  font-size: 14px;
+  color: #333;
+}
+
+#percentage {
+  margin-top: 10px;
+  font-size: 14px;
+}
 </style>
