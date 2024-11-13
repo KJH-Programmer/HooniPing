@@ -8,6 +8,7 @@ import wwee.jihun.Entity.UserEntity;
 import wwee.jihun.Service.UserAuthService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -47,5 +48,15 @@ public class UserController {
         }
     }
 
+    @PostMapping("/extendLogin")
+    public ResponseEntity<String> extendLogin(@RequestBody Map<String, String> requestBody) {
+        String token = requestBody.get("token");
+        String newToken = userAuthService.ExtendLogin(token);
+        if (newToken != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(newToken);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 올바르지 않습니다.");
+        }
+    }
 
 }
