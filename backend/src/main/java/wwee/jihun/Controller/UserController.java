@@ -52,7 +52,6 @@ public class UserController {
     public ResponseEntity<String> extendLogin(@RequestBody Map<String, String> requestBody) {
         String token = requestBody.get("token");
         String newToken = userAuthService.ExtendLogin(token);
-
         if (newToken != null) {
             return ResponseEntity.status(HttpStatus.OK).body(newToken);
         } else {
