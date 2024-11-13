@@ -199,9 +199,9 @@ export default {
         this.keywords.push(this.newKeyword);
         // 자동으로 선택된 상태로 selectedKeywords에도 추가
         this.selectedKeywords.push(this.newKeyword);
-        
+
         console.log('새로운 키워드 추가 및 선택됨:', this.newKeyword);
-        
+
         // 입력 필드 초기화
         this.newKeyword = '';
       } else {
@@ -217,8 +217,8 @@ export default {
       
       try {
         const keywords = this.selectedKeywords.join(', ');
-        console.log('문구 생성에 사용되는 키워드:', keywords);
         const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
+        console.log('문구 생성에 사용되는 키워드:', keywords);
         const adTexts = ad_text.data.split("\n")
           .map(text => text.replace("hooniping", "").trim())
           .filter(text => text !== "");
