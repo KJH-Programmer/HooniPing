@@ -188,7 +188,6 @@ export default {
 
         // //서버로부터 받은 키워드를 keywords 배열에 할당
         // this.keywords = response.keywords;
-
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }
