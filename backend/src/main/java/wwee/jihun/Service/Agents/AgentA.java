@@ -14,7 +14,8 @@ public class AgentA {
         this.gptService = gptService;
         this.systemPrompt = systemPrompt;
     }
-    public Mono<String> generateKeywordsAndProductInfo(CampaignEntity campaignEntity, String keywords) {
+    public Mono<String> generateKeywordsAndProductInfo(CampaignEntity campaignEntity) {
+        String keywords = campaignEntity.getKeywords();
         StringBuilder promptBuilder = new StringBuilder(String.format(
                 "%s 제품을 위한 광고 문구 3가지를 생성해줘." +
                         "광고 문구에 반드시 들어가야할 키워드는 %s이 들어가야해. 꼭 들어가야 해." +

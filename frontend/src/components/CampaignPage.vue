@@ -6,20 +6,20 @@
         <div class="input-field">
           <label for="brand">브랜드명</label>
           <input
-              id="brand"
-              v-model="brand"
-              placeholder="브랜드명을 입력하세요."
-              class="product-input"
+            id="brand"
+            v-model="brand"
+            placeholder="브랜드명을 입력하세요."
+            class="product-input"
           />
         </div>
-
+        
         <div class="input-field">
           <label for="model">모델 이름</label>
           <input
-              id="model"
-              v-model="brand_model"
-              placeholder="모델 이름을 입력하세요."
-              class="product-input"
+            id="model"
+            v-model="brand_model"
+            placeholder="모델 이름을 입력하세요."
+            class="product-input"
           />
         </div>
 
@@ -38,20 +38,20 @@
         <div class="input-field">
           <label for="product">제품명</label>
           <input
-              id="product"
-              v-model="product"
-              placeholder="제품명을 입력하세요."
-              class="product-input"
+            id="product"
+            v-model="product"
+            placeholder="제품명을 입력하세요."
+            class="product-input"
           />
         </div>
 
         <div class="input-field">
           <label for="features">제품 설명</label>
           <input
-              id="features"
-              v-model="features"
-              placeholder="제품 설명을 입력하세요."
-              class="product-input1"
+            id="features"
+            v-model="features"
+            placeholder="제품 설명을 입력하세요."
+            class="product-input1"
           />
         </div>
 
@@ -61,10 +61,10 @@
           <label for="keywords">키워드</label>
           <div class="keyword-wrapper">
             <button
-                v-for="(keyword, index) in keywords"
-                :key="index"
-                :class="['keyword-button', { selected: selectedKeywords.includes(keyword) }]"
-                @click="toggleKeyword(keyword)"
+              v-for="(keyword, index) in keywords"
+              :key="index"
+              :class="['keyword-button', { selected: selectedKeywords.includes(keyword) }]"
+              @click="toggleKeyword(keyword)"
             >
               {{ keyword }}
             </button>
@@ -72,17 +72,17 @@
           <!-- '추가 키워드 입력란'과 '추가' 버튼 -->
           <div class="add-keyword-section">
             <input
-                v-model="newKeyword"
-                type="text"
-                placeholder="새로운 키워드를 입력하세요"
-                class="new-keyword-input"
+              v-model="newKeyword"
+              type="text"
+              placeholder="새로운 키워드를 입력하세요"
+              class="new-keyword-input"
             />
             <button @click="addKeyword" class="add-keyword-button">추가</button>
           </div>
         </div>
         <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
       </div>
-
+      
       <div id="recommendationLoadingContainer" v-if="isGeneratingRecommendation">
         <span id="loadingText">추천 내용 생성 중...</span>
         <div id="progressBar">
@@ -105,11 +105,11 @@
           <label for="preview">이미지 요구사항</label>
           <textarea v-model="prompt" @input="resizeTextarea" rows="5" placeholder="보고 싶은 이미지를 설명해주세요!"></textarea>
         </div>
-
+        
         <div class="button-container">
           <button class="product-button" @click="startLoading">이미지 생성하기</button>
         </div>
-
+        
         <!-- 이미지 로딩 상태 -->
         <div id="loadingContainer" v-if="isLoading">
           <span id="loadingText">이미지 생성 중...</span>
@@ -177,7 +177,7 @@ export default {
 
         // 추출한 키워드(extractedKeywords)에 selectedKeywords랑 겹치는게 있는지 확인
         const filteredKeywords = extractedKeywords.filter(
-            keyword => !this.selectedKeywords.includes(keyword)
+          keyword => !this.selectedKeywords.includes(keyword)
         );
 
         // 비어있는 keywords 배열에 filteredKeywords + selectedKeywords 합치기
@@ -188,7 +188,6 @@ export default {
 
         // //서버로부터 받은 키워드를 keywords 배열에 할당
         // this.keywords = response.keywords;
-
       } catch (error) {
         console.error('키워드 추출 오류:', error);
       }
@@ -215,14 +214,14 @@ export default {
       this.recommendationLoadingPercentage = 0;
       this.isGeneratingRecommendation = true;
       this.increaseRecommendationLoading();
-
+      
       try {
         const keywords = this.selectedKeywords.join(', ');
-        console.log('문구 생성에 사용되는 키워드:', keywords);
         const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
+        console.log('문구 생성에 사용되는 키워드:', keywords);
         const adTexts = ad_text.data.split("\n")
-            .map(text => text.replace("hooniping", "").trim())
-            .filter(text => text !== "");
+          .map(text => text.replace("hooniping", "").trim())
+          .filter(text => text !== "");
 
         this.sourceText = adTexts.map((text, index) => `${index + 1}.\n${text}`).join("\n\n");
         console.log('selectedKeywords:', this.selectedKeywords);
@@ -314,9 +313,9 @@ export default {
         this.$router.push('/CampaignListPage');
         console.log('SaveCampaign response:', response);
         console.log('캠페인 저장 성공(updatedAdText)');
-      } catch (error) {
-        console.log('캠페인 저장 실패:', error);
-      }
+        } catch (error) {
+          console.log('캠페인 저장 실패:', error);
+        }
     },
     resizeTextarea(event) {
       const textarea = event.target;
@@ -356,22 +355,22 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; 
 }
 
 .form-wrapper {
-  display: flex;
+  display: flex; 
   justify-content: space-between;
   width: 90%;
 }
 
 .form {
-  width: 48%;
+  width: 48%; 
   border-radius: 8px;
 }
 
 .input-field {
-  margin-bottom: 20px;
+  margin-bottom: 20px; 
 }
 
 .input-field1 {
@@ -383,24 +382,24 @@ textarea {
 
 .input-field label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 6px; 
 }
 
 .keyword-section {
-  margin-top: 10px;
+  margin-top: 10px; 
 }
 
 .keyword-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px; 
   max-width: 600px;
   margin-top: 8px;
 }
 
 .product-input {
   width: 100%;
-  padding: 10px;
+  padding: 10px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -410,7 +409,7 @@ textarea {
 
 .product-input1 {
   width: 100%;
-  padding: 10px;
+  padding: 10px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: inherit;
@@ -419,7 +418,7 @@ textarea {
 
 .product-button {
   width: 100%;
-  padding: 12px;
+  padding: 12px; 
   background-color: #42b983;
   color: white;
   border: none;
@@ -435,13 +434,13 @@ textarea {
 }
 
 .keyword-button {
-  padding: 5px 8px;
-  background-color: transparent;
+  padding: 5px 8px; 
+  background-color: transparent; 
   border: 1px solid #ccc;
   border-radius: 20px;
   font-family: inherit;
-  font-size: 13px;
-  color: black;
+  font-size: 13px; 
+  color: black; 
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
