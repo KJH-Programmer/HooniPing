@@ -2,6 +2,8 @@
   <div class="page-container">
     <!-- 왼쪽 섹션: 슬라이드 및 생성하기 버튼 -->
     <div class="carousel-container">
+      <h5><b><font size="6">CAMPAIGN LIST</font></b></h5>
+      <h5><font size="2" style="color:gray;">캠페인 목록</font></h5>
       <div class="carousel-wrapper">
         <div class="carousel" :style="{ transform: `translateX(-${currentIndex * 100}%)`, transition: 'transform 0.5s ease-in-out' }">
           <div
@@ -13,8 +15,15 @@
                  :key="itemIndex"
                  class="carousel-content"
                  @click="navigateToDetail(item.campaignId)">
+              <p><b>Product</b></p>
               <h1>{{ item.product }}</h1>
-              <h2 v-for="(keyword, index) in item.keywords.split(',')" :key="index"> - {{ keyword }}</h2>
+              <p><b>Keywords</b></p>
+              <br>
+              <p v-for="(keyword, index) in item.keywords.split(',')" :key="index">{{ keyword }}</p>
+              <br>
+              <p><b>About Product</b></p>
+              <br>
+              <p>{{item.features}}</p>
             </div>
           </div>
         </div>
@@ -23,46 +32,67 @@
         <button class="carousel-button prev" @click="prevSlide">〈</button>
         <button class="carousel-button next" @click="nextSlide">〉</button>
       </div>
-      <button class="create-button" @click="createItem">생성하기</button>
+      <button class="create-button" @click="createItem">새 캠페인 생성</button>
     </div>
+
+    <!-- DETAILS 제목 -->
 
     <!-- 오른쪽 섹션: 상세 정보 -->
     <div class="detail-view" v-if="selectedItem">
-      <h1>캠페인 정보</h1>
+      <h5><b><font size="6">DETAILS</font></b></h5>
+      <h5><font size="2" style="color:gray;">상세정보</font></h5>
+      <p><b>Product</b></p>
 
       <template v-if="isEditing">
         <!-- 수정 모드 -->
-        <p><strong>주제 <br> </strong><input v-model="editedItem.product"/></p>
-        <p><strong>키워드 <br> </strong><input v-model="editedItem.keywords"/></p>
-        <p><strong>브랜드 <br> </strong><input v-model="editedItem.brand"/></p>
-        <p><strong>모델 <br> </strong><input v-model="editedItem.brand_model"/></p>
-        <p><strong>어조 <br> </strong><input v-model="editedItem.tone"/></p>
-        <p><strong>특장점 <br> </strong><input v-model="editedItem.features"/></p>
-        <!-- 광고문구 : hooniping 단위로 쪼개서 각 부분 수정 가능 -->
-        <p><strong>광고문구 </strong></p>
-        <ol>
-          <li v-for="(textPart, index) in editableAdTextParts" :key="index">
-            <input v-model="editableAdTextParts[index]" class="ad-text-input"/>
-          </li>
-        </ol>
-        <p><strong>이미지 </strong></p>
-        <div class="image-container">
-          <!-- 로딩 중이 아닐 때만 이미지 표시 -->
-          <img v-if="!isLoading" :src="editedItem.image_url" :key="imageKey" alt="이미지 없음" class="editable-image"/>
-
-          <!-- 로딩 중일 때 프로그래스바와 진행도 표시 -->
-          <div v-if="isLoading" class="loading-wrapper">
-            <div class="loading-bar"
-                 :style="{ background: `linear-gradient(to right, #42b983 ${progress}%, white ${progress}%)` }"></div>
-            <span class="loading-text">{{ progress }}%</span>
+        <h1>{{ editedItem.product }}</h1>
+        <div class="detail-row">
+          <div class="detail-column">
+            <p><b>Keywords</b></p>
+            <p v-for="(keyword, index) in editedItem.keywords.split(',')" :key="index">{{ keyword }}</p>
           </div>
-
-          <button @click="updateImage" class="image-update-button" :disabled="isLoading">
-            {{ isLoading ? "이미지 생성 중..." : "이미지 수정" }}
-          </button>
+          <div class="detail-column">
+            <p><b>About Product</b></p>
+            <p>{{ editedItem.features }}</p>
+          </div>
         </div>
-        <p><input class="image-description-input" v-model="image_prompt" placeholder="본인이 원하는 이미지를 자세하게 입력하세요."/></p>
-
+        <div class="detail-row">
+          <div class="detail-column">
+            <p><strong>Brand <br> </strong>{{editedItem.brand}}</p>
+          </div>
+          <div class="detail-column">
+            <p><strong>Tone <br> </strong>{{editedItem.tone}}</p>
+          </div>
+        </div>
+        <br>
+        <p><strong>Brand Model <br> </strong>{{ editedItem.brand_model }}</p>
+        <br>
+        <br>
+        <div class="detail-row">
+          <div class="detail-column">
+          <p class="detail-column-center"><strong>광고문구 </strong></p>
+            <ol>
+                <textarea v-model="editedItem.ad_text" class="large-textarea"/>
+            </ol>
+          </div>
+          <div class="detail-column">
+            <p class="detail-column-center"><strong>이미지 </strong></p>
+            <div class="image-container">
+              <!-- 로딩 중이 아닐 때만 이미지 표시 -->
+              <img v-if="!isLoading" :src="editedItem.image_url" :key="imageKey" alt="이미지 없음" class="editable-image"/>
+              <p><textarea class="small-textarea" v-model="image_prompt" placeholder="본인이 원하는 이미지를 자세하게 입력하세요."/></p>
+              <!-- 로딩 중일 때 프로그래스바와 진행도 표시 -->
+              <div v-if="isLoading" class="loading-wrapper">
+                <div class="loading-bar"
+                     :style="{ background: `linear-gradient(to right, #42b983 ${progress}%, white ${progress}%)` }"></div>
+                <span class="loading-text">{{ progress }}%</span>
+              </div>
+              <button @click="updateImage" class="image-update-button" :disabled="isLoading">
+                {{ isLoading ? "이미지 생성 중..." : "이미지 수정" }}
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="button-container">
           <button class="save-button" @click="saveEdit">저장</button>
           <button class="cancel-button" @click="cancelEdit">취소</button>
@@ -71,18 +101,40 @@
 
       <template v-else>
         <!-- 보기 모드 -->
-        <p><strong>주제 <br> </strong> - {{ selectedItem.product }}</p>
-        <p><strong>키워드 <br> </strong> - {{ selectedItem.keywords }}</p>
-        <p><strong>브랜드 <br> </strong> - {{ selectedItem.brand }}</p>
-        <p><strong>모델 <br> </strong> - {{ selectedItem.brand_model }}</p>
-        <p><strong>어조 <br> </strong> - {{ selectedItem.tone }}</p>
-        <p><strong>특장점 <br> </strong> - {{ selectedItem.features }}</p>
-        <!-- 광고문구 : hooniping 단위로 쪼개서 출력 -->
-        <p><strong>광고문구 </strong></p>
-        <ol>
-          <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"> - {{ textPart }}</li>
-        </ol>
-        <p><strong>이미지 </strong> <img :src="selectedItem.image_url" :key="imageKey" alt="이미지 없음" class="editable-image"/></p>
+        <h1>{{ selectedItem.product }}</h1>
+        <div class="detail-row">
+          <div class="detail-column">
+            <p><b>Keywords</b></p>
+            <p v-for="(keyword, index) in selectedItem.keywords.split(',')" :key="index">{{ keyword }}</p>
+          </div>
+          <div class="detail-column">
+            <p><b>About Product</b></p>
+            <p>{{ selectedItem.features }}</p>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-column">
+            <p><strong>Brand <br> </strong>{{selectedItem.brand}}</p>
+          </div>
+          <div class="detail-column">
+            <p><strong>Tone <br> </strong>{{selectedItem.tone}}</p>
+          </div>
+        </div>
+        <br>
+        <p><strong>Brand Model <br> </strong>{{ selectedItem.brand_model }}</p>
+        <br>
+        <br>
+        <div class="detail-row">
+          <div class="detail-column">
+            <p class="detail-column-center"><strong>광고문구 </strong></p>
+            <ol>
+              <li v-for="(textPart, index) in splitAdTextFiltered" :key="index"><br>{{ textPart }}</li>
+            </ol>
+          </div>
+          <div class="detail-column">
+            <p class="detail-column-center"><strong>이미지 </strong> <img :src="selectedItem.image_url" :key="imageKey" alt="이미지 없음" class="editable-image"/></p>
+          </div>
+        </div>
         <div class="button-container">
           <button class="edit-button" @click="editItem">수정</button>
           <button class="delete-button" @click="deleteItem(selectedItem.userId, selectedItem.campaignId)">삭제</button>
@@ -121,14 +173,10 @@ export default {
       return slides;
     },
     splitAdText() {
-      return this.selectedItem && this.selectedItem.ad_text ? this.selectedItem.ad_text.split("hooniping") : [];
+      return this.selectedItem && this.selectedItem.ad_text ? this.selectedItem.ad_text.split(/\d\./) : [];
     },
     splitAdTextFiltered() {
-      return this.splitAdText.filter(textPart => textPart.trim() !== "");
-    },
-    // 수정 모드용 필터링된 배열 추가
-    editableAdTextPartsFiltered() {
-      return this.editableAdTextParts.filter(textPart => textPart.trim() !== "");
+      return this.splitAdText.filter(textPart => textPart.trim() !== "").map((textPart, index) => `${index + 1}.${textPart.trim()}`);
     },
   },
   methods: {
@@ -160,7 +208,9 @@ export default {
     },
     editItem() {
       this.isEditing = true;
-      this.editableAdTextParts = this.splitAdText.filter(textPart => textPart.trim() !== "");
+
+      const adTextParts = this.selectedItem.ad_text.split(/\d\./).filter(textPart => textPart.trim() !== "");
+      this.editedItem.ad_text = adTextParts.map((textPart, index) => `${index + 1}.${textPart.trim()}`).join('\n\n');
     },
     async updateImage() {
       this.isLoading = true;
@@ -187,9 +237,9 @@ export default {
     },
     async saveEdit() {
       if (window.confirm("캠페인을 정말로 수정하겠습니까?")) {
-        this.editedItem.ad_text = this.editableAdTextParts.filter(textPart => textPart.trim() !== "").join("hooniping");
+        const adTextParts = this.editedItem.ad_text.split(/\d\./).filter(textPart => textPart.trim() !== "");
+        this.editedItem.ad_text = adTextParts.map((textPart, index) => `${index + 1}.${textPart.trim()}`).join('');
         try{
-          console.log(this.editedItem);
           await UpdateCampaign(this.editedItem);
           this.selectedItem = JSON.parse(JSON.stringify(this.editedItem));
           const index = this.items.findIndex(item => item.campaignId === this.editedItem.campaignId);
@@ -237,7 +287,13 @@ export default {
     },
     navigateToDetail(campaignId) {
       // 아이템의 상세 정보 출력하기
-      this.selectedItem = this.items.find(item => item.campaignId === campaignId);
+      if(this.selectedItem == null){
+        this.selectedItem = this.items.find(item => item.campaignId === campaignId);
+      }else if(this.selectedItem && this.selectedItem.campaignId !== campaignId) {
+        this.selectedItem = this.items.find(item => item.campaignId === campaignId);
+      } else if(this.selectedItem && this.selectedItem.campaignId === campaignId) {
+        this.selectedItem = null;
+      }
       this.editedItem = JSON.parse(JSON.stringify(this.selectedItem));
       this.isEditing = false;
     },
@@ -322,8 +378,8 @@ export default {
 }
 
 .create-button {
-  background-color: #42b983;
-  color: white;
+  background-color: #d7d7d7;
+  color: #000000;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -343,21 +399,21 @@ export default {
 .edit-button,
 .delete-button {
   background-color: #36996e; /* 기본 수정 버튼 색상 */
-  color: white;
+  color: #000000;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.cancel-button,
+.save-button,
 .delete-button {
-  background-color: #ba0d0d; /* 삭제 버튼 색상 */
+  background-color: #dc7a7a; /* 삭제 버튼 색상 */
 }
 
-.save-button,
+.cancel-button,
 .edit-button {
-  background-color: #42b983; /* 수정 버튼 색상 */
+  background-color: #a4a4a4; /* 수정 버튼 색상 */
 }
 
 .detail-view {
@@ -378,6 +434,10 @@ export default {
   font-size: 40px;
   font-weight: bold;
   margin: 0 0 30px;
+}
+
+.detail-view h5 {
+  text-align: center;
 }
 
 input, .ad-text-input {
@@ -402,10 +462,11 @@ input:focus, .ad-text-input:focus {
 
 .image-container {
   display: flex;
+  flex-direction: column; /* 세로로 정렬 */
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-bottom: 10px; /* 이미지와 아래 input 간격 추가 */
+  margin-bottom: 10px; /* 이미지와 아래 요소 간 간격 추가 */
 }
 
 .editable-image {
@@ -416,29 +477,24 @@ input:focus, .ad-text-input:focus {
   border-radius: 5px;
 }
 
+
 .image-update-button {
-  position: absolute;
-  bottom: -40px; /* 이미지 하단 아래에 위치시킴 */
-  left: 0; /* 왼쪽 정렬 */
-  width: 100px; /* 원하는 버튼 너비 고정 */
-  padding: 8px 0;
-  background-color: #42b983;
-  color: white;
+  width: 120px; /* 원하는 버튼 너비 고정 */
+  padding: 10px; /* 버튼의 내부 여백 */
+  background-color: #a4a4a4;
+  color: #000000;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
-  font-size: 14px;
   text-align: center;
+  font-size: 14px;
+  margin-top: 10px; /* textarea와 버튼 간 간격 추가 */
 }
 
 .image-update-button:hover {
-  background-color: #36996e;
+  background-color: #a4a4a4;
 }
 
-.image-description-input {
-  margin-top: 50px; /* 이미지와 input 요소 사이에 충분한 간격 추가 */
-}
 
 /* 로딩 바와 진행도 텍스트 스타일 */
 .loading-wrapper {
@@ -459,6 +515,65 @@ input:focus, .ad-text-input:focus {
   margin-left: 10px;
   font-size: 14px;
   color: #333;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start; /* 아이템의 세로 정렬 */
+  gap: 20px; /* Keywords와 About Product 사이 간격 */
+  margin-bottom: 20px; /* 전체 행 간의 간격 */
+}
+
+.detail-column {
+  flex: 1; /* 두 컬럼이 동일한 너비를 가짐 */
+}
+
+.detail-column-center {
+  flex: 1; /* 두 컬럼이 동일한 너비를 가짐 */
+  text-align: center;
+}
+
+.detail-column p {
+  margin: 5px 0; /* 텍스트 간격 조정 */
+}
+
+.large-textarea {
+  width: 100%; /* 가로 전체 크기 */
+  height: 512px; /* 세로 크기 */
+  padding: 10px; /* 내부 여백 */
+  border: 1px solid #ccc; /* 테두리 색상 */
+  border-radius: 5px; /* 둥근 테두리 */
+  font-size: 16px; /* 글자 크기 */
+  line-height: 1.5; /* 줄 간격 */
+  resize: none; /* 크기 조절 비활성화 (원하면 활성화 가능) */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 안쪽 그림자 */
+  background-color: #f9f9f9; /* 배경색 */
+}
+
+.large-textarea:focus {
+  border-color: #42b983; /* 포커스 시 테두리 색 변경 */
+  box-shadow: 0 0 5px rgba(66, 185, 131, 0.5); /* 포커스 시 그림자 */
+  outline: none; /* 기본 포커스 효과 제거 */
+}
+
+.small-textarea {
+  margin-top: 10px; /* 이미지와 textarea 사이 간격 추가 */
+  margin-bottom: 10px; /* textarea와 이미지 수정 버튼 사이 간격 추가 */
+  width: 508px; /* 가로 전체 크기 */
+  height: 128px; /* 세로 크기 */
+  padding: 10px; /* 내부 여백 */
+  border: 1px solid #ccc; /* 테두리 색상 */
+  border-radius: 5px; /* 둥근 테두리 */
+  font-size: 16px; /* 글자 크기 */
+  line-height: 1.5; /* 줄 간격 */
+  resize: none; /* 크기 조절 비활성화 */
+  background-color: #f9f9f9; /* 배경색 */
+}
+
+.small-textarea:focus {
+  border-color: #42b983; /* 포커스 시 테두리 색 변경 */
+  box-shadow: 0 0 5px rgba(66, 185, 131, 0.5); /* 포커스 시 그림자 */
+  outline: none; /* 기본 포커스 효과 제거 */
 }
 
 </style>

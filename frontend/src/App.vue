@@ -13,9 +13,12 @@
           />
         </div>
         <div class="welcome-wrapper">
-          <span class="welcome-message">{{ timeRemaining }}남음 - 환영합니다, {{ userId }}님!</span>
-          <button class="extend-button" @click="extendLogin">로그인연장</button>
-          <button class="logout-button" @click="handleLogout">로그아웃</button>
+          <span class="welcome-message">WELCOME,{{userId}}!&emsp;&emsp;</span>
+          <img src="@/assets/clock.png" height="20" width="20"/>
+          <span class="welcome-message">{{ timeRemaining }}</span>
+          <button class="extend-button" @click="extendLogin">연장</button>
+          &emsp;
+          <button class="logout-button" @click="handleLogout">LOGOUT</button>
         </div>
       </div>
 
@@ -105,11 +108,11 @@ export default {
             const currentTime = Math.floor(Date.now() / 1000);
             const timeLeft = decoded.exp - currentTime;
             if (timeLeft > 0) {
-              const minutes = Math.floor(timeLeft / 60);
-              const seconds = timeLeft % 60;
-              this.timeRemaining = `${minutes}분 ${seconds}초`;
+              const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+              const seconds = (timeLeft % 60).toString().padStart(2, '0');
+              this.timeRemaining = `${minutes}:${seconds}`;
             } else {
-              this.timeRemaining = '토큰 만료';
+              this.timeRemaining = '00:00';
               this.handleLogout();
             }
           }
@@ -163,8 +166,8 @@ export default {
   color: #333;
 }
 .logout-button {
-  background-color: #f56565;
-  color: white;
+  background-color: #a4a4a4;
+  color: #000000;
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
@@ -175,8 +178,8 @@ export default {
 }
 
 .extend-button {
-  background-color: #36996e;
-  color: white;
+  background-color: #a4a4a4;
+  color: #000000;
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
