@@ -1,6 +1,8 @@
 package wwee.jihun.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -14,5 +16,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메소드
                 .allowedHeaders("*") // 허용할 요청 헤더
                 .allowCredentials(true); // 자격 증명(쿠키) 허용
+    }
+
+    // WebClient Bean 등록
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder()
+                .baseUrl("https://graph.facebook.com/v17.0") // Instagram Graph API 기본 URL
+                .build();
     }
 }
