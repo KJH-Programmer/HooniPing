@@ -17,7 +17,6 @@
           <img src="@/assets/clock.png" height="20" width="20"/>
           <span class="welcome-message">{{ timeRemaining }}</span>
           <button class="extend-button" @click="extendLogin">연장</button>
-          &emsp;
           <button class="logout-button" @click="handleLogout">LOGOUT</button>
         </div>
       </div>
@@ -135,7 +134,7 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f0f3fb;
+  background-color: #eaeaea;
   justify-content: space-between;
 }
 .header-wrapper {
@@ -143,7 +142,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #fff;
+  background-color: #eaeaea;
   border-bottom: 1px solid #ddd;
 }
 .logo-wrapper {

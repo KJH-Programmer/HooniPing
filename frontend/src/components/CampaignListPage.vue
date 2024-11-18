@@ -14,6 +14,7 @@
             <div v-for="(item, itemIndex) in slide"
                  :key="itemIndex"
                  class="carousel-content"
+                 :class="{ 'selected': selectedItem && selectedItem.campaignId === item.campaignId }"
                  @click="navigateToDetail(item.campaignId)">
               <p><b>Product</b></p>
               <h1>{{ item.product }}</h1>
@@ -39,9 +40,6 @@
 
     <!-- 오른쪽 섹션: 상세 정보 -->
     <div class="detail-view" v-if="selectedItem">
-      <h5><b><font size="6">DETAILS</font></b></h5>
-      <h5><font size="2" style="color:gray;">상세정보</font></h5>
-      <p><b>Product</b></p>
 
       <template v-if="isEditing">
         <!-- 수정 모드 -->
@@ -309,6 +307,7 @@ export default {
   display: flex; /* 가로 정렬 */
   width: 100%;
   height: 100vh; /* 화면 전체 높이 */
+  background-color: #fff;
 }
 
 .carousel-container {
@@ -344,9 +343,9 @@ export default {
 .carousel-content {
   flex: 0 0 45%;
   height: 450px;
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
-  background-color: white;
+  background-color: #e3e1e1;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
   padding: 20px;
   overflow: auto;
   cursor: pointer;
@@ -376,6 +375,7 @@ export default {
   font-size: 2rem;
   cursor: pointer;
 }
+
 
 .create-button {
   background-color: #d7d7d7;
@@ -416,6 +416,15 @@ export default {
   background-color: #a4a4a4; /* 수정 버튼 색상 */
 }
 
+.create-button:hover,
+.cancel-button:hover,
+.edit-button:hover,
+.delete-button:hover,
+.save-button:hover,
+.image-update-button:hover {
+  box-shadow: 0 1px 10px rgb(0, 0, 0);
+}
+
 .detail-view {
   flex: 1.5;
   display: flex;
@@ -424,7 +433,7 @@ export default {
   padding: 20px;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
-  background-color: #f9f9f9;
+  background-color: #f1efef;
   margin: auto 30px;
   height: 700px;
   overflow-y: auto; /* 세로 스크롤 활성화 */
@@ -490,11 +499,6 @@ input:focus, .ad-text-input:focus {
   font-size: 14px;
   margin-top: 10px; /* textarea와 버튼 간 간격 추가 */
 }
-
-.image-update-button:hover {
-  background-color: #a4a4a4;
-}
-
 
 /* 로딩 바와 진행도 텍스트 스타일 */
 .loading-wrapper {
@@ -574,6 +578,15 @@ input:focus, .ad-text-input:focus {
   border-color: #42b983; /* 포커스 시 테두리 색 변경 */
   box-shadow: 0 0 5px rgba(66, 185, 131, 0.5); /* 포커스 시 그림자 */
   outline: none; /* 기본 포커스 효과 제거 */
+}
+
+.carousel-content:hover {
+  box-shadow: 0 1px 20px rgb(0, 0, 0);
+}
+
+.carousel-content.selected {
+  border: 2px solid #000000; /* 선택된 아이템에 초록색 테두리 추가 */
+  box-shadow: 0 1px 20px rgb(0, 0, 0); /* 강조 효과 */
 }
 
 </style>

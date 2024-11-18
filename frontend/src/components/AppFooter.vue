@@ -4,8 +4,8 @@
     <div class="content-wrapper">
       <img :src="require('@/assets/KakaoTalk_20240926_155821857.jpg')" alt="Logo" class="footer-logo" />
       <div class="text-wrapper">
-        <p class="footer-title">후니핑</p>
-        <p class="footer-team">김지훈, 강어진, 김지현, 이수민, 한재준</p>
+        <p class="footer-title">@Hooniping 김지훈, 강어진, 김지현, 이수민, 한재준</p>
+        <p class="footer-team">Hooniping git hub : https://github.com/KJH-Programmer/HooniPing</p>
       </div>
     </div>
   </div>
@@ -28,10 +28,10 @@ export default {
 
 .footer {
   display: flex;
-  justify-content: center; /* 가운데 정렬 */
+  justify-content: left; /* 가운데 정렬 */
   align-items: center;
   padding: 20px;
-  background-color: #fff;
+  background-color: #eaeaea;
   border-top: 1px solid #ddd;
 }
 
@@ -42,7 +42,7 @@ export default {
 }
 
 .footer-logo {
-  width: 150px;
+  width: 70px;
   margin-right: 20px;
 }
 
@@ -53,14 +53,12 @@ export default {
 }
 
 .footer-title {
-  font-size: 60px; /* "후니핑" 이름의 글씨 크기 */
+  font-size: 20px; /* "후니핑" 이름의 글씨 크기 */
   color: #333;
-  font-family: 'RIXTteokbokkiM', sans-serif;
 }
 
 .footer-team {
-  font-size: 35px; /* 팀원 이름의 글씨 크기 */
+  font-size: 15px; /* 팀원 이름의 글씨 크기 */
   color: #666;
-  font-family: 'RIXTteokbokkiM', sans-serif;
 }
 </style>
