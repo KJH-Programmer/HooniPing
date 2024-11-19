@@ -33,8 +33,8 @@
           <input v-model="password" type="password" placeholder="비밀번호 입력">
         </div>
 
-        <div class="login-button">
-          <button @click="submitLogin">로그인</button>
+        <div>
+          <button class="login-button" @click="submitLogin">로그인</button>
         </div>
 
         <a href="#" class="signup" @click="goToSignup">회원가입</a>
@@ -209,14 +209,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-}
-
-.login-button button {
-  font-size: 15px;
-  color: #000000;
-  background: none;
-  border: none;
+  width: 370px;
   cursor: pointer;
 }
 
@@ -240,7 +233,7 @@ html, body {
 .footer {
   width: 100%;
   height: 127px;
-  background: #F5F5F5;
+  background: #FFFFFF;
   display: flex;
   flex-direction: column; /* 세로 방향으로 배치 */
   align-items: flex-start; /* 왼쪽 정렬 */
@@ -253,5 +246,11 @@ html, body {
   color: #747474;
   margin: 0;
   line-height: 1.5; /* 줄 간격 조정 */
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  gap: 10px; /* 버튼 사이의 간격 */
+  margin-top: auto; /* 하단에 위치 */
 }
 </style>
