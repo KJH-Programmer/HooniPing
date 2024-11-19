@@ -240,7 +240,7 @@ html, body {
 .footer {
   width: 100%;
   height: 127px;
-  background: #F5F5F5;
+  background: #ffffff;
   display: flex;
   flex-direction: column; /* 세로 방향으로 배치 */
   align-items: flex-start; /* 왼쪽 정렬 */

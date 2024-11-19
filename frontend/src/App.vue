@@ -13,7 +13,7 @@
           />
         </div>
         <div class="welcome-wrapper">
-          <span class="welcome-message">WELCOME,{{userId}}!&emsp;&emsp;</span>
+          <span class="welcome-message">WELCOME, {{userId}}!&emsp;&emsp;</span>
           <img src="@/assets/clock.png" height="20" width="20"/>
           <span class="welcome-message">{{ timeRemaining }}</span>
           <button class="extend-button" @click="extendLogin">연장</button>
