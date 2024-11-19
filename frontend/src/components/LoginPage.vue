@@ -45,36 +45,40 @@
 </template>
 
 <script>
-import { Login } from '@/api/loginService';
+import { Login } from '@/api/loginService'; // 로그인 서비스 임포트
+
 
 export default {
   data() {
     return {
-      userId: '', // 사용자가 입력한 아이디
-      password: '' // 사용자가 입력한 비밀번호
+      userId: '', // 사용자가 입력한 아이디를 저장하는 변수
+      password: '' // 사용자가 입력한 비밀번호를 저장하는 변수
     };
   },
   methods: {
     // 로그인 처리 함수
     async submitLogin() {
       try {
-        // loginService를 사용해 로그인 요청 수행
+        // 로그인 요청 수행
         const response = await Login(this.userId, this.password);
 
-        // 로그인 성공 시, 서버 응답에서 받은 토큰과 사용자 아이디를 localStorage에 저장
-        sessionStorage.setItem('token', response.data);
-        sessionStorage.setItem('userId', this.userId);
+        // 서버 응답이 "Not User"일 경우 로그인 실패 처리
+        if (response.data === 'Not User') {
+          alert('아이디 또는 비밀번호가 잘못되었습니다.');
+          return; // 함수 종료
+        }
+
+        // 로그인 성공 시 사용자 아이디를 localStorage에 저장
+        localStorage.setItem('userId', this.userId);
+        localStorage.setItem('token', response.data);
+        console.log('로그인 성공:', response.data);
 
         // 로그인 성공 후 메인 페이지로 이동
-        this.$router.push('/CampaignListPage');
+        this.$router.push('/');
       } catch (error) {
-        // 로그인 실패 시 상태 코드 확인
-        if (error.response && error.response.status === 401) {
-          alert('아이디 또는 비밀번호가 잘못되었습니다.'); // 401 에러 메시지
-        } else {
-          console.error('로그인 실패:', error);
-          alert('로그인에 실패했습니다. 다시 시도해주세요.');
-        }
+        // 서버 연결 실패 또는 기타 오류 발생 시 처리
+        console.error('로그인 중 오류 발생:', error);
+        alert('로그인에 실패했습니다. 다시 시도해주세요.');
       }
     },
     // 회원가입 페이지로 이동하는 함수
