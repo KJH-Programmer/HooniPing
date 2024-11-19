@@ -194,6 +194,12 @@ export default {
       this.keywordLoadingPercentage = 0;
       this.isGeneratingKeywords = true;
       this.increaseKeywordLoading();
+      
+      if (this.product.trim() === "") {
+        alert("제품명을 입력해주세요!");
+        this.isGeneratingKeywords = false; // 로딩 상태 종료
+        return;
+      }
 
       try {
         this.keywords = [];  // 배열 초기화
@@ -255,6 +261,22 @@ export default {
       this.isGeneratingRecommendation = true;
       this.increaseRecommendationLoading();
       
+      if (this.product.trim() === "") {
+        alert("제품명을 입력해주세요!");
+        this.isGeneratingRecommendation = false; // 로딩 상태 종료
+        return;
+      }
+      if (this.selectedKeywords.length === 0) {
+        alert("키워드를 입력해주세요!");
+        this.isGeneratingRecommendation = false; // 로딩 상태 종료
+        return;
+      }
+      if (this.features.trim() === "") {
+        alert("제품 설명을 입력해주세요!");
+        this.isGeneratingRecommendation = false; // 로딩 상태 종료
+        return;
+      }
+
       try {
         const keywords = this.selectedKeywords.join(', ');
         const ad_text = await GenerateAdText(this.product, this.brand, this.tone, this.brand_model, this.features, keywords);
