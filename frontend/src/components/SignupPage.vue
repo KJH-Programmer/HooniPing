@@ -76,8 +76,8 @@
             />
           </div>
 
-          <div class="signup-button">
-            <button type="submit">가입하기</button>
+          <div>
+            <button class="signup-button" type="submit">가입하기</button>
           </div>
         </form>
       </div>
@@ -193,10 +193,15 @@ html, body {
   padding: 0 43px;
 }
 
-.logo {
+.logo-image {
   font-size: 32px;
   color: #000000;
 }
+
+.logo-image:hover {
+  box-shadow: 0 1px 10px rgb(0, 0, 0);
+}
+
 
 .welcome {
   font-size: 20px;

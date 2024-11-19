@@ -154,6 +154,11 @@ export default {
   height: 50px;
   cursor: pointer; /* 클릭 가능한 커서 */
 }
+
+.logo-image:hover {
+  box-shadow: 0 1px 10px rgb(0, 0, 0);
+}
+
 .welcome-wrapper {
   display: flex;
   align-items: center;
