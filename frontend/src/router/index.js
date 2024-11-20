@@ -34,7 +34,7 @@ const router = new Router({
       path :'/CampaignListPage',
       name : "CampaignListPage",
       component : CampaignListPage,
-    }
+    },
   ],
 });
 

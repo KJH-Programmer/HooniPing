@@ -30,7 +30,6 @@
 </template>
 
 
-
 <script>
 import AppFooter from '@/components/AppFooter.vue'; 
 import { getLoginStatus, performLogout } from '@/api/authService.js';
@@ -154,9 +153,9 @@ export default {
 }
 
 .header-logo {
-  width: 50px; /* 로고 크기 */
+  width: 50px; 
   height: 50px;
-  cursor: pointer; /* 클릭 가능한 커서 */
+  cursor: pointer; 
 }
 
 .right-section {

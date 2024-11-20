@@ -461,7 +461,6 @@ export default {
   margin-bottom: 10px;
 }
 
-
 .input-field1 textarea{
   resize: none;
   width: 100%;

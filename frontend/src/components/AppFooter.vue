@@ -3,6 +3,7 @@
     <div class="content-wrapper">
       <p class="footer-contact">©Hooniping, 김지훈, 강어진, 김지현, 이수민, 한재준</p>
       <p class="footer-info">문의: hooniping@gmail.com</p>
+
     </div>
   </div>
 </template>
@@ -20,7 +21,7 @@ export default {
   justify-content: left; 
   align-items: left;    
   padding: 10px 20px;
-  background-color: #f0f3fb;
+  background-color: #f4f4f4;
   border-top: 1px solid #ccc;
   font-family: Arial, sans-serif;
 }
@@ -28,7 +29,6 @@ export default {
 .content-wrapper {
   text-align: left; 
 }
-
 .footer-info {
   text-align: left;
 }
