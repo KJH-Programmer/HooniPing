@@ -1,72 +1,23 @@
 <template>
   <div class="container">
     <div class="form-wrapper">
-      <!-- 폼 섹션 -->
       <div class="form section">
-        <div class="input-field">
-          <label for="brand">브랜드명</label>
-          <input
-            id="brand"
-            v-model="brand"
-            placeholder="브랜드명을 입력하세요."
-            class="product-input"
-          />
+        <div class="carousel-container">
+          <h5><b><font size="6">New Campaign</font></b></h5>
+          <h5><font size="2" style="color:gray;">캠페인 생성</font></h5>
         </div>
-        
         <div class="input-field">
-          <label for="model">모델 이름</label>
-          <input
-            id="model"
-            v-model="brand_model"
-            placeholder="모델 이름을 입력하세요."
-            class="product-input"
-          />
-        </div>
-
-        <div class="input-field">
-          <label for="tone">말투</label>
-          <select id="tone" v-model="tone" class="product-input">
-            <option disabled value="">말투를 선택하세요.</option>
-            <option value="~습니다">~습니다</option>
-            <option value="~해요">~해요</option>
-            <option value="반말">반말</option>
-            <option value="럭키비키체">럭키비키체</option>
-            <option value="신조어">신조어</option>
-          </select>
-        </div>
-
-        <div class="input-field">
-          <label for="product">제품명</label>
+          <label for="product"><b><font size="2.9">Product</font></b><span class="required">*</span></label>
           <input
             id="product"
             v-model="product"
-            placeholder="제품명을 입력하세요."
+            placeholder="제품명을 입력해주세요."
             class="product-input"
           />
         </div>
 
-        <div class="input-field">
-          <label for="features">제품 설명</label>
-          <input
-            id="features"
-            v-model="features"
-            placeholder="제품 설명을 입력하세요."
-            class="product-input1"
-          />
-        </div>
-
-        <button class="product-button" @click="addProduct">추천 키워드 생성</button>
-
-        <div id="keywordLoadingContainer" v-if="isGeneratingKeywords">
-          <span id="loadingText">키워드 생성 중...</span>
-          <div id="progressBar">
-            <div id="progress" :style="{ width: keywordLoadingPercentage + '%' }"></div>
-          </div>
-          <span id="percentage">{{ keywordLoadingPercentage }}%</span>
-        </div>
-
         <div class="input-field keyword-section">
-          <label for="keywords">키워드</label>
+          <label for="keywords"><b><font size="2.9">Keywords</font></b><span class="required">*</span></label>
           <div class="keyword-wrapper">
             <button
               v-for="(keyword, index) in keywords"
@@ -77,48 +28,98 @@
               {{ keyword }}
             </button>
           </div>
-          <!-- '추가 키워드 입력란'과 '추가' 버튼 -->
-          <div class="add-keyword-section">
+          <button class="product-button keyword-recommendation" @click="addProduct">키워드 추천받기</button>
+
+          <div class="input-field add-keyword-section">
             <input
               v-model="newKeyword"
               type="text"
-              placeholder="새로운 키워드를 입력하세요"
+              placeholder="키워드를 입력해주세요."
               class="new-keyword-input"
             />
             <button @click="addKeyword" class="add-keyword-button">추가</button>
           </div>
         </div>
-        <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
-      </div>
-      
-      <div id="recommendationLoadingContainer" v-if="isGeneratingRecommendation">
-        <span id="loadingText">추천 내용 생성 중...</span>
-        <div id="progressBar">
-          <div id="progress" :style="{ width: recommendationLoadingPercentage + '%' }"></div>
+
+        <div class="input-field">
+  <label for="features"><b><font size="2.9">About Product</font></b><span class="required">*</span></label>
+  <textarea
+    id="features"
+    v-model="features"
+    placeholder="제품에 대해 설명해주세요."
+    class="product-input-about"
+  ></textarea>
+</div>
+
+
+        <div class="input-field">
+          <label for="tone"><b><font size="2.9">Tone</font></b></label>
+          <select id="tone" v-model="tone" class="product-input">
+            <option disabled value="">말투를 선택해주세요.</option>
+            <option value="~습니다">~습니다</option>
+            <option value="~해요">~해요</option>
+            <option value="반말">반말</option>
+            <option value="럭키비키체">럭키비키체</option>
+            <option value="신조어">신조어</option>
+          </select>
         </div>
-        <span id="percentage">{{ recommendationLoadingPercentage }}%</span>
+
+        <div class="input-field">
+          <label for="brand"><b><font size="2.9">Brand</font></b></label>
+          <input
+            id="brand"
+            v-model="brand"
+            placeholder="브랜드명을 입력해주세요."
+            class="product-input"
+          />
+        </div>
+
+        <div class="input-field">
+          <label for="model"><b><font size="2.9">Brand Model</font></b></label>
+          <input
+            id="model"
+            v-model="brand_model"
+            placeholder="브랜드 모델 이름을 입력해주세요."
+            class="product-input"
+          />
+        </div>
+
+        <button class="product-button" @click="generateRecommendation">추천 내용 생성하기</button>
+
+        <div id="keywordLoadingContainer" v-if="isGeneratingKeywords">
+          <span id="loadingText">키워드 생성 중...</span>
+          <div id="progressBar">
+            <div id="progress" :style="{ width: keywordLoadingPercentage + '%' }"></div>
+          </div>
+          <span id="percentage">{{ keywordLoadingPercentage }}%</span>
+        </div>
+
+        <div id="recommendationLoadingContainer" v-if="isGeneratingRecommendation">
+          <span id="loadingText">추천 내용 생성 중...</span>
+          <div id="progressBar">
+            <div id="progress" :style="{ width: recommendationLoadingPercentage + '%' }"></div>
+          </div>
+          <span id="percentage">{{ recommendationLoadingPercentage }}%</span>
+        </div>
       </div>
 
-      <!-- 광고 문구 섹션 -->
       <div class="form section">
+        <label for="description2.9">광고 문구</label>
         <div class="input-field1">
-          <label for="description3">광고 문구</label>
           <textarea v-model="sourceText" @input="resizeTextarea" rows="20"></textarea>
         </div>
       </div>
 
-      <!-- 이미지 생성 섹션 -->
       <div class="form section">
-        <div class="input-field">
-          <label for="preview">이미지 요구사항</label>
-          <textarea v-model="prompt" @input="resizeTextarea" rows="5" placeholder="보고 싶은 이미지를 설명해주세요!"></textarea>
+        <label for="preview">이미지 요구사항</label>
+        <div class="input-field1">
+          <textarea v-model="prompt" @input="resizeTextarea" rows="10" placeholder="보고 싶은 이미지를 설명해주세요!"></textarea>
         </div>
-        
+
         <div class="button-container">
           <button class="product-button" @click="startLoading">이미지 생성하기</button>
         </div>
-        
-        <!-- 이미지 로딩 상태 -->
+
         <div id="loadingContainer" v-if="isLoading">
           <span id="loadingText">이미지 생성 중...</span>
           <div id="progressBar">
@@ -127,13 +128,12 @@
           <span id="percentage">{{ loadingImagePercentage }}%</span>
         </div>
 
-        <!-- 생성된 이미지 표시 -->
         <div class="image-container" v-if="imageUrl && !isLoading">
           <img :src="imageUrl" alt="Generated Image" class="generated-image" />
         </div>
-
-        <button class="product-button" @click="save">저장하기</button>
-
+        <div class="button-container">
+          <button class="product-button" @click="save">전체 저장하기</button>
+        </div>
         <div id="saveloadingContainer" v-if="saveloading">
           <span id="loadingText">저장 중...</span>
           <div id="progressBar">
@@ -141,11 +141,12 @@
           </div>
           <span id="percentage">{{ saveloadingPercentage }}%</span>
         </div>
-
       </div>
     </div>
   </div>
 </template>
+
+
 
 
 <script>
@@ -169,8 +170,8 @@ export default {
       tone: '',
       features: '',
       
-      keywords: [],  // 추천 키워드 목록
-      newKeyword: '',  // 사용자 추가 키워드
+      keywords: [],  
+      newKeyword: '',  
       selectedKeywords: [],  // 최종 선택 키워드
       
       sourceText: '',
@@ -397,119 +398,175 @@ export default {
 </script>
 
 <style scoped>
-textarea {
-  width: 100%;
+.carousel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20px;
+  margin-top: 70px; 
+}
+
+.image-container {
+  margin-top: 20px;  
+  display: flex;
+  justify-content: center;  
+}
+
+.generated-image {
+  max-width: 100%; 
+  height: auto;
+}
+
+.textarea {
+  width: 70%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #c4c4c4;
   border-radius: 5px;
-  resize: none;
   overflow-y: hidden;
-  font-family: inherit;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
+  resize: none;
 }
 
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh; 
+  align-items: flex-start; 
+  margin: 20px;
+  overflow-y: auto;
+  padding-top: 100px; 
 }
 
 .form-wrapper {
-  display: flex; 
+  display: flex;
   justify-content: space-between;
+  gap: 40px;
   width: 90%;
+  overflow-y: auto;
 }
 
 .form {
-  width: 48%; 
+  width: 48%;
   border-radius: 8px;
+  max-height: 100%;
 }
 
 .input-field {
-  margin-bottom: 20px; 
+  margin-bottom: 10px;
 }
 
-.input-field1 {
+
+.input-field1 textarea{
+  resize: none;
   width: 100%;
   display: flex;
+  padding: 10px; 
   flex-direction: column;
+  border: 1px solid #c4c4c4;
+  margin-top: 10px;
+  border-radius: 5px;
   gap: 8px;
+  font-family: 'Inter', sans-serif; 
 }
 
 .input-field label {
   display: block;
-  margin-bottom: 6px; 
+  margin-bottom: 6px;
 }
 
 .keyword-section {
-  margin-top: 10px; 
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .keyword-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; 
-  max-width: 600px;
+  gap: 8px;
+  max-width: 300px;
   margin-top: 8px;
 }
 
 .product-input {
-  width: 100%;
-  padding: 10px; 
+  width: 70%;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-family: inherit;
+  font-family: 'Inter', sans-serif; 
   font-size: 14px;
 }
+
+.product-input-about {
+  width: 70%;
+  height: 80px; 
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  font-family: 'Inter', sans-serif; 
+  font-size: 14px; 
+  resize: none; 
+  line-height: 20px; 
+}
+
 
 
 .product-input1 {
   width: 100%;
-  padding: 10px; 
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-family: inherit;
+  font-family: 'Inter', sans-serif; 
   font-size: 14px;
 }
 
 .product-button {
-  width: 100%;
-  padding: 12px; 
-  background-color: #42b983;
-  color: white;
+  width: 70%;
+  padding: 12px;
+  background-color: #ccc;
+  color: black;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   margin-top: 8px;
+}
+
+.product-button:hover {
+  background-color: #aaa; 
 }
 
 .button-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 8px;
 }
 
 .keyword-button {
-  padding: 5px 8px; 
-  background-color: transparent; 
+  padding: 5px 8px;
+  word-wrap: break-word;  /* 텍스트가 넘칠 때 자동으로 줄바꿈 */
+  white-space: normal;  /* 텍스트가 한 줄에 들어가지 않으면 줄바꿈이 되도록 설정 */
+  background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 20px;
   font-family: inherit;
-  font-size: 13px; 
-  color: black; 
+  font-size: 12.9px;
+  color: black;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.2.9s, color 0.2.9s;
 }
 
 .keyword-button.selected {
-  background-color: #42b983;
-  color: white;
+  background-color: #ccc;
+  color: black;
+  border: 2px solid black; 
 }
 
-#generateButton {
-  padding: 10px 20px;
-  font-size: 16px;
+.keyword-button:hover {
+  background-color: #aaa;
 }
 
 #loadingContainer {
@@ -517,7 +574,7 @@ textarea {
   position: fixed;
   top: 50%;
   right: 0%;
-  transform: translate(-40%, -30%);
+  transform: translate(-95%, -30%);
   width: 300px;
   text-align: center;
   background-color: white;
@@ -537,7 +594,7 @@ textarea {
 #progress {
   height: 100%;
   width: 0;
-  background-color: #4caf50;
+  background-color: #aaa;
   transition: width 0.2s;
 }
 
@@ -579,31 +636,6 @@ textarea {
   z-index: 1000;
 }
 
-#progressBar {
-  width: 100%;
-  background-color: #f3f3f3;
-  height: 10px;
-  margin-top: 10px;
-  position: relative;
-}
-
-#progress {
-  height: 100%;
-  width: 0;
-  background-color: #4caf50;
-  transition: width 0.2s;
-}
-
-#loadingText {
-  font-size: 14px;
-  color: #333;
-}
-
-#percentage {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
 #saveloadingContainer {
   display: flex;
   position: fixed;
@@ -618,28 +650,63 @@ textarea {
   z-index: 1000;
 }
 
-#progressBar {
-  width: 100%;
-  background-color: #f3f3f3;
-  height: 10px;
-  margin-top: 10px;
-  position: relative;
+.add-keyword-section {
+  display: flex;
+  align-items: center; 
+  gap: 8px; 
+  margin-top: 20px; 
+  margin-bottom: 20px; 
 }
 
-#progress {
-  height: 100%;
-  width: 0;
-  background-color: #4caf50;
-  transition: width 0.2s;
+.add-keyword-button {
+  padding: 10px 20px;
+  font-size: 12.9px; 
+  background-color: #f9f9f9; 
+  color: black; 
+  border: 1px solid #ccc; 
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2.9s;
+  white-space: nowrap; 
 }
 
-#loadingText {
+.add-keyword-button:hover {
+  background-color: #aaa; 
+}
+
+.new-keyword-input {
+  width: 53%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif; 
   font-size: 14px;
-  color: #333;
 }
 
-#percentage {
-  margin-top: 10px;
-  font-size: 14px;
+.keyword-recommendation {
+  width: 70%;
+  padding: 12px;
+  background-color: #f9f9f9; 
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 8px;
 }
+
+.keyword-recommendation:hover {
+  background-color: #e0e0e0; 
+}
+
+.required {
+  color: red;
+  font-weight: bold;
+}
+
+
+html, body {
+  font-family: 'Inter', sans-serif;
+}
+
 </style>
+

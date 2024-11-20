@@ -1,42 +1,45 @@
 <template>
   <div id="app">
     <div class="app-container">
-      <!-- 헤더: 로그인 상태일 때만 표시 -->
+
       <div v-if="isLoggedIn" class="header-wrapper">
-        <div class="logo-wrapper">
-          <!-- 이미지 추가 및 클릭 이벤트 연결 (로그인 상태일 때만 표시) -->
+        <div class="left-section">
           <img
             src="@/assets/KakaoTalk_20240926_155821857.jpg"
             alt="Logo"
-            class="logo-image"
+            class="header-logo"
             @click="goToCampaignListPage"
           />
         </div>
-        <div class="welcome-wrapper">
-          <span class="welcome-message">{{ timeRemaining }}남음 - 환영합니다, {{ userId }}님!</span>
-          <button class="extend-button" @click="extendLogin">로그인연장</button>
-          <button class="logout-button" @click="handleLogout">로그아웃</button>
+        <div class="right-section">
+          <span class="welcome-message">WELCOME, {{ userId }}!</span>
+          <div class="time-wrapper">
+            <span class="time-icon">⏰</span>
+            <span class="time-remaining">{{ timeRemaining }}</span>
+            <button class="extend-button" @click="extendLogin">연장</button>
+          </div>
+          <button class="logout-button" @click="handleLogout">LOGOUT</button>
         </div>
       </div>
 
-      <!-- 페이지 콘텐츠 -->
       <router-view />
 
-      <!-- 푸터: 항상 표시 -->
       <AppFooter />
     </div>
   </div>
 </template>
 
+
+
 <script>
-import AppFooter from '@/components/AppFooter.vue'; // Footer 컴포넌트 import
+import AppFooter from '@/components/AppFooter.vue'; 
 import { getLoginStatus, performLogout } from '@/api/authService.js';
 import {extendLogin} from "@/api/loginService";
 import jwt_decode from 'jsonwebtoken';
 
 export default {
   components: {
-    AppFooter, // Footer 컴포넌트 등록
+    AppFooter, 
   },
   data() {
     return {
@@ -127,7 +130,6 @@ export default {
 </script>
 
 <style scoped>
-/* 전체 스타일은 동일하게 유지 */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -135,51 +137,80 @@ export default {
   background-color: #f0f3fb;
   justify-content: space-between;
 }
+
 .header-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #ccc;
+  font-family: Arial, sans-serif;
 }
-.logo-wrapper {
+
+.left-section {
   display: flex;
   align-items: center;
 }
-.logo-image {
-  width: 50px; /* 이미지 크기 조정 */
+
+.header-logo {
+  width: 50px; /* 로고 크기 */
   height: 50px;
   cursor: pointer; /* 클릭 가능한 커서 */
 }
-.welcome-wrapper {
+
+.right-section {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 25px;
 }
+
 .welcome-message {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-size: 16px;
+  color: #1a1919;
 }
-.logout-button {
-  background-color: #f56565;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+
+.time-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.logout-button:hover {
-  background-color: #e53e3e;
+
+.time-icon {
+  font-size: 16px; 
+}
+
+.time-remaining {
+  font-size: 14px;
+  color: #999;
 }
 
 .extend-button {
-  background-color: #36996e;
+  background-color: #999;
   color: white;
-  padding: 5px 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
+  padding: 5px 10px;
+  font-size: 14px;
   cursor: pointer;
 }
+
+.extend-button:hover {
+  background-color: #494040;
+}
+
+.logout-button {
+  background-color: transparent;
+  color: #1a1919;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  color: #1a1919;
+  text-decoration: underline;
+}
 </style>
+
+
