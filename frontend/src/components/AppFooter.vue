@@ -19,7 +19,7 @@ export default {
   flex-direction: column;
   justify-content: left; 
   align-items: left;    
-  padding: 15px 20px;
+  padding: 10px 20px;
   background-color: #f0f3fb;
   border-top: 1px solid #ccc;
   font-family: Arial, sans-serif;

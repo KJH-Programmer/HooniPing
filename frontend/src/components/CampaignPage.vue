@@ -16,6 +16,8 @@
           />
         </div>
 
+        <button class="product-button" @click="addProduct">추천 키워드 생성</button>
+
         <div class="input-field keyword-section">
           <label for="keywords"><b><font size="2.9">Keywords</font></b><span class="required">*</span></label>
           <div class="keyword-wrapper">
@@ -50,7 +52,6 @@
     class="product-input-about"
   ></textarea>
 </div>
-
 
         <div class="input-field">
           <label for="tone"><b><font size="2.9">Tone</font></b></label>
@@ -132,8 +133,8 @@
           <img :src="imageUrl" alt="Generated Image" class="generated-image" />
         </div>
         <div class="button-container">
-          <button class="product-button" @click="save">전체 저장하기</button>
-        </div>
+        <button class="product-button" @click="save">저장하기</button>
+        
         <div id="saveloadingContainer" v-if="saveloading">
           <span id="loadingText">저장 중...</span>
           <div id="progressBar">
@@ -142,11 +143,10 @@
           <span id="percentage">{{ saveloadingPercentage }}%</span>
         </div>
       </div>
+      </div>
     </div>
   </div>
 </template>
-
-
 
 
 <script>
@@ -170,8 +170,8 @@ export default {
       tone: '',
       features: '',
       
-      keywords: [],  
-      newKeyword: '',  
+      keywords: [],  // 추천 키워드 목록
+      newKeyword: '',  // 사용자 추가 키워드
       selectedKeywords: [],  // 최종 선택 키워드
       
       sourceText: '',
@@ -397,6 +397,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .carousel-container {
   display: flex;
@@ -513,10 +514,8 @@ export default {
   line-height: 20px; 
 }
 
-
-
 .product-input1 {
-  width: 100%;
+  width: 70%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -547,8 +546,8 @@ export default {
 
 .keyword-button {
   padding: 5px 8px;
-  word-wrap: break-word;  /* 텍스트가 넘칠 때 자동으로 줄바꿈 */
-  white-space: normal;  /* 텍스트가 한 줄에 들어가지 않으면 줄바꿈이 되도록 설정 */
+  word-wrap: break-word;  
+  white-space: normal;  
   background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -567,45 +566,6 @@ export default {
 
 .keyword-button:hover {
   background-color: #aaa;
-}
-
-#loadingContainer {
-  display: flex;
-  position: fixed;
-  top: 50%;
-  right: 0%;
-  transform: translate(-95%, -30%);
-  width: 300px;
-  text-align: center;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 20px;
-  z-index: 1000;
-}
-
-#progressBar {
-  width: 100%;
-  background-color: #f3f3f3;
-  height: 10px;
-  margin-top: 10px;
-  position: relative;
-}
-
-#progress {
-  height: 100%;
-  width: 0;
-  background-color: #aaa;
-  transition: width 0.2s;
-}
-
-#loadingText {
-  font-size: 14px;
-  color: #333;
-}
-
-#percentage {
-  margin-top: 10px;
-  font-size: 14px;
 }
 
 #recommendationLoadingContainer {
@@ -648,6 +608,31 @@ export default {
   border: 1px solid #ccc;
   padding: 20px;
   z-index: 1000;
+}
+
+#progressBar {
+  width: 100%;
+  background-color: #f3f3f3;
+  height: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+#progress {
+  height: 100%;
+  width: 0;
+  background-color: #aaa;
+  transition: width 0.2s;
+}
+
+#loadingText {
+  font-size: 14px;
+  color: #333;
+}
+
+#percentage {
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 .add-keyword-section {

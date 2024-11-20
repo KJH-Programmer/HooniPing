@@ -294,6 +294,7 @@ export default {
       }
       this.editedItem = JSON.parse(JSON.stringify(this.selectedItem));
       this.isEditing = false;
+
     },
   },
   created() {
