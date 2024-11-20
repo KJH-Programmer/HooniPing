@@ -158,6 +158,10 @@ export default {
   cursor: pointer;
 }
 
+.header-logo:hover {
+  box-shadow: 0 1px 20px rgb(0, 0, 0);
+}
+
 .right-section {
   display: flex;
   align-items: center;
