@@ -12,7 +12,7 @@
             @click="goToCampaignListPage"
           />
         </div>
-        <div class="welcome-wrapper">
+        <div class="welcome-wrapper"å>
           <span class="welcome-message">WELCOME,{{userId}}!&emsp;&emsp;</span>
           <img src="@/assets/clock.png" height="20" width="20"/>
           <span class="welcome-message">{{ timeRemaining }}</span>
