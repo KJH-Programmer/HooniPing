@@ -1,44 +1,44 @@
 <template>
   <div id="app">
     <div class="app-container">
-      <!-- 헤더: 로그인 상태일 때만 표시 -->
+
       <div v-if="isLoggedIn" class="header-wrapper">
-        <div class="logo-wrapper">
-          <!-- 이미지 추가 및 클릭 이벤트 연결 (로그인 상태일 때만 표시) -->
+        <div class="left-section">
           <img
             src="@/assets/KakaoTalk_20240926_155821857.jpg"
             alt="Logo"
-            class="logo-image"
+            class="header-logo"
             @click="goToCampaignListPage"
           />
         </div>
-        <div class="welcome-wrapper"å>
-          <span class="welcome-message">WELCOME,{{userId}}!&emsp;&emsp;</span>
-          <img src="@/assets/clock.png" height="20" width="20"/>
-          <span class="welcome-message">{{ timeRemaining }}</span>
-          <button class="extend-button" @click="extendLogin">연장</button>
+        <div class="right-section">
+          <span class="welcome-message">WELCOME, {{ userId }}!</span>
+          <div class="time-wrapper">
+            <span class="time-icon">⏰</span>
+            <span class="time-remaining">{{ timeRemaining }}</span>
+            <button class="extend-button" @click="extendLogin">연장</button>
+          </div>
           <button class="logout-button" @click="handleLogout">LOGOUT</button>
         </div>
       </div>
 
-      <!-- 페이지 콘텐츠 -->
       <router-view />
 
-      <!-- 푸터: 항상 표시 -->
       <AppFooter />
     </div>
   </div>
 </template>
 
+
 <script>
-import AppFooter from '@/components/AppFooter.vue'; // Footer 컴포넌트 import
+import AppFooter from '@/components/AppFooter.vue';
 import { getLoginStatus, performLogout } from '@/api/authService.js';
 import {extendLogin} from "@/api/loginService";
 import jwt_decode from 'jsonwebtoken';
 
 export default {
   components: {
-    AppFooter, // Footer 컴포넌트 등록
+    AppFooter,
   },
   data() {
     return {
@@ -107,11 +107,11 @@ export default {
             const currentTime = Math.floor(Date.now() / 1000);
             const timeLeft = decoded.exp - currentTime;
             if (timeLeft > 0) {
-              const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-              const seconds = (timeLeft % 60).toString().padStart(2, '0');
-              this.timeRemaining = `${minutes}:${seconds}`;
+              const minutes = Math.floor(timeLeft / 60);
+              const seconds = timeLeft % 60;
+              this.timeRemaining = `${minutes}분 ${seconds}초`;
             } else {
-              this.timeRemaining = '00:00';
+              this.timeRemaining = '토큰 만료';
               this.handleLogout();
             }
           }
@@ -129,64 +129,87 @@ export default {
 </script>
 
 <style scoped>
-/* 전체 스타일은 동일하게 유지 */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #eaeaea;
+  background-color: #f0f3fb;
   justify-content: space-between;
 }
+
 .header-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #eaeaea;
-  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #ccc;
+  font-family: Arial, sans-serif;
 }
-.logo-wrapper {
+
+.left-section {
   display: flex;
   align-items: center;
 }
-.logo-image {
-  width: 50px; /* 이미지 크기 조정 */
+
+.header-logo {
+  width: 50px;
   height: 50px;
-  cursor: pointer; /* 클릭 가능한 커서 */
-}
-
-.logo-image:hover {
-  box-shadow: 0 1px 10px rgb(0, 0, 0);
-}
-
-.welcome-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.welcome-message {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-.logout-button {
-  background-color: #a4a4a4;
-  color: #000000;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
 }
-.logout-button:hover {
-  background-color: #e53e3e;
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.welcome-message {
+  font-size: 16px;
+  color: #1a1919;
+}
+
+.time-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-icon {
+  font-size: 16px;
+}
+
+.time-remaining {
+  font-size: 14px;
+  color: #999;
 }
 
 .extend-button {
-  background-color: #a4a4a4;
-  color: #000000;
-  padding: 5px 10px;
+  background-color: #999;
+  color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
+  padding: 5px 10px;
+  font-size: 14px;
   cursor: pointer;
 }
+
+.extend-button:hover {
+  background-color: #494040;
+}
+
+.logout-button {
+  background-color: transparent;
+  color: #1a1919;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  color: #1a1919;
+  text-decoration: underline;
+}
 </style>
+
+

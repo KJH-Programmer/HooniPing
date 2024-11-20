@@ -14,7 +14,6 @@ const router = new Router({
       path: '/CampaignPage',
       name: 'CampaignPage',
       component: CampaignPage,
-      meta: { requiresAuth: true }, // 인증이 필요한 페이지로 설정
     },
     {
       path: '/',
@@ -25,7 +24,6 @@ const router = new Router({
       path: '/main',
       name: 'MainPage',
       component: MainPage,
-      meta: { requiresAuth: true }, // 인증이 필요한 페이지로 설정
     },
     {
       path: '/signup',
