@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <!-- Header -->
+ 
     <header class="header">
       <img
           src="@/assets/KakaoTalk_20240926_155821857.jpg"
@@ -188,6 +188,7 @@ html, body {
 
 .input-field {
   margin-top: 20px;
+  border-radius: 9px;
   background: #D9D9D9;
   height: 61px;
   display: flex;
@@ -199,18 +200,20 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 10px;
-  border: none;
+  border-radius: 9px;
   background: #D9D9D9;
   font-size: 15px;
 }
 
 .input-field input::placeholder {
-  color: black;
-  opacity: 1;
+  color: #373737a1;
+  opacity: 1; 
 }
+
 
 .login-button {
   margin-top: 20px;
+  border-radius: 9px;
   background: #ABABAB;
   height: 58px;
   display: flex;

@@ -276,6 +276,7 @@ html, body {
 
 .input-field input {
   width: 400px;
+  border-radius: 9px;
   padding: 20px;
   border: none;
   background: #D9D9D9;
@@ -283,12 +284,13 @@ html, body {
 }
 
 .input-field input::placeholder {
-  color: black;
+  color: #373737a1;
   opacity: 1;
 }
 
 .signup-button {
   margin-top: 20px;
+  border-radius: 9px;
   background: #ABABAB;
   height: 58px;
   display: flex;
