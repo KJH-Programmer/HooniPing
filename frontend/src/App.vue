@@ -129,6 +129,9 @@ export default {
 </script>
 
 <style scoped>
+body{
+  font-family: 'MyFont', sans-serif;
+}
 .app-container {
   display: flex;
   flex-direction: column;
@@ -144,7 +147,6 @@ export default {
   padding: 10px 20px;
   background-color: #f4f4f4;
   border-bottom: 1px solid #ccc;
-  font-family: Arial, sans-serif;
 }
 
 .left-section {
@@ -166,6 +168,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 25px;
+  font-family: 'MyFont', sans-serif;
 }
 
 .welcome-message {

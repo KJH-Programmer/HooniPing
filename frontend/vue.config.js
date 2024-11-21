@@ -2,6 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 const webpack = require("webpack");
 module.exports = defineConfig({
   transpileDependencies: true,
+  assetsDir: 'assets',
   devServer: {
 
     port: 8080, // 원하는 포트로 변경

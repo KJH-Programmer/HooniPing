@@ -162,6 +162,11 @@ export default {
 
 
 <style scoped>
+
+body{
+  font-family: 'MyFont', sans-serif;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -213,6 +218,7 @@ html, body {
   display: flex;
   padding-top: 50px;
   padding-left: 70px;
+  font-family: 'MyFont', sans-serif;
 }
 
 /* Left Side Text */

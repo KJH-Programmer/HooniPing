@@ -15,6 +15,9 @@ export default {
 </script>
 
 <style scoped>
+body{
+  font-family: 'MyFont', sans-serif;
+}
 .footer {
   display: flex;
   flex-direction: column;
@@ -23,11 +26,11 @@ export default {
   padding: 10px 20px;
   background-color: #f4f4f4;
   border-top: 1px solid #ccc;
-  font-family: Arial, sans-serif;
 }
 
 .content-wrapper {
-  text-align: left; 
+  text-align: left;
+  font-family: 'MyFont', sans-serif;
 }
 .footer-info {
   text-align: left;

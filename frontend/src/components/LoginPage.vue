@@ -90,6 +90,11 @@ export default {
 
 
 <style scoped>
+
+body{
+  font-family: 'MyFont', sans-serif;
+}
+
 /* 전체 화면의 기본 여백 제거 */
 html, body {
   margin: 0;
@@ -130,6 +135,7 @@ html, body {
 .welcome {
   font-size: 20px;
   color: #000000;
+  font-family: 'MyFont', sans-serif;
 }
 
 /* Content */
@@ -137,6 +143,7 @@ html, body {
   display: flex;
   padding-top: 50px;
   padding-left: 70px;
+  font-family: 'MyFont', sans-serif;
 }
 
 /* Left Side Text */
