@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const API_URL = `http://${process.env.VUE_APP_API_URL}/api/user`;
-const API_URL = `http://localhost:8080/api/user`;
+const API_URL = `http://${process.env.VUE_APP_API_URL}/api/user`;
+// const API_URL = `http://localhost:8080/api/user`;
 
 // 회원가입 API 호출
 export const registerUser = async (payload) => {
