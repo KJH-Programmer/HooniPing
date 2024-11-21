@@ -1,8 +1,8 @@
 <template>
   <div class="footer">
     <div class="content-wrapper">
-      <p class="footer-contact">©Hooniping, 김지훈, 강어진, 김지현, 이수민, 한재준</p>
-      <p class="footer-info">문의: hooniping@gmail.com</p>
+      <p class="footer-contact" style="color:gray;" >©Hooniping, 김지훈, 강어진, 김지현, 이수민, 한재준</p>
+      <p class="footer-info" style="color:gray;" >문의: hooniping@gmail.com</p>
 
     </div>
   </div>

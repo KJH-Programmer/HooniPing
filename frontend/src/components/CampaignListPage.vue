@@ -379,12 +379,14 @@ export default {
 
 
 .create-button {
-  background-color: #d7d7d7;
-  color: #000000;
+  background-color: #000000;
+  color: #f6f6f6;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
+  font-family: 'MyFont-Bold', sans-serif;
 }
 
 
@@ -400,21 +402,23 @@ export default {
 .edit-button,
 .delete-button {
   background-color: #36996e; /* 기본 수정 버튼 색상 */
-  color: #000000;
+  color: #ffffff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'MyFont-Bold', sans-serif;
+  width: 120px;
 }
 
 .save-button,
 .delete-button {
-  background-color: #dc7a7a; /* 삭제 버튼 색상 */
+  background-color: #ff0000; /* 삭제 버튼 색상 */
 }
 
 .cancel-button,
 .edit-button {
-  background-color: #a4a4a4; /* 수정 버튼 색상 */
+  background-color: #000000; /* 수정 버튼 색상 */
 }
 
 .create-button:hover,
@@ -491,14 +495,15 @@ input:focus, .ad-text-input:focus {
 .image-update-button {
   width: 120px; /* 원하는 버튼 너비 고정 */
   padding: 10px; /* 버튼의 내부 여백 */
-  background-color: #a4a4a4;
-  color: #000000;
+  background-color: #000000;
+  color: #ffffff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   text-align: center;
   font-size: 14px;
   margin-top: 10px; /* textarea와 버튼 간 간격 추가 */
+  font-family: 'MyFont-Bold', sans-serif;
 }
 
 /* 로딩 바와 진행도 텍스트 스타일 */

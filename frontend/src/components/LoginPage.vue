@@ -152,19 +152,19 @@ html, body {
 }
 
 .left-text h1 {
-  font-size: 96px;
-  line-height: 116px;
+  font-size: 150px;
+  line-height: 150px;
   color: #000000;
   margin: 0; /* 두 줄의 간격을 최소화 */
 }
 
 .left-text h1 + h1 {
-  margin-top: 10px; /* 두 번째 줄과 첫 번째 줄 사이의 간격을 추가 */
+  margin-top: 20px; /* 두 번째 줄과 첫 번째 줄 사이의 간격을 추가 */
 }
 
 .left-text p {
-  font-size: 40px;
-  line-height: 48px;
+  font-size: 50px;
+  line-height: 58px;
   color: #000000;
   margin-top: 20px;
   margin-bottom: 30px;

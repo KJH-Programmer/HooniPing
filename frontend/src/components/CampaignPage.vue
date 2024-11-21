@@ -1,4 +1,5 @@
 <template>
+ <div class="app-container">
   <div class="container">
     <div class="form-wrapper">
       <div class="form section">
@@ -146,6 +147,7 @@
       </div>
     </div>
   </div>
+ </div>
 </template>
 
 
@@ -421,6 +423,11 @@ export default {
 
 
 <style scoped>
+
+.app-container{
+  background-color: #fff;
+}
+
 .carousel-container {
   display: flex;
   flex-direction: column;
