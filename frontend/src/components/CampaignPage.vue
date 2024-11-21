@@ -17,8 +17,6 @@
           />
         </div>
 
-        <button class="product-button" @click="addProduct">추천 키워드 생성</button>
-
         <div class="input-field keyword-section">
           <label for="keywords"><b><font size="2.9">Keywords</font></b><span class="required">*</span></label>
           <div class="keyword-wrapper">
@@ -554,12 +552,13 @@ export default {
 .product-button {
   width: 70%;
   padding: 12px;
-  background-color: #ccc;
-  color: black;
+  background-color: #000000;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   margin-top: 8px;
+  font-family: 'MyFont-Bold', sans-serif;
 }
 
 .product-button:hover {
@@ -699,8 +698,8 @@ export default {
 .keyword-recommendation {
   width: 70%;
   padding: 12px;
-  background-color: #f9f9f9; 
-  color: black;
+  background-color: #000000;
+  color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;

@@ -214,13 +214,15 @@ html, body {
 .login-button {
   margin-top: 20px;
   border-radius: 9px;
-  background: #ABABAB;
+  background: #000000;
+  color: #fff;
   height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 370px;
   cursor: pointer;
+  font-family: 'MyFont-Bold', sans-serif;
 }
 
 .login-button:hover {
@@ -233,6 +235,7 @@ html, body {
   margin-top: 20px;
   font-size: 15px;
   color: #000000;
+  font-family: 'MyFont-Bold', sans-serif;
 }
 
 .signup:hover {

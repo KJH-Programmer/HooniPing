@@ -291,13 +291,15 @@ html, body {
 .signup-button {
   margin-top: 20px;
   border-radius: 9px;
-  background: #ABABAB;
+  color: #ffffff;
+  background: #000000;
   height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 400px;
   margin-bottom: 70px;
+  font-family: 'MyFont-Bold', sans-serif;
 }
 
 .signup-button button {
